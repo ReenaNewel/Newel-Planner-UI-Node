@@ -1,0 +1,219 @@
+<c-accordion>
+    <div *ngIf="totaltimehr4>0">
+        <c-accordion-item #item0="cAccordionItem" [visible]="false">
+            <ng-template cTemplateId="accordionHeaderTemplate">
+                <button (click)="item0.toggleItem()" [collapsed]="!item0.visible" cAccordionButton>
+                    <span class="text-primary">Today{{TimesheetDate5}}</span>
+                    <span class="ml-auto">Total hours: <span class="font-semibold">{{totaltimehr4|number : '1.2-2'}}</span></span>
+                </button>
+            </ng-template>
+            <div *ngIf="totaltimehr4 > 0">
+            <ng-template cTemplateId="accordionBodyTemplate">
+                <div class="accordion-body">
+
+                    <p-table [value]="dataSource5" styleClass="p-datatable-sm" [tableStyle]="{'min-width': '50rem'}">
+                     
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <!-- <th>Sr.No</th> -->
+                                    <th>Project Name</th>
+                                    <th>Task Name</th>
+                                    <th>Task Desc</th>
+                                    <th>Activity</th>
+                                    <th>Hrs</th>
+                                    <th>Mins</th>
+
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-dataSource5>
+                                <tr>
+                                    <!-- <td>{{index+1}}</td> -->
+                                    <td>{{dataSource5.projectname}}</td>
+                                    <td>{{dataSource5.taskname}}</td>
+                                    <td>{{dataSource5.description}}</td>
+                                    <td>{{dataSource5.activity}}</td>
+                                    <td>{{dataSource5.timeinhours}}</td>
+                                    <td>{{dataSource5.timeinminutes}}</td>
+                                </tr>
+                            </ng-template>
+                     
+                    </p-table>
+
+                </div>
+            </ng-template>
+            </div>
+        </c-accordion-item>
+    </div>
+   <div *ngIf="totaltimehr3>0">
+        <c-accordion-item #item1="cAccordionItem" [visible]="false">
+            <ng-template cTemplateId="accordionHeaderTemplate">
+                <button (click)="item1.toggleItem()" [collapsed]="!item1.visible" cAccordionButton>
+                    <span class="text-900">{{TimesheetDate4}}</span>
+                    <span class="ml-auto">Total hours: <span class="font-semibold">{{totaltimehr3|number : '1.2-2'}}</span></span>
+                </button>
+            </ng-template>
+    
+            <ng-template cTemplateId="accordionBodyTemplate">
+                <div class="accordion-body">
+                    <p-table [value]="dataSource4" styleClass="p-datatable-sm" [tableStyle]="{'min-width': '50rem'}">
+                    
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <!-- <th>Sr.No</th> -->
+                                    <th>Project Name</th>
+                                    <th>Task Name</th>
+                                    <th>Task Desc</th>
+                                    <th>Activity</th>
+                                    <th>Hrs</th>
+                                    <th>Mins</th>
+
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-dataSource4>
+                                <tr>
+                                    <!-- <td>{{index+1}}</td> -->
+                                    <td>{{dataSource4.projectname}}</td>
+                                    <td>{{dataSource4.taskname}}</td>
+                                    <td>{{dataSource4.description}}</td>
+                                    <td>{{dataSource4.activity}}</td>
+                                    <td>{{dataSource4.timeinhours}}</td>
+                                    <td>{{dataSource4.timeinminutes}}</td>
+                                </tr>
+                            </ng-template>
+                    </p-table>
+
+                </div>
+            </ng-template>
+        </c-accordion-item>
+   </div>
+    
+   <div *ngIf="totaltimehr2>0">
+        <c-accordion-item #item2="cAccordionItem" [visible]="false">
+            <ng-template cTemplateId="accordionHeaderTemplate">
+                <button (click)="item2.toggleItem()" [collapsed]="!item2.visible" cAccordionButton>
+                    <span class="text-blue-600">    {{TimesheetDate3}}</span>
+                    <span class="ml-auto">Total hours: <span class="font-semibold">{{totaltimehr2|number : '1.2-2'}}</span></span>
+                </button>
+            </ng-template>
+            <ng-template cTemplateId="accordionBodyTemplate">
+                <div class="accordion-body">
+                    <p-table [value]="dataSource3" styleClass="p-datatable-sm" [tableStyle]="{'min-width': '50rem'}">
+                       
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <!-- <th>Sr.No</th> -->
+                                    <th>Project Name</th>
+                                    <th>Task Name</th>
+                                    <th>Task Desc</th>
+                                    <th>Activity</th>
+                                    <th>Hrs</th>
+                                    <th>Mins</th>
+
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-dataSource3>
+                                <tr>
+                                    <!-- <td>index+1</td> -->
+                                    <td>{{dataSource3.projectname}}</td>
+                                    <td>{{dataSource3.taskname}}</td>
+                                    <td>{{dataSource3.description}}</td>
+                                    <td>{{dataSource3.activity}}</td>
+                                    <td>{{dataSource3.timeinhours}}</td>
+                                    <td>{{dataSource3.timeinminutes}}</td>
+                                </tr>
+                            </ng-template>
+                      
+                    </p-table>
+
+                </div>
+            </ng-template>
+        </c-accordion-item>
+   </div>
+    
+
+    <div *ngIf="totaltimehr1>0">
+        <c-accordion-item #item3="cAccordionItem" [visible]="false">
+            <ng-template cTemplateId="accordionHeaderTemplate">
+                <button (click)="item3.toggleItem()" [collapsed]="!item3.visible" cAccordionButton>
+                    <span class="text-purple-500">{{TimesheetDate2}}</span>
+                    <span class="ml-auto">Total hours: <span class="font-semibold">{{totaltimehr1 | number : '1.2-2' }}</span></span>
+                </button>
+            </ng-template>
+            <ng-template cTemplateId="accordionBodyTemplate">
+                <div class="accordion-body">
+                    <p-table [value]="dataSource2" styleClass="p-datatable-sm" [tableStyle]="{'min-width': '50rem'}">
+                       
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <!-- <th>Sr.No</th> -->
+                                    <th>Project Name</th>
+                                    <th>Task Name</th>
+                                    <th>Task Desc</th>
+                                    <th>Activity</th>
+                                    <th>Hrs</th>
+                                    <th>Mins</th>
+
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-dataSource2>
+                                <tr>
+                                    <!-- <td>index+1</td> -->
+                                    <td>{{dataSource2.projectname}}</td>
+                                    <td>{{dataSource2.taskname}}</td>
+                                    <td>{{dataSource2.description}}</td>
+                                    <td>{{dataSource2.activity}}</td>
+                                    <td>{{dataSource2.timeinhours}}</td>
+                                    <td>{{dataSource2.timeinminutes}}</td>
+                                </tr>
+                            </ng-template>
+                    </p-table>
+
+                </div>
+            </ng-template>
+        </c-accordion-item>
+    </div>
+    
+    <div *ngIf="totaltimehr>0">
+        <c-accordion-item #item4="cAccordionItem" [visible]="false">
+            <ng-template cTemplateId="accordionHeaderTemplate">
+                <button (click)="item4.toggleItem()" [collapsed]="!item4.visible" cAccordionButton>
+                    <span class="text-yellow-400">{{TimesheetDate1}}</span>
+                    <span class="ml-auto">Total hours: <span class="font-semibold">{{totaltimehr|number : '1.2-2'}}</span></span>
+                </button>
+            </ng-template>
+            <ng-template cTemplateId="accordionBodyTemplate">
+                <div class="accordion-body">
+                    <p-table [value]="dataSource" styleClass="p-datatable-sm" [tableStyle]="{'min-width': '50rem'}">
+                    
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <!-- <th>Sr.No</th> -->
+                                    <th>Project Name</th>
+                                    <th>Task Name</th>
+                                    <th>Task Desc</th>
+                                    <th>Activity</th>
+                                    <th>Hrs</th>
+                                    <th>Mins</th>
+
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-dataSource>
+                                <tr>
+                                    <!-- <td>index+1</td> -->
+                                    <td>{{dataSource.projectname}}</td>
+                                    <td>{{dataSource.taskname}}</td>
+                                    <td>{{dataSource.description}}</td>
+                                    <td>{{dataSource.activity}}</td>
+                                    <td>{{dataSource.timeinhours}}</td>
+                                    <td>{{dataSource.timeinminutes}}</td>
+                                </tr>
+                            </ng-template>
+                    
+                    </p-table>
+                    
+                </div>
+            </ng-template>
+        </c-accordion-item>
+    </div>
+    
+</c-accordion>

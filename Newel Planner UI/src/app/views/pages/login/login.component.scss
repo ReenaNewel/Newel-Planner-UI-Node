@@ -1,0 +1,20 @@
+.bg-blue {
+    background: #010800;
+  }
+  
+  .text-blue {
+    color: #03a9f4;
+  }
+  
+  .btn-primary {
+    --bs-btn-bg: #03a9f4;
+    --bs-btn-border-color: #03a9f4;
+    --bs-btn-hover-bg: #03a0e7;
+    --bs-btn-hover-border-color: #03a0e7;
+  }
+  
+  .container-fluid {
+    font-family: Roboto, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
+      Helvetica Neue, Arial, Noto Sans, sans-serif, "Apple Color Emoji",
+      "Segoe UI Emoji", Segoe UI Symbol, "Noto Color Emoji";
+  }

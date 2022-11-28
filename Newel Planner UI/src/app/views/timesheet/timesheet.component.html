@@ -1,0 +1,228 @@
+<p-toast></p-toast>
+<app-widgets-dropdown></app-widgets-dropdown>
+
+<c-card class="mb-4">
+  <c-card-header>Add Timesheet</c-card-header>
+  <c-card-body class="px-0">
+    <form #timesheetform="ngForm" (ngSubmit)="submit(timesheetform.valid) ; timesheetform.resetForm()">
+      <c-row class="shadow border-1 py-2 mx-2">
+
+        <c-col sm="12" md="12" lg="12" xl="12" xxl="auto" class="border-1 ps-0 onlyCalendarIcon">
+
+          <p-calendar [(ngModel)]="taskDate" name="taskdate" [showIcon]="true" appendTo="body"
+            [inputStyle]="{'width':'0px', 'border':'0', 'padding':'0'}" class="">
+          </p-calendar> {{taskDate | date:'shortDate'}}
+        </c-col>
+        <!-- Project Name    formControlName="ProjectName"-->
+        <c-col sm="12" md="12" lg="12" xl="12" xxl="auto" class="border-1">
+          <p-dropdown [options]="ProjectNames" [(ngModel)]="selectedProject" value="projectid" optionLabel="projectname"
+            [filter]="true" required name="projectname" (onChange)="GetTaskNameByProject(selectedProject)"
+            filterBy="projectname" [showClear]="true" placeholder="Project Name" class="borderNone">
+            <ng-template pTemplate="selectedItem">
+              <div class="country-item country-item-value" *ngIf="selectedProject">
+                <div>{{selectedProject?.projectname | slice:0:12}}</div>
+              </div>
+            </ng-template>
+            <!-- <ng-template let-ProjectName pTemplate="item">
+              <div class="country-item">
+                <div>{{ProjectName.projectname + ' ' + ProjectName.projectid }}</div>
+              </div>
+            </ng-template>
+            -->
+          </p-dropdown>
+        </c-col>
+
+
+        <!-- Task Name formControlName="TaskName"-->
+
+        <c-col sm="12" md="12" lg="12" xl="12" xxl="auto" class="border-1">
+          <p-dropdown [options]="Tasknames" [(ngModel)]="selectedTask" value="taskid" optionLabel="taskname"
+            [filter]="true" filterBy="taskname" [showClear]="true" name="taskname" placeholder="Task Name"
+            class="borderNone" required>
+            <ng-template pTemplate="selectedItem">
+              <div class="country-item country-item-value" *ngIf="selectedTask">
+                <div>{{selectedTask?.taskname | slice:0:12}}</div>
+              </div>
+            </ng-template>
+            <ng-template let-TaskName pTemplate="item">
+              <div class="country-item">
+                <div>{{TaskName.taskname}}</div>
+              </div>
+            </ng-template>
+            <ng-template pTemplate="footer" *ngIf="!selectedProject">
+              <p (click)="showCreateNewTaskDialog()" class="px-3 py-2 bg-light">+ Create new task</p>
+            </ng-template>
+          </p-dropdown>
+        </c-col>
+
+        <!-- <c-col sm="12" md="12" lg="12" xl="12" xxl="auto" class="border-1">
+            <p-multiSelect [options]="ProjectActivities" [(ngModel)]="selectedActivity" defaultLabel="Activity" optionLabel="name"
+              [maxSelectedLabels]="0" [selectedItemsLabel]="'{0} Activity'" class="borderNone">
+            </p-multiSelect>
+          </c-col> -->
+
+        <!-- formControlName="Activity"  -->
+        <c-col sm="12" md="12" lg="12" xl="12" xxl="auto" class="border-1">
+          <p-dropdown [options]="ProjectActivities" [(ngModel)]="selectedactivity" optionLabel="name" [filter]="true"
+            name="projectact" filterBy="name" [showClear]="true" value="typeid" placeholder="Activity"
+            class="borderNone" required>
+            <ng-template pTemplate="selectedItem">
+              <div class="country-item country-item-value" *ngIf="selectedactivity">
+                <div>{{selectedactivity?.name | slice:0:5 }}</div>
+              </div>
+            </ng-template>
+            <ng-template let-activity pTemplate="item">
+              <div class="country-item">
+                <div>{{activity.name}}</div>
+              </div>
+            </ng-template>
+          </p-dropdown>
+        </c-col>
+
+        <!-- formControlName="TaskDesc"  -->
+        <c-col sm="12" md="12" lg="12" xl="12" xxl="4" class="border-1">
+          <input type="text" pInputText placeholder="Description" class="w-full" [(ngModel)]="selectedDescription"
+            name="desc" required />
+          <!-- <div *ngIf="desc.invalid || (desc.touched && f.submitted)">
+        <small class="text-danger">Please input name</small> -->
+          <!--  </div> -->
+        </c-col>
+        <!--  formControlName="TimeHr" -->
+        <c-col sm="12" md="12" lg="12" xl="12" xxl="auto" class="border-1 my-2 my-md-0">
+          <p-dropdown [options]="hours" [(ngModel)]="selectedhours" required name="hours" placeholder="hh"
+            class="time borderNone">
+
+          </p-dropdown>
+          <!-- formControlName="TimeMin" -->
+          <span class="font-semibold mx-1">:</span>
+          <p-dropdown [options]="minutes" [(ngModel)]="selectedminutes" placeholder="mm" class="time borderNone"
+            name="time" required>
+          </p-dropdown>
+        </c-col>
+        <!-- [disabled]="!TimeSheetForm.valid"  -->
+        <c-col sm="12" md="12" lg="12" xl="12" xxl="auto" class="border-1 mt-2 mt-md-2 mt-lg-0 px-1">
+          <p-button type="submit" [disabled]="timesheetform.invalid" label="Add"
+            styleClass="p-button-warning px-3 py-2 mb-md-1">
+          </p-button>
+        </c-col>
+
+      </c-row>
+    </form>
+
+  </c-card-body>
+</c-card>
+
+<c-card class="mb-4">
+  <c-card-header>Weekly Timesheet</c-card-header>
+  <c-card-body>
+    <c-row>
+      <c-col sm="12" class="mb-3">
+        <app-task-accordion></app-task-accordion>
+      </c-col>
+    </c-row>
+  </c-card-body>
+</c-card>
+
+<p-dialog header="Create New Task"  [(visible)]="displayResponsive" [breakpoints]="{'960px': '75vw'}"
+  [style]="{width: '70vw'}" [draggable]="false" [resizable]="false" class="pb-2">
+
+  <form #ProjectForm="ngForm" (ngSubmit)="tasksubmit(ProjectForm.valid) ;ProjectForm.resetForm(); timesheetform.resetForm()">
+  <!-- <form autocomplete="off" [formGroup]="ProjectForm" (Submit)="tasksubmit()"> -->
+
+    <c-row class="">
+      <c-col sm="12" md="4" lg="4" class="mb-3">
+        <span class="p-float-label">
+          <input type="text" class="w-full" placeholder="Normal" pInputText 
+          name="name" [value]="selectedTaskProject" [(ngModel)]="selectedTaskProject"
+          required [readOnly]="true"/>
+        </span>
+      </c-col>
+
+      <c-col sm="12" md="8" lg="8" class="mb-3">
+        <input type="text" class="w-full" placeholder="Task Name*" 
+        pInputText required  name="taskname"  [(ngModel)]="selectedTaskName"/>
+      </c-col>
+
+      <c-col sm="12" md="4" lg="4" class="mb-3">
+        <p-dropdown [options]="tasktypes"[style]="{'minWidth':'100%'}"
+          optionLabel="name" [filter]="true" filterBy="name"
+          [showClear]="true" value="typeid" placeholder="Task Type*"
+          class="" required name="tasktype_name"
+          [(ngModel)]="selectedTaskTypeName">
+        </p-dropdown>
+      </c-col>
+
+      <c-col sm="12" md="4" lg="4" class="mb-3">
+        <p-dropdown [options]="tasks" [style]="{'minWidth':'100%'}" optionLabel="name" 
+        [filter]="true" filterBy="name" name="taskstatus"
+        [showClear]="true" value="typeid" placeholder="Task Status*" class="" 
+        required [(ngModel)]="selectedtaskstatus">
+        </p-dropdown>
+      </c-col>
+
+      <c-col sm="12" md="4" lg="4" class="mb-3">
+        <p-dropdown [options]="UserData" [style]="{'minWidth':'100%'}" optionLabel="name" 
+        [filter]="true" filterBy="name"
+        [showClear]="true"  value="id" (selectionChange)="changeAssigneeId($event.value)"
+        placeholder="Assignee Name*" class="" required 
+        [(ngModel)]="selectedTaskAssignee" name ="assignee_name">
+        </p-dropdown>
+      </c-col>
+
+      <c-col sm="12" md="4" lg="4" class="mb-3">
+        <p-inputNumber inputId="minmax" [min]="0" [max]="500" 
+        inputId="integeronly" placeholder="Efforts In Hrs*"
+        required name="efforts" [(ngModel)]="selectedEfforts">
+        </p-inputNumber>
+      </c-col>
+
+      <c-col sm="12" md="4" lg="4" class="mb-3">
+        <p-calendar [style]="{'minWidth':'100%'}" [showIcon]="true" appendTo="body"
+         placeholder="Start Date" inputId="icon"
+          required name="startdate"  [(ngModel)]="selectedStartDate"></p-calendar>
+      </c-col>
+
+      <c-col sm="12" md="4" lg="4" class="mb-3">
+        <p-calendar  [style]="{'minWidth':'100%'}" [showIcon]="true" 
+        appendTo="body" placeholder="End Date" inputId="icon"
+        required name="enddate" [(ngModel)]="selectedEndate"></p-calendar>
+      </c-col>
+
+      <c-col sm="12" md="8" lg="8" class="mb-3">
+        <input type="text" class="w-full" placeholder="Comment" pInputText name="comments"  [(ngModel)]="selectedComment"/>
+      </c-col>
+
+      <c-col sm="12" md="8" lg="8" class="mb-3">
+        <!-- <p-fileUpload id="uploadFile" name="uploadFile" url="./upload.php" (onUpload)="onUpload($event)"
+          multiple="multiple" accept="image/*" maxFileSize="1000000" formControlName="attachment">
+          <ng-template pTemplate="content">
+            <ul *ngIf="uploadedFiles.length">
+              <li *ngFor="let file of uploadedFiles">{{file.name}} - {{file.size}} bytes</li>
+            </ul>
+          </ng-template>
+        </p-fileUpload> -->
+
+        <!-- <p-fileUpload #fubauto mode="basic" name="uploadFile" accept="image/*" maxFileSize="1000000"
+        (onUpload)="onUpload($event)" [auto]="true" chooseLabel="Browse" multiple="multiple" id="uploadFile"
+          name="uploadFile" formControlName="attachment"></p-fileUpload>
+        </c-col>
+        <c-col sm="12" md="4" lg="4" class="mb-3">
+        <ul *ngIf="uploadedFiles.length">
+          <li *ngFor="let file of uploadedFiles">{{file.name}} - {{file.size}} bytes</li>
+        </ul> -->
+      </c-col>
+      <!-- <ng-template pTemplate="footer">
+        <p-button (click)="displayResponsive=false" label="Back" styleClass="p-button-text pb-2"></p-button>
+        <p-button [disabled]="!ProjectForm.valid" (click)="SubmitNewTask()" label="Save" styleClass="p-button-warning px-3 py-2">
+        </p-button>
+      </ng-template> -->
+
+    </c-row>
+    <!-- (click)="SubmitNewTask()" -->
+    <p-button type="submit" [disabled]="ProjectForm.invalid"  label="Save" styleClass="p-button-warning px-3 py-2"></p-button>
+    <p-button  (click)="ProjectForm.resetForm()" (click) ="timesheetform.resetForm()" (click)="displayResponsive=false" label="Back" styleClass="p-button-text pb-2"></p-button>
+   
+  </form>
+
+ 
+</p-dialog>

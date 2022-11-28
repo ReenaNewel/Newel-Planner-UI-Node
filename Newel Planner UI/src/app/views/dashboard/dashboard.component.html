@@ -1,0 +1,289 @@
+<div class="card">
+  <c-row>
+    <c-col sm="12" class="mb-3">
+
+      <!-- <h5>Programmatic</h5> -->
+
+      <p-tabView [(activeIndex)]="activeIndex1">
+        <p-tabPanel header="Project">
+          <c-row>
+
+            <div class="flex justify-content-center flex-wrap">
+
+              <p-dropdown [options]="countries" [(ngModel)]="selectedCountry" optionLabel="name" [filter]="true"
+                filterBy="name" [showClear]="true" placeholder="Select a Project">
+                <ng-template pTemplate="selectedItem">
+                  <div class="country-item country-item-value" *ngIf="selectedCountry">
+                    <div>{{selectedCountry.name}}</div>
+                  </div>
+                </ng-template>
+                <ng-template let-country pTemplate="item">
+                  <div class="country-item">
+                    <div>{{country.name}}</div>
+                  </div>
+                </ng-template>
+              </p-dropdown>
+
+              <p-dropdown [options]="member" [(ngModel)]="selectedMem" optionLabel="name"
+                placeholder="Select" class="mx-3">
+                <ng-template pTemplate="selectedItem">
+                  <div class="member-item member-item-value" *ngIf="selectedMem">
+                    <div>{{selectedMem.name}}</div>
+                  </div>
+                </ng-template>
+                <ng-template let-member pTemplate="item">
+                  <div class="member-item">
+                    <div>{{member.name}}</div>
+                  </div>
+                </ng-template>
+              </p-dropdown>
+
+              <!-- {{selectedMem}} -->
+              <p-dropdown *ngIf="selectedMem == 'Team' " [options]="countries" [(ngModel)]="selectedCountry" optionLabel="name" [filter]="true"
+              filterBy="name" [showClear]="true" placeholder="Select Team List">
+              <ng-template pTemplate="selectedItem">
+                <div class="country-item country-item-value" *ngIf="selectedCountry">
+                  <div>{{selectedCountry.name}}</div>
+                </div>
+              </ng-template>
+              <ng-template let-country pTemplate="item">
+                <div class="country-item">
+                  <div>{{country.name}}</div>
+                </div>
+              </ng-template>
+            </p-dropdown>
+
+            </div>
+
+            <c-col sm="12" class="my-3">
+              <app-task-accordion></app-task-accordion>
+            </c-col>
+          </c-row>
+
+        </p-tabPanel>
+        <p-tabPanel header="Task">
+          <div class="flex justify-content-center flex-wrap">
+            <p-dropdown [options]="countries" [(ngModel)]="selectedCountry" optionLabel="name" [filter]="true"
+              filterBy="name" [showClear]="true" placeholder="Select a Project">
+              <ng-template pTemplate="selectedItem">
+                <div class="country-item country-item-value" *ngIf="selectedCountry">
+                  <div>{{selectedCountry.name}}</div>
+                </div>
+              </ng-template>
+              <ng-template let-country pTemplate="item">
+                <div class="country-item">
+                  <div>{{country.name}}</div>
+                </div>
+              </ng-template>
+            </p-dropdown>
+          </div>
+
+
+          <c-row class="grid mt-4">
+            <c-col sm="12" md="3">
+              <div class="bg-green-400 font-bold text-gray-900 py-2 text-center mb-2 text-white">Completed</div>
+              <p-scrollPanel [style]="{width: '100%', height: '420px'}" styleClass="custombar1">
+                <div class="mb-1">
+                  <p class="text-sm ps-0">Discussion regarding dashboard page</p>
+                  <c-row class="border-bottom-2 border-600">
+                    <c-col sm="12" xxl="4">
+                      <span class="text-xs">NILAM PATIL</span>
+                    </c-col>
+                    <c-col sm="12" xxl="auto">
+                      <span class="text-xs">11-11-2022</span>
+                    </c-col>
+                    <c-col sm="12" xxl="auto">
+                      <span class="text-xs">11-11-2022</span>
+                    </c-col>
+                  </c-row>
+                </div>
+                <div class="mb-1">
+                  <p class="text-sm ps-0">Discussion regarding dashboard page</p>
+                  <c-row class="border-bottom-2 border-600">
+                    <c-col sm="12" xxl="4">
+                      <span class="text-xs">NILAM PATIL</span>
+                    </c-col>
+                    <c-col sm="12" xxl="auto">
+                      <span class="text-xs">11-11-2022</span>
+                    </c-col>
+                    <c-col sm="12" xxl="auto">
+                      <span class="text-xs">11-11-2022</span>
+                    </c-col>
+                  </c-row>
+                </div>
+                <div class="mb-1">
+                  <p class="text-sm ps-0">Discussion regarding dashboard page</p>
+                  <c-row class="border-bottom-2 border-600">
+                    <c-col sm="12" xxl="4">
+                      <span class="text-xs">NILAM PATIL</span>
+                    </c-col>
+                    <c-col sm="12" xxl="auto">
+                      <span class="text-xs">11-11-2022</span>
+                    </c-col>
+                    <c-col sm="12" xxl="auto">
+                      <span class="text-xs">11-11-2022</span>
+                    </c-col>
+                  </c-row>
+                </div>
+                <div class="mb-1">
+                  <p class="text-sm ps-0">Discussion regarding dashboard page</p>
+                  <c-row class="border-bottom-2 border-600">
+                    <c-col sm="12" xxl="4">
+                      <span class="text-xs">NILAM PATIL</span>
+                    </c-col>
+                    <c-col sm="12" xxl="auto">
+                      <span class="text-xs">11-11-2022</span>
+                    </c-col>
+                    <c-col sm="12" xxl="auto">
+                      <span class="text-xs">11-11-2022</span>
+                    </c-col>
+                  </c-row>
+                </div>
+                <div class="mb-1">
+                  <p class="text-sm ps-0">Discussion regarding dashboard page</p>
+                  <c-row class="border-bottom-2 border-600">
+                    <c-col sm="12" xxl="4">
+                      <span class="text-xs">NILAM PATIL</span>
+                    </c-col>
+                    <c-col sm="12" xxl="auto">
+                      <span class="text-xs">11-11-2022</span>
+                    </c-col>
+                    <c-col sm="12" xxl="auto">
+                      <span class="text-xs">11-11-2022</span>
+                    </c-col>
+                  </c-row>
+                </div>
+                <div class="mb-1">
+                  <p class="text-sm ps-0">Discussion regarding dashboard page</p>
+                  <c-row class="border-bottom-2 border-600">
+                    <c-col sm="12" xxl="4">
+                      <span class="text-xs">NILAM PATIL</span>
+                    </c-col>
+                    <c-col sm="12" xxl="auto">
+                      <span class="text-xs">11-11-2022</span>
+                    </c-col>
+                    <c-col sm="12" xxl="auto">
+                      <span class="text-xs">11-11-2022</span>
+                    </c-col>
+                  </c-row>
+                </div>
+                <div class="mb-1">
+                  <p class="text-sm ps-0">Discussion regarding dashboard page</p>
+                  <c-row class="border-bottom-2 border-600">
+                    <c-col sm="12" xxl="4">
+                      <span class="text-xs">NILAM PATIL</span>
+                    </c-col>
+                    <c-col sm="12" xxl="auto">
+                      <span class="text-xs">11-11-2022</span>
+                    </c-col>
+                    <c-col sm="12" xxl="auto">
+                      <span class="text-xs">11-11-2022</span>
+                    </c-col>
+                  </c-row>
+                </div>
+                <div class="mb-1">
+                  <p class="text-sm ps-0">Discussion regarding dashboard page</p>
+                  <c-row class="border-bottom-2 border-600">
+                    <c-col sm="12" xxl="4">
+                      <span class="text-xs">NILAM PATIL</span>
+                    </c-col>
+                    <c-col sm="12" xxl="auto">
+                      <span class="text-xs">11-11-2022</span>
+                    </c-col>
+                    <c-col sm="12" xxl="auto">
+                      <span class="text-xs">11-11-2022</span>
+                    </c-col>
+                  </c-row>
+                </div>
+
+              </p-scrollPanel>
+            </c-col>
+            <c-col sm="12" md="3">
+              <div class="bg-yellow-400 font-bold text-gray-900 py-2 text-center mb-2 text-white">In Progress</div>
+              <p-scrollPanel [style]="{width: '100%', height: '420px'}" styleClass="custombar1">
+                <p>
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
+                  et
+                  dolore magna aliqua.
+                  Vitae et leo duis ut diam.
+                  Ultricies mi quis hendrerit dolor magna eget est lorem. Amet consectetur adipiscing elit ut.
+                  Nam libero justo laoreet sit amet. Pharetra massa massa ultricies mi quis hendrerit dolor magna.
+                  Est ultricies integer quis auctor elit sed vulputate. Consequat ac felis donec et. Tellus orci ac
+                  auctor augue mauris.
+                  Semper feugiat nibh sed pulvinar proin gravida hendrerit lectus a. Tincidunt arcu non sodales neque
+                  sodales.
+                  Metus aliquam eleifend mi in nulla posuere sollicitudin aliquam ultrices. Sodales ut etiam sit amet
+                  nisl purus.
+                  Cursus sit amet dictum sit amet. Tristique senectus et netus et malesuada fames ac turpis egestas.
+                  Et tortor consequat id porta nibh venenatis cras sed. Diam maecenas ultricies mi eget mauris.
+                  Eget egestas purus viverra accumsan in nisl nisi. Suscipit adipiscing bibendum est ultricies
+                  integer.
+                  Mattis aliquam faucibus purus in massa tempor nec.
+                </p>
+              </p-scrollPanel>
+            </c-col>
+            <c-col sm="12" md="3">
+              <div class="bg-red-400 font-bold text-gray-900 py-2 text-center mb-2 text-white"> Not Started</div>
+              <p-scrollPanel [style]="{width: '100%', height: '420px'}" styleClass="custombar1">
+                <p>
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
+                  et
+                  dolore magna aliqua.
+                  Vitae et leo duis ut diam.
+                  Ultricies mi quis hendrerit dolor magna eget est lorem. Amet consectetur adipiscing elit ut.
+                  Nam libero justo laoreet sit amet. Pharetra massa massa ultricies mi quis hendrerit dolor magna.
+                  Est ultricies integer quis auctor elit sed vulputate. Consequat ac felis donec et. Tellus orci ac
+                  auctor augue mauris.
+                  Semper feugiat nibh sed pulvinar proin gravida hendrerit lectus a. Tincidunt arcu non sodales neque
+                  sodales.
+                  Metus aliquam eleifend mi in nulla posuere sollicitudin aliquam ultrices. Sodales ut etiam sit amet
+                  nisl purus.
+                  Cursus sit amet dictum sit amet. Tristique senectus et netus et malesuada fames ac turpis egestas.
+                  Et tortor consequat id porta nibh venenatis cras sed. Diam maecenas ultricies mi eget mauris.
+                  Eget egestas purus viverra accumsan in nisl nisi. Suscipit adipiscing bibendum est ultricies
+                  integer.
+                  Mattis aliquam faucibus purus in massa tempor nec.
+                </p>
+              </p-scrollPanel>
+            </c-col>
+            <c-col sm="12" md="3">
+              <div class="bg-blue-400 font-bold text-gray-900 py-2 text-center mb-2 text-white">Total</div>
+              <p-scrollPanel [style]="{width: '100%', height: '420px'}" styleClass="custombar1">
+                <p>
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
+                  et
+                  dolore magna aliqua.
+                  Vitae et leo duis ut diam.
+                  Ultricies mi quis hendrerit dolor magna eget est lorem. Amet consectetur adipiscing elit ut.
+                  Nam libero justo laoreet sit amet. Pharetra massa massa ultricies mi quis hendrerit dolor magna.
+                  Est ultricies integer quis auctor elit sed vulputate. Consequat ac felis donec et. Tellus orci ac
+                  auctor augue mauris.
+                  Semper feugiat nibh sed pulvinar proin gravida hendrerit lectus a. Tincidunt arcu non sodales neque
+                  sodales.
+                  Metus aliquam eleifend mi in nulla posuere sollicitudin aliquam ultrices. Sodales ut etiam sit amet
+                  nisl purus.
+                  Cursus sit amet dictum sit amet. Tristique senectus et netus et malesuada fames ac turpis egestas.
+                  Et tortor consequat id porta nibh venenatis cras sed. Diam maecenas ultricies mi eget mauris.
+                  Eget egestas purus viverra accumsan in nisl nisi. Suscipit adipiscing bibendum est ultricies
+                  integer.
+                  Mattis aliquam faucibus purus in massa tempor nec.
+                </p>
+              </p-scrollPanel>
+            </c-col>
+          </c-row>
+
+
+        </p-tabPanel>
+        <p-tabPanel header="Header III">
+          <p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti
+            atque corrupti quos dolores et quas molestias excepturi sint occaecati
+            cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et
+            dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio.
+            Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus.</p>
+        </p-tabPanel>
+      </p-tabView>
+
+    </c-col>
+  </c-row>
+
+</div>
