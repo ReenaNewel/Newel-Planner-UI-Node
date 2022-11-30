@@ -24,6 +24,9 @@ import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { MessagesModule } from 'primeng/messages';
 import { MessageModule } from 'primeng/message';
+import { DialogModule } from 'primeng/dialog';
+import {ToolbarModule} from 'primeng/toolbar';
+
 
 @NgModule({
   declarations: [
@@ -53,6 +56,9 @@ import { MessageModule } from 'primeng/message';
     InputTextareaModule,
     RadioButtonModule,
     TableModule,
+    DialogModule,
+    ToolbarModule,
+
   ]
 })
 export class MastersModule {

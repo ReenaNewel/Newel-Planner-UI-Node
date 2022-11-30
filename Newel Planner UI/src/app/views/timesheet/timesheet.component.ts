@@ -61,7 +61,7 @@ export class TimesheetComponent implements OnInit,AfterViewInit {
   countries: any[];
   hours: number[];
   minutes: number[];
-  displayResponsive: boolean;
+  createTaskDialog: boolean;
   uploadedFiles: any[] = [];
 
   // TimeSheetForm !: FormGroup
@@ -209,8 +209,9 @@ export class TimesheetComponent implements OnInit,AfterViewInit {
   }
 
   showCreateNewTaskDialog() {
-    this.displayResponsive = true;
+    this.createTaskDialog = true;
   }
+
   submit(isvalid: boolean) {
     if (isvalid) {
       this.saveTimesheet()
@@ -320,7 +321,7 @@ export class TimesheetComponent implements OnInit,AfterViewInit {
   }
   saveTimesheet() {
 
-    this.displayResponsive = false
+    this.createTaskDialog = false
     let model = {
 
       projectid: this.selectedProject.projectid,
@@ -343,7 +344,7 @@ export class TimesheetComponent implements OnInit,AfterViewInit {
         this.child.ShowDetails();
       }
       else {
-        this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Record not saved' });
+        this.messageService.add({ severity: 'warn', summary: 'Success', detail: 'Record not saved' });
       }
     });
 

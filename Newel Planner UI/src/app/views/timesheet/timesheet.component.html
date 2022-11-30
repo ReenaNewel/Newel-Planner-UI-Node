@@ -81,7 +81,7 @@
 
         <!-- formControlName="TaskDesc"  -->
         <c-col sm="12" md="12" lg="12" xl="12" xxl="4" class="border-1">
-          <input type="text" pInputText placeholder="Description" class="w-full" [(ngModel)]="selectedDescription"
+          <input pTooltip="Description" tooltipPosition="top" type="text" pInputText placeholder="Description" class="w-full" [(ngModel)]="selectedDescription"
             name="desc" required />
           <!-- <div *ngIf="desc.invalid || (desc.touched && f.submitted)">
         <small class="text-danger">Please input name</small> -->
@@ -89,13 +89,13 @@
         </c-col>
         <!--  formControlName="TimeHr" -->
         <c-col sm="12" md="12" lg="12" xl="12" xxl="auto" class="border-1 my-2 my-md-0">
-          <p-dropdown [options]="hours" [(ngModel)]="selectedhours" required name="hours" placeholder="00"
+          <p-dropdown pTooltip="Hours" tooltipPosition="top" [options]="hours" [(ngModel)]="selectedhours" required name="hours" placeholder="00"
             class="time borderNone">
 
           </p-dropdown>
           <!-- formControlName="TimeMin" -->
           <span class="font-semibold mx-1">:</span>
-          <p-dropdown [options]="minutes" [(ngModel)]="selectedminutes" placeholder="00" class="time borderNone"
+          <p-dropdown pTooltip="Minutes" tooltipPosition="top" [options]="minutes" [(ngModel)]="selectedminutes" placeholder="00" class="time borderNone"
             name="time" required>
           </p-dropdown>
         </c-col>
@@ -123,7 +123,8 @@
   </c-card-body>
 </c-card>
 
-<p-dialog header="Create New Task" (click)="ProjectForm.resetForm(); timesheetform.resetForm()" [(visible)]="displayResponsive" [breakpoints]="{'960px': '75vw'}"
+<p-dialog header="Create New Task" (click)="ProjectForm.resetForm(); timesheetform.resetForm()"
+ [(visible)]="createTaskDialog" [breakpoints]="{'960px': '75vw'}"
   [style]="{width: '70vw'}" [draggable]="false" [resizable]="false" class="pb-2">
 
   <form #ProjectForm="ngForm" (ngSubmit)="tasksubmit(ProjectForm.valid) ;ProjectForm.resetForm(); timesheetform.resetForm()">
@@ -214,7 +215,7 @@
         </ul> -->
       </c-col>
       <!-- <ng-template pTemplate="footer">
-        <p-button (click)="displayResponsive=false" label="Back" styleClass="p-button-text pb-2"></p-button>
+        <p-button (click)="createTaskDialog=false" label="Back" styleClass="p-button-text pb-2"></p-button>
         <p-button [disabled]="!ProjectForm.valid" (click)="SubmitNewTask()" label="Save" styleClass="p-button-warning px-3 py-2">
         </p-button>
       </ng-template> -->
@@ -222,7 +223,7 @@
     </c-row>
     <!-- (click)="SubmitNewTask()" -->
     <p-button type="submit" [disabled]="ProjectForm.invalid"  label="Save" styleClass="p-button-warning px-3 py-2"></p-button>
-    <p-button  (click)="ProjectForm.resetForm()" (click) ="timesheetform.resetForm()" (click)="displayResponsive=false" label="Back" styleClass="p-button-text pb-2"></p-button>
+    <p-button  (click)="ProjectForm.resetForm()" (click) ="timesheetform.resetForm()" (click)="createTaskDialog=false" label="Back" styleClass="p-button-text pb-2"></p-button>
    
   </form>
 

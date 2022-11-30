@@ -48,6 +48,7 @@ export class ProjectMasterComponent implements OnInit {
   loginid: any
   userLoggedIn: any
   userid: any
+  projectDialog: boolean;
 
   // @ViewChild(MatPaginator) paginator!: MatPaginator;
   // @ViewChild(MatSort) sort!: MatSort;
@@ -55,7 +56,8 @@ export class ProjectMasterComponent implements OnInit {
     'ProjectStatus', 'ProjectStatusid', 'ProjectStage', 'ProjectStageid', 'Action'];
 
   products2: any[];
-  SelectedProjectNames: any;
+  SelectedProjectNames: any[];
+  showSaveBtn: boolean;
 
 
   constructor(private fb: FormBuilder, private router: Router,
@@ -64,7 +66,7 @@ export class ProjectMasterComponent implements OnInit {
     private ApiService: ApiserviceService,
     private messageService: MessageService,
     // private messageService: MessageService
-    ) { }
+  ) { }
 
 
 
@@ -112,13 +114,28 @@ export class ProjectMasterComponent implements OnInit {
 
   }
 
+  showCreateNewProjectDialog() {
+    this.projectDialog = true;
+    this.showSaveBtn = true;
+  }
+
+
+  // onRowEditInit(SelectedProject) {
+  //   const project = SelectedProject;
+  //   console.log("project", project);
+
+  //   this.projectDialog = true;
+  // }
+
+
+
   onRowEditSave() {
-      // delete this.clonedProducts[product.id];
-      this.messageService.add({
-        severity: 'success',
-        summary: 'Success',
-        detail: 'Product is updated',
-      });
+    // delete this.clonedProducts[product.id];
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Success',
+      detail: 'Product is updated',
+    });
 
   }
 
@@ -144,11 +161,11 @@ export class ProjectMasterComponent implements OnInit {
   ShowDetails() {
     // console.log(this.Global.getapiendpoint() + '/api/Project/GetAllProjects')
     this.rest.getAll(this.Global.getapiendpoint() + '/Project/GetAllProjects').subscribe((data: any) => {
-      
-      if(data.Success){
+
+      if (data.Success) {
         this.SelectedProjectNames = data.Data
       }
-      console.log('data', this.SelectedProjectNames)
+      console.log('project data', this.SelectedProjectNames)
     })
 
 
@@ -188,7 +205,7 @@ export class ProjectMasterComponent implements OnInit {
     this.rest.getAll(this.Global.getapiendpoint() + '/Client/GetAllClients').subscribe((data: any) => {
 
       if (data.Success) {
-       
+
         this.ClientNames = data.Data
         // console.log('client',data.Data)
 
@@ -203,7 +220,7 @@ export class ProjectMasterComponent implements OnInit {
     this.rest.postParams(this.Global.getapiendpoint() + '/Client/GetSelectedClients', model).subscribe((data: any) => {
 
       if (data.Success) {
-        console.log('slected client', data.Data)
+        // console.log('slected client', data.Data)
         this.SelectedClientNames = data.Data
 
 
@@ -220,6 +237,9 @@ export class ProjectMasterComponent implements OnInit {
     this.ShowDetails()
   }
   submit() {
+
+    this.projectDialog = false
+
     if (!this.ProjectForm.valid) {
       return
     }
@@ -241,37 +261,37 @@ export class ProjectMasterComponent implements OnInit {
     // this.IsEditable = false
     this.ProjectForm.reset();
 
-   
+
   }
   SavePrjDetails() {
-   
+
     var model = {
       name: this.ProjectForm.controls['PrjName'].value,
       activity: this.ProjectForm.controls['Activity'].value,
       clientid: this.ProjectForm.controls['ClientName'].value,
       fromdate: moment(this.ProjectForm.controls['fromdate'].value).format('YYYY-MM-DD'),
       todate: moment(this.ProjectForm.controls['todate'].value).format('YYYY-MM-DD'),
-      owner:null,
+      owner: null,
       isactive: this.ProjectForm.controls['PrjActive'].value,
       created_date: moment(new Date()).format('YYYY-MM-DD'),
       created_by: this.userid,
-      projecttype: this.PrjType_id,
+      projecttype: this.ProjectForm.controls['PrjType'].value,
       plannedeffort: this.ProjectForm.controls['PlannedEfforts'].value,
       projectstage: this.ProjectForm.controls['PrjStage'].value,
       projectstatus: this.ProjectForm.controls['PrjStatus'].value
 
     }
-    console.log('project model',model)
+    // console.log('project model', model)
     this.rest.postParams(this.Global.getapiendpoint() + '/Project/InsertProjects', model).subscribe((data: any) => {
 
       if (data.Success) {
         this.messageService.add({ severity: 'success', summary: 'Service Message', detail: 'New Project added successfully' });
         this.Cancel_form()
       }
-      else{
-        this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Record not saved' });
+      else {
+        this.messageService.add({ severity: 'warn', summary: 'Success', detail: 'Record not saved' });
       }
-      
+
       //  this.isViewList=true
 
     })
@@ -279,6 +299,11 @@ export class ProjectMasterComponent implements OnInit {
   editprojects(row: any) {
 
     console.log('project rows :', row)
+
+    this.projectDialog = true;
+    this.showSaveBtn = false;
+
+
     this.IsCreate = false;
     this.isViewList = false;
     this.IsEditable = true
@@ -286,10 +311,10 @@ export class ProjectMasterComponent implements OnInit {
     this.projectid = row.projectid
     this.plannedEffort = row.plannedeffort
 
-    console.log('client', row.clientid)
+    // console.log('client date', row.prjtodate)
 
     //  this.showselectedclient(this.ClientPrjId)
-    debugger;
+    // debugger;
     this.ProjectForm = this.fb.group({
       PrjName: [row.projectname],
       ClientName: [row.clientid],
@@ -299,8 +324,9 @@ export class ProjectMasterComponent implements OnInit {
       PrjStage: [row.projectstageid],
       Activity: [row.projectdesc],
       PrjActive: [row.isactive],
-      fromdate: [row.prjtodate],
-      todate: [row.prjstartdate],
+      fromdate: [new Date(row.prjstartdate)],
+      // fromdate: [row.prjtodate],
+      todate: [new Date(row.prjtodate)],
       PlannedEfforts: [Math.round(this.plannedEffort)]
 
     })
@@ -326,6 +352,8 @@ export class ProjectMasterComponent implements OnInit {
 
   UpdateProject() {
     // this.loginid =1
+
+    
     var model = {
       projectid: this.projectid,
       name: this.ProjectForm.controls['PrjName'].value,
@@ -347,8 +375,11 @@ export class ProjectMasterComponent implements OnInit {
     this.rest.postParams(this.Global.getapiendpoint() + '/Project/UpdateProjects', model).subscribe((data: any) => {
       // console.log(data.Data)
       if (data.Success) {
-        this.openSnackBarSuccess(data.Message)
+        this.messageService.add({ severity: 'success', summary: 'Service Message', detail: 'Project Record updated successfully' });
         this.Cancel_form()
+      }
+      else{
+        this.messageService.add({ severity: 'warn', summary: 'Success', detail: 'Record not updated..!!' });
       }
       //  this.isViewList=true
 
