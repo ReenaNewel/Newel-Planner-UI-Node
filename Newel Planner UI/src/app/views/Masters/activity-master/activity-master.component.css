@@ -1,0 +1,83 @@
+.form-container{
+    height:10cm;
+    width:20cm ;
+
+    padding-top: 100px;
+    padding-left: 400px;
+    position: fixed;
+}
+.container{
+    display: flex;
+    justify-content:center;
+    /* height: 100%; */
+    padding: 50px;
+    margin: 0px;
+    height:10cm;
+    width:20cm ;
+    background-color:  #f9f9f9;
+   
+}
+.mat-card{
+    background-color: rgb(96, 45, 224);
+    height:15mm;
+    appearance: initial;
+    width:20cm ;
+    font-weight: 100;
+    color: rgb(232, 207, 18)
+}
+.form-container{
+    width: 100 px; 
+    /* margin: 0 px auto;  */
+    margin-top: 200 px;
+}
+
+.form-field{
+    /* display:block; */
+    width:300px
+    /* height:40px; */
+}
+.box{
+    width: 100px;
+    height: 100px;
+    background-color: beige;
+}
+.Save{
+    background-color: rgb(96, 45, 224);
+    color: rgb(232, 207, 18);
+    /* margin-right: 40mm; */
+}
+.mat-radio-button ~ .mat-radio-button {
+    margin-left: 16px;
+    
+    /* background-color: black; */
+
+  }
+  .mat-option{
+    color: rgb(96, 45, 224);
+    z-index: index;
+  }
+ 
+  .mat-radio-group{
+    color: rgb(96, 45, 224);
+  }
+  .mat-radio-button.mat-accent .mat-radio-ripple .mat-ripple-element {
+    background-color:  rgb(22, 92, 125) !important;
+}
+
+.mat-radio-button.mat-accent .mat-radio-inner-circle {
+    background-color:  rgb(22, 92, 125) !important;
+    z-index: 3;
+}
+
+.mat-radio-button .mat-radio-outer-circle {
+    border-color:  rgb(22, 92, 125) !important;
+    z-index: 3;
+}
+.invalid{
+    color:#eb36f4;
+}
+.btn-close{
+    margin-left: 14cm;
+    float:right;
+   
+}

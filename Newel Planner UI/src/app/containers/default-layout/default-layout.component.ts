@@ -31,11 +31,11 @@ export class DefaultLayoutComponent implements OnInit {
     private Global: Global, private ApiService: ApiserviceService) { }
 
   ngOnInit(): void {
-    this.userLoggedIn = JSON.parse(localStorage.getItem('userLoggedIn')!);
-    this.userid = this.userLoggedIn.id;
-    this.defaultRoleId = this.userLoggedIn.defaultroleid;
+    // this.userLoggedIn = JSON.parse(localStorage.getItem('userLoggedIn')!);
+    // this.userid = this.userLoggedIn.id;
+    // this.defaultRoleId = this.userLoggedIn.defaultroleid;
     // this.ShowMenuDetails()
-
+    console.log('navitems',navItems)
 
   }
 

@@ -41,8 +41,8 @@ export class TimesheetComponent implements OnInit,AfterViewInit {
   selectedstatus:any
   selectedactivity: any
   selectedActivity: any;
-  selectedhours: number;
-  selectedminutes: number;
+  selectedhours: number = 0;
+  selectedminutes: number = 0;
   selectedDescription: any
 
   selectedTaskTypeName:any;
@@ -191,8 +191,8 @@ export class TimesheetComponent implements OnInit,AfterViewInit {
   }
 
   ngOnInit(): void {
-    this.hours = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24];
-    this.minutes = [0, 15, 30, 45]
+    this.hours = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24];
+    this.minutes = [15, 30, 45]
     // [...Array(60)].map((_, i) => i);
     this.userLoggedIn = JSON.parse(localStorage.getItem('userLoggedIn')!);
     this.userRole = this.userLoggedIn.defaultroleid;
@@ -368,9 +368,10 @@ export class TimesheetComponent implements OnInit,AfterViewInit {
       this.projectnames = data.Data;
     })
 
-    this.rest.getAll(this.Global.getapiendpoint() + '/UserDetails/GetAllAssign').subscribe((data: any) => {
-    this.UserData = data.Data;
-    })
+    // this.rest.getAll(this.Global.getapiendpoint() + '/UserDetails/GetAllAssign').subscribe((data: any) => {
+    // this.UserData = data.Data;
+    // })
+   
 
     this.rest.getAll(this.Global.getapiendpoint() + '/General/getAllTasks').subscribe((data: any) => {
     this.tasks = data.Data;
@@ -380,6 +381,20 @@ export class TimesheetComponent implements OnInit,AfterViewInit {
   changeAssigneeId(value: any) {
     console.log(value.id)
     this.AssigneeId = value.id
+  }
+
+  getUserByProjectId(){
+    if(this.selectedProject){
+      var model={
+        projectid: this.selectedProject.projectid
+      }
+      console.log('project id', model)
+      this.rest.postParams(this.Global.getapiendpoint() + '/NewTask/GetAllUsersByProjectID',model).subscribe((data: any) => {
+        if(data.Success){
+          this.UserData = data.Data;
+        }
+        })
+    }
   }
 
   onUpload(event) {

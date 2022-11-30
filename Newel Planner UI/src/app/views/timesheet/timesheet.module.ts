@@ -21,6 +21,7 @@ import { MessageModule } from 'primeng/message';
 import { ToastModule } from 'primeng/toast';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { FileUploadModule } from 'primeng/fileupload';
+import {TooltipModule} from 'primeng/tooltip';
 
 @NgModule({
   declarations: [TimesheetComponent],
@@ -44,6 +45,7 @@ import { FileUploadModule } from 'primeng/fileupload';
     InputNumberModule,
     FileUploadModule,
     HttpClientModule,
+    TooltipModule
   ]
 })
 export class TimesheetModule { }

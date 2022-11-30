@@ -1,0 +1,39 @@
+<!-- <div class ="form-container">
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title>
+                Leave Master
+            </mat-card-title>
+        </mat-card-header>
+    </mat-card>
+    <div class="container">
+                <form [formGroup]="ProjectForm" (submit)="submit()">
+                    
+                    <mat-form-field class="form-field" appearance="outline">
+                    <mat-label> Leave Type
+                    </mat-label>
+                    <input matInput formControlName="LeaveType" required>
+                    <mat-error *ngIf="ProjectForm.controls['LeaveType'].touched && ProjectForm.controls['LeaveType'].invalid">
+                        <span *ngIf="ProjectForm.controls['LeaveType'].errors">This field is mandatory.</span>
+                    </mat-error>
+                    </mat-form-field>&nbsp;
+    
+                    <mat-form-field class="form-field" appearance="outline" >
+                        <mat-label>Select Leave Status</mat-label>
+                        <mat-select disableRipple placeholder="Leave Status*" formControlName="Status"
+                            (selectionChange)="GetAllStatus()"required>
+                            <mat-option *ngFor="let StatusName of StatusNames" [value]="StatusName">
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                 
+    
+                    <button mat-raised-button class ="Save" type="submit" [disabled]="!ProjectForm.valid">Save Details</button>&nbsp;
+                    <button mat-raised-button class ="Save" type="submit" color="primary">Cancel</button>
+                   
+                   
+                </form>
+          
+    </div>
+    </div> -->

@@ -12,6 +12,7 @@ const routes: Routes = [
   {
     path: '',
     redirectTo: 'login',
+    // redirectTo: 'masters/project',
     pathMatch: 'full'
   },
   {
@@ -30,6 +31,11 @@ const routes: Routes = [
         path: 'timesheet',
         loadChildren: () =>
           import('./views/timesheet/timesheet.module').then((m) => m.TimesheetModule)
+      },
+      {
+        path: 'new-task',
+        loadChildren: () =>
+          import('./views/new-task/new-task.module').then((m) => m.NewTaskModule)
       },
       {
         path: 'theme',
@@ -75,6 +81,11 @@ const routes: Routes = [
         path: 'pages',
         loadChildren: () =>
           import('./views/pages/pages.module').then((m) => m.PagesModule)
+      },
+      {
+        path: 'masters',
+        loadChildren: () =>
+          import('./views/masters/masters.module').then((m) => m.MastersModule)
       },
     ]
   },

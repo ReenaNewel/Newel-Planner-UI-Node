@@ -20,7 +20,7 @@
             filterBy="projectname" [showClear]="true" placeholder="Project Name" class="borderNone">
             <ng-template pTemplate="selectedItem">
               <div class="country-item country-item-value" *ngIf="selectedProject">
-                <div>{{selectedProject?.projectname | slice:0:12}}</div>
+                <div pTooltip="Project Name" tooltipPosition="top">{{selectedProject?.projectname | slice:0:12}}</div>
               </div>
             </ng-template>
             <!-- <ng-template let-ProjectName pTemplate="item">
@@ -41,7 +41,7 @@
             class="borderNone" required>
             <ng-template pTemplate="selectedItem">
               <div class="country-item country-item-value" *ngIf="selectedTask">
-                <div>{{selectedTask?.taskname | slice:0:12}}</div>
+                <div pTooltip="Task Name" tooltipPosition="top">{{selectedTask?.taskname | slice:0:12}}</div>
               </div>
             </ng-template>
             <ng-template let-TaskName pTemplate="item">
@@ -68,7 +68,7 @@
             class="borderNone" required>
             <ng-template pTemplate="selectedItem">
               <div class="country-item country-item-value" *ngIf="selectedactivity">
-                <div>{{selectedactivity?.name | slice:0:5 }}</div>
+                <div pTooltip="Activity" tooltipPosition="top">{{selectedactivity?.name | slice:0:5 }}</div>
               </div>
             </ng-template>
             <ng-template let-activity pTemplate="item">
@@ -89,13 +89,13 @@
         </c-col>
         <!--  formControlName="TimeHr" -->
         <c-col sm="12" md="12" lg="12" xl="12" xxl="auto" class="border-1 my-2 my-md-0">
-          <p-dropdown [options]="hours" [(ngModel)]="selectedhours" required name="hours" placeholder="hh"
+          <p-dropdown [options]="hours" [(ngModel)]="selectedhours" required name="hours" placeholder="00"
             class="time borderNone">
 
           </p-dropdown>
           <!-- formControlName="TimeMin" -->
           <span class="font-semibold mx-1">:</span>
-          <p-dropdown [options]="minutes" [(ngModel)]="selectedminutes" placeholder="mm" class="time borderNone"
+          <p-dropdown [options]="minutes" [(ngModel)]="selectedminutes" placeholder="00" class="time borderNone"
             name="time" required>
           </p-dropdown>
         </c-col>
@@ -123,7 +123,7 @@
   </c-card-body>
 </c-card>
 
-<p-dialog header="Create New Task"  [(visible)]="displayResponsive" [breakpoints]="{'960px': '75vw'}"
+<p-dialog header="Create New Task" (click)="ProjectForm.resetForm(); timesheetform.resetForm()" [(visible)]="displayResponsive" [breakpoints]="{'960px': '75vw'}"
   [style]="{width: '70vw'}" [draggable]="false" [resizable]="false" class="pb-2">
 
   <form #ProjectForm="ngForm" (ngSubmit)="tasksubmit(ProjectForm.valid) ;ProjectForm.resetForm(); timesheetform.resetForm()">
@@ -163,17 +163,19 @@
       <c-col sm="12" md="4" lg="4" class="mb-3">
         <p-dropdown [options]="UserData" [style]="{'minWidth':'100%'}" optionLabel="name" 
         [filter]="true" filterBy="name"
-        [showClear]="true"  value="id" (selectionChange)="changeAssigneeId($event.value)"
+        [showClear]="true"  value="id" (click)="getUserByProjectId()" (selectionChange)="changeAssigneeId($event.value)"
         placeholder="Assignee Name*" class="" required 
         [(ngModel)]="selectedTaskAssignee" name ="assignee_name">
         </p-dropdown>
       </c-col>
 
       <c-col sm="12" md="4" lg="4" class="mb-3">
-        <p-inputNumber inputId="minmax" [min]="0" [max]="500" 
+        <input type="number" class="w-full" placeholder="Efforts In Hrs*" pInputText name="efforts"
+        [(ngModel)]="selectedEfforts"  />
+        <!-- <p-inputNumber inputId="minmax" [min]="0" [max]="500" 
         inputId="integeronly" placeholder="Efforts In Hrs*"
         required name="efforts" [(ngModel)]="selectedEfforts">
-        </p-inputNumber>
+        </p-inputNumber> -->
       </c-col>
 
       <c-col sm="12" md="4" lg="4" class="mb-3">

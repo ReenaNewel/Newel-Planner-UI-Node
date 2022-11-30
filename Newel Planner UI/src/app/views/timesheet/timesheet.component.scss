@@ -82,7 +82,9 @@
   width: 55px;
 }
 
-
+:host ::ng-deep .p-overlay {
+  width: 500px;
+}
 
 // :host ::ng-deep 
 

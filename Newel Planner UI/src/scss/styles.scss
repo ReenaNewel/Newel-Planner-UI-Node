@@ -32,7 +32,7 @@ $enable-rtl: true;
 @import "../../node_modules/primeflex/primeflex.css";
 
 .header {
-  background: #010800 !important;
+  background: #4e5d6c !important;
   --cui-header-color: #eff6ff !important;
   --cui-header-hover-color: rgb(255 255 255 / 87%) !important;
   --cui-header-active-color: #ffffff !important;
@@ -41,7 +41,7 @@ $enable-rtl: true;
 }
 
 .sidebar-brand {
-  background: #010800 !important;
+  background: #4e5d6c !important;
 }
 
 .sidebar {
@@ -105,3 +105,9 @@ $enable-rtl: true;
 .sidebar-toggler {
   background: #f8f9fa !important;
 }
+
+.card-header {
+  font-weight: 700 !important;
+}
+
+

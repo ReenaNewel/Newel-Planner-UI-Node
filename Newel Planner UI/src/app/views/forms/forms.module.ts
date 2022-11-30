@@ -35,7 +35,8 @@ import { ValidationComponent } from './validation/validation.component';
     ChecksRadiosComponent,
     InputGroupsComponent,
     LayoutComponent,
-    ValidationComponent
+    ValidationComponent,
+
   ],
   imports: [
     CommonModule,

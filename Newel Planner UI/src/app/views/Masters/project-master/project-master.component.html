@@ -1,0 +1,591 @@
+<p-toast></p-toast>
+
+<c-card class="mb-4">
+    <c-card-header>Add Project</c-card-header>
+    <c-card-body class="px-3">
+        <form [formGroup]="ProjectForm" (submit)="submit()">
+            <c-row class="">
+                <c-col sm="12" md="4" lg="4" class="mb-3">
+                    <input type="text" class="w-full" placeholder="Project Name*" pInputText required
+                        formControlName="PrjName" />
+                    <small *ngIf="ProjectForm.controls['PrjName'].touched && ProjectForm.controls['PrjName'].invalid"
+                        class="p-error block">
+                        <span *ngIf="ProjectForm.controls['PrjName'].errors">This field is mandatory.</span>
+                    </small>
+                </c-col>
+                <c-col sm="12" md="4" lg="4" class="mb-3">
+                    <p-dropdown [options]="ClientNames" [style]="{'minWidth':'100%'}" optionValue="id"  optionLabel="name" [filter]="true"
+                        filterBy="name" [showClear]="true" value="id" placeholder="Client Name*" class="" required
+                        formControlName="ClientName">
+                    </p-dropdown>
+                    <small *ngIf="ProjectForm.controls['ClientName'].touched && ProjectForm.controls['ClientName'].invalid"
+                        class="p-error block">
+                        <span *ngIf="ProjectForm.controls['ClientName'].errors">This field is mandatory.</span>
+                    </small>
+                </c-col>
+               <c-col sm="12" md="4" lg="4" class="">
+                   <!--   <input type="text" class="w-full" placeholder="Owner*" pInputText required
+                        formControlName="PrjOwner" />
+                    <small *ngIf="ProjectForm.controls['PrjOwner'].touched && ProjectForm.controls['PrjOwner'].invalid"
+                        class="p-error block">
+                        <span *ngIf="ProjectForm.controls['PrjOwner'].errors">This field is mandatory.</span>
+                    </small> -->
+                </c-col>
+                <c-col sm="12" md="4" lg="4" class="mb-3">
+                    <p-calendar [style]="{'minWidth':'100%'}" [showIcon]="true" appendTo="body"
+                        placeholder="Project Start Date" inputId="icon" name="startdate" formControlName="fromdate">
+                    </p-calendar>
+                </c-col>
+                <c-col sm="12" md="4" lg="4" class="mb-3">
+                    <p-calendar [style]="{'minWidth':'100%'}" [showIcon]="true" appendTo="body"
+                        placeholder="Project End Date" inputId="icon" required name="enddate" formControlName="todate">
+                    </p-calendar>
+                </c-col>
+                <c-col sm="12" md="4" lg="4" class="mb-3">
+                    <input type="number" class="w-full" placeholder="Effort In Hrs*" pInputText required
+                        formControlName="PlannedEfforts" />
+                    <small
+                        *ngIf="ProjectForm.controls['PlannedEfforts'].touched && ProjectForm.controls['PlannedEfforts'].invalid"
+                        class="p-error block">
+                        <span *ngIf="ProjectForm.controls['PlannedEfforts'].errors">This field is mandatory.</span>
+                    </small>
+                </c-col>
+                <c-col sm="12" md="4" lg="4" class="mb-3">
+                    <p-dropdown [options]="ProjectTypes" [style]="{'minWidth':'100%'}"optionValue="typeid"  optionLabel="name"
+                        [filter]="true" filterBy="name" [showClear]="true" value="typeid" placeholder="Project Type*"
+                        (selectionChange)="GetAllProjectType($event.value)" required formControlName="PrjType">
+
+                    </p-dropdown>
+                </c-col>
+                <c-col sm="12" md="4" lg="4" class="mb-3">
+                    <p-dropdown [options]="ProjectStates" [style]="{'minWidth':'100%'}" optionValue="typeid" optionLabel="name"
+                        [filter]="true" filterBy="name" [showClear]="true" value="typeid" placeholder="Project Status*"
+                        (selectionChange)="GetAllProjectStatus($event.value)" required formControlName="PrjStatus">
+                    </p-dropdown>
+                </c-col>
+                <c-col sm="12" md="4" lg="4" class="mb-3">
+                    <p-dropdown [options]="ProjectStages" [style]="{'minWidth':'100%'}" optionValue="typeid" optionLabel="name"
+                        [filter]="true" filterBy="name" [showClear]="true" value="typeid" placeholder="Project Stage*"
+                        (selectionChange)="GetAllProjectStage($event.value)" required formControlName="PrjStage">
+                    </p-dropdown>
+                </c-col>
+                <c-col sm="12" md="8" lg="8" class="mb-3">
+                    <span class="p-float-label">
+                        <textarea id="float-input" rows="1" cols="100" pInputTextarea required
+                            formControlName="Activity"></textarea>
+                        <label for="float-input">Description</label>
+                    </span>
+                    <small class="p-error block"
+                        *ngIf="ProjectForm.controls['Activity'].touched && ProjectForm.controls['Activity'].invalid">
+                        <span *ngIf="ProjectForm.controls['Activity'].errors">This field is mandatory.</span>
+                    </small>
+                </c-col>
+                <c-col sm="12" md="12" lg="12">
+                    <div class="field-radiobutton">
+                        <p-radioButton value="true" formControlName="PrjActive"></p-radioButton>
+                        <label for="Active">Active</label>
+                        <span class="px-3"></span>
+                    <!-- </div>
+                    <div class="field-radiobutton"> -->
+                        <p-radioButton value="false" formControlName="PrjActive">
+                        </p-radioButton>
+                        <label for="InActive">In Active</label>
+                    </div>
+                    <small class="p-error block"
+                        *ngIf="ProjectForm.controls['PrjActive'].touched && ProjectForm.controls['PrjActive'].invalid">
+                        <span *ngIf="ProjectForm.controls['PrjActive'].errors">This field is mandatory.</span>
+                    </small>
+                </c-col>
+                <c-col>
+                    <p-button type="submit" [disabled]="!ProjectForm.valid" (click)="SavePrjDetails()" label="Save"
+                        styleClass="p-button-warning px-3 py-2"></p-button>
+                </c-col>
+
+            </c-row>
+        </form>
+    </c-card-body>
+</c-card>
+
+<c-card class="mb-4">
+    <c-card-header>Project Master</c-card-header>
+    <c-card-body class="px-3">
+
+        <div class="card">
+            <p-table [value]="products2" dataKey="id" editMode="row" [tableStyle]="{'min-width': '50rem'}">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <!-- <th>Sr.No</th> -->
+                        <th>Project Name</th>
+                        <th>Client Name</th>
+                        <th>Project Type</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Project Status</th>
+                        <th>Project Stage</th>
+                        <th>Action</th>
+                        <th></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-product let-editing="editing" let-ri="rowIndex">
+                    <tr [pEditableRow]="product">
+                        <td>
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input class="p-inputtext-sm" pInputText type="text" [(ngModel)]="product.code">
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{product.code}} 
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td>
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input pInputText type="text"  required>
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{product.name}} 
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td>
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <p-dropdown [options]="statuses" appendTo="body"
+                                        [style]="{'width':'100%'}"></p-dropdown>
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{product.inventoryStatus}}
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td>
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input pInputText type="text" >
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{product.price | currency: 'USD'}}
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td>
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input pInputText type="text" >
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{product.price | currency: 'USD'}}
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td>
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input pInputText type="text" >
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{product.price | currency: 'USD'}}
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td>
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input pInputText type="text" >
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{product.price | currency: 'USD'}}
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td>
+                            <div class="flex align-items-center justify-content-center gap-2">
+                                <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow
+                                    icon="pi pi-pencil" (click)="onRowEditInit(product)"
+                                    class="p-button-rounded p-button-text"></button>
+                                <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow
+                                    icon="pi pi-check" (click)="onRowEditSave(product)"
+                                    class="p-button-rounded p-button-text p-button-success mr-2"></button>
+                                <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow
+                                    icon="pi pi-times" (click)="onRowEditCancel(product, ri)"
+                                    class="p-button-rounded p-button-text p-button-danger"></button>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+
+    </c-card-body>
+</c-card>
+<!-- <div class="form-container">
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title>
+                Project Master
+            </mat-card-title>
+            <button class="btn-close  btn-close-white" aria-label="Close" (click)="Cancel()"></button>
+        </mat-card-header>
+    </mat-card>
+    <div class="container">
+        <form [formGroup]="ProjectForm" (submit)="submit()">
+            <div *ngIf="isViewList == true">
+                <div class=" " fxLayout.xl="row wrap" fxLayout.lg="row" fxLayout.sm="column" fxLayout.xs="column"
+                    fxLayoutGap="20px" fxLayoutGap.sm="0" fxLayoutGap.xs="0">
+
+                    <mat-form-field fxFlex="0 0 calc(85%-15px)" fxFlex.sm="0 0 100%" fxFlex.xs="0 0 100%"
+                        appearance="fill" appearance="standard">
+                        <mat-label class="filter">Filter</mat-label>
+                        <input matInput (keyup)="applyFilter($event)" placeholder="Search" #input>
+                    </mat-form-field>
+
+                    <button mat-flat-button color="primary" class="custom-btn">
+                        <mat-icon mat-list-icon class="Add-New" (click)="showform()">add_circle</mat-icon>Create
+                    </button>
+
+                </div>
+                <div class=" " fxLayout.xl="column wrap" fxLayout.lg="column" fxLayout.sm="column" fxLayout.xs="column"
+                    fxLayoutGap="20px" fxLayoutGap.sm="0" fxLayoutGap.xs="0" class="table-responsive">
+                    <table class="table" mat-table [dataSource]="dataSource" matSort class="mat-elevation-z0">
+
+                        <ng-container matColumnDef="Sr.No">
+                            <th mat-header-cell class="mat-header-cell" *matHeaderCellDef mat-sort-header> Sr.NO </th>
+                            <td mat-cell *matCellDef="let element ; let i = index"> {{i+1}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="ProjectId">
+                            <th mat-header-cell class="mat-header-cell" [hidden]=true *matHeaderCellDef mat-sort-header>
+                                Project Id </th>
+                            <td mat-cell *matCellDef="let element" [hidden]=true> {{element.projectid}}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="ProjectName">
+                            <th mat-header-cell class="mat-header-cell" *matHeaderCellDef mat-sort-header> Project Name
+                            </th>
+                            <td mat-cell *matCellDef="let element"> {{element.projectname}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="ClientName">
+                            <th mat-header-cell class="mat-header-cell" *matHeaderCellDef mat-sort-header> Client Name
+                            </th>
+                            <td mat-cell *matCellDef="let element">{{element.clientname}}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="ClientId">
+                            <th mat-header-cell class="mat-header-cell" [hidden]=true *matHeaderCellDef mat-sort-header>
+                                Client Id</th>
+                            <td mat-cell *matCellDef="let element" [hidden]=true>{{element.clientid}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Owner">
+                            <th mat-header-cell class="mat-header-cell" *matHeaderCellDef mat-sort-header
+                                [hidden]="true"> Owner </th>
+                            <td mat-cell *matCellDef="let element" [hidden]="true">{{element.owner}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="PlannedEfforts">
+                            <th mat-header-cell class="mat-header-cell" *matHeaderCellDef mat-sort-header
+                                [hidden]="true"> Planned Efforts</th>
+                            <td mat-cell *matCellDef="let element" [hidden]="true">{{element.plannedeffort |
+                                number:'1.0-0'}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="ProjectType">
+                            <th mat-header-cell class="mat-header-cell" *matHeaderCellDef mat-sort-header>Project Type
+                            </th>
+                            <td mat-cell *matCellDef="let element"> {{element.projecttype}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="ProjectTypeid">
+                            <th mat-header-cell class="mat-header-cell" *matHeaderCellDef mat-sort-header
+                                [hidden]="true">Project TypeId </th>
+                            <td mat-cell *matCellDef="let element" [hidden]="true"> {{element.projecttypeid}} </td>
+                        </ng-container>
+
+
+                        <ng-container matColumnDef="ProjectStatus">
+                            <th mat-header-cell class="mat-header-cell" *matHeaderCellDef mat-sort-header>Project Status
+                            </th>
+                            <td mat-cell *matCellDef="let element"> {{element.projectstatus}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="ProjectStatusid">
+                            <th mat-header-cell class="mat-header-cell" *matHeaderCellDef mat-sort-header
+                                [hidden]="true">Project StatusId </th>
+                            <td mat-cell *matCellDef="let element" [hidden]="true"> {{element.projectstatusid}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="ProjectStage">
+                            <th mat-header-cell class="mat-header-cell" *matHeaderCellDef mat-sort-header>Project Stage
+                            </th>
+                            <td mat-cell *matCellDef="let element"> {{element.projectstage}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="ProjectStageid">
+                            <th mat-header-cell class="mat-header-cell" *matHeaderCellDef mat-sort-header
+                                [hidden]="true">Project StageId </th>
+                            <td mat-cell *matCellDef="let element" [hidden]="true"> {{element.projectstageid}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Activity">
+                            <th mat-header-cell class="mat-header-cell" *matHeaderCellDef mat-sort-header
+                                [hidden]="true">Activity </th>
+                            <td mat-cell *matCellDef="let element" [hidden]="true"> {{element.projectdesc}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="StartDate">
+                            <th mat-header-cell class="mat-header-cell" *matHeaderCellDef mat-sort-header>Start Date
+                            </th>
+                            <td mat-cell *matCellDef="let element"> {{element.prjstartdate| date:'dd/MM/yyyy'}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="EndDate">
+                            <th mat-header-cell class="mat-header-cell" *matHeaderCellDef mat-sort-header>End Date </th>
+                            <td mat-cell *matCellDef="let element"> {{element.prjtodate| date:'dd/MM/yyyy'}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Action">
+                            <th mat-header-cell class="mat-header-cell" *matHeaderCellDef mat-sort-header>Action</th>
+                            <td mat-cell *matCellDef="let element">
+                                <button mat-icon-button color="primary" (click)="editprojects(element)">
+                                    <mat-icon>edit</mat-icon>
+                                </button>
+                        </ng-container>
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+                        <tr class="mat-row" *matNoDataRow>
+                            <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+                        </tr>
+                    </table>
+                    <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page"></mat-paginator>
+                </div>
+            </div>
+
+            <div *ngIf="IsCreate == true">
+                <div class="box">
+                    <mat-form-field class="form-field" appearance="outline">
+                        <mat-label> Project Name
+                        </mat-label>
+                        <input matInput formControlName="PrjName" required>
+                        <mat-error
+                            *ngIf="ProjectForm.controls['PrjName'].touched &&ProjectForm.controls['PrjName'].invalid">
+                            <span *ngIf="ProjectForm.controls['PrjName'].errors">This field is mandatory.</span>
+                        </mat-error>
+                    </mat-form-field>&nbsp;
+
+                    <mat-form-field class="form-field" appearance="outline">
+                        <mat-label>Client Name</mat-label>
+                        <mat-select disableRipple placeholder="Client Name*" formControlName="ClientName" required>
+                            <mat-option *ngFor="let ClientName2 of ClientNames" [value]="ClientName2.id">
+                                {{ClientName2.name}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>&nbsp;
+
+                    <mat-form-field class="form-field" appearance="outline">
+                        <mat-label> Owner</mat-label>
+                        <input matInput formControlName="PrjOwner" required>
+                        <mat-error
+                            *ngIf="ProjectForm.controls['PrjOwner'].touched && ProjectForm.controls['PrjOwner'].invalid">
+                            <span *ngIf="ProjectForm.controls['PrjOwner'].errors">This field is mandatory.</span>
+                        </mat-error>
+                    </mat-form-field>&nbsp;
+
+
+                    <br>
+                    <mat-form-field appearance="outline">
+                        <mat-label>Project Start Date</mat-label>
+                        <input matInput [matDatepicker]="picker" formControlName="fromdate" placeholder="From date">
+                        <mat-hint [style]="'color: rgb(96, 45, 224);'">MM/DD/YYYY</mat-hint>
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                    </mat-form-field>&nbsp;
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Project End Date</mat-label>
+                        <input matInput [matDatepicker]="picker1" formControlName="todate" placeholder="To date">
+                        <mat-hint [style]="'color: rgb(96, 45, 224);'">MM/DD/YYYY</mat-hint>
+                        <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                        <mat-datepicker #picker1></mat-datepicker>
+                    </mat-form-field>&nbsp;
+
+                    <mat-form-field class="form-field" appearance="outline">
+                        <mat-label>Effort In Hrs
+                        </mat-label>
+                        <input matInput formControlName="PlannedEfforts" type="number" required>
+                        <mat-error
+                            *ngIf="ProjectForm.controls['PlannedEfforts'].touched &&ProjectForm.controls['PlannedEfforts'].invalid">
+                            <span *ngIf="ProjectForm.controls['PlannedEfforts'].errors">This field is mandatory.</span>
+                        </mat-error>
+                    </mat-form-field>&nbsp;
+                    <mat-form-field class="form-field" appearance="outline">
+                        <mat-label>Project Type</mat-label>
+                        <mat-select disableRipple placeholder="Project Type*" formControlName="PrjType"
+                            (selectionChange)="GetAllProjectType($event.value)" required>
+                            <mat-option *ngFor="let ProjectType of ProjectTypes" [value]="ProjectType.typeid">
+                                {{ProjectType.name}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>&nbsp;
+
+                    <mat-form-field class="form-field" appearance="outline">
+                        <mat-label>Project Status</mat-label>
+                        <mat-select disableRipple placeholder="Project Type*" formControlName="PrjStatus"
+                            (selectionChange)="GetAllProjectStatus($event.value)" required>
+                            <mat-option *ngFor="let ProjectState of ProjectStates" [value]="ProjectState.typeid">
+                                {{ProjectState.name}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>&nbsp;
+
+
+
+                    <mat-form-field class="form-field" appearance="outline">
+                        <mat-label>Project Stage</mat-label>
+                        <mat-select disableRipple placeholder="Project Stage*" formControlName="PrjStage"
+                            (selectionChange)="GetAllProjectStage($event.value)" required>
+                            <mat-option *ngFor="let ProjectStage of ProjectStages" [value]="ProjectStage.typeid">
+                                {{ProjectStage.name}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>&nbsp;
+                    <mat-form-field class="form-field" appearance="outline">
+                        <mat-label> Description</mat-label>
+                        <input matInput formControlName="Activity" required>
+                        <mat-error
+                            *ngIf="ProjectForm.controls['Activity'].touched && ProjectForm.controls['Activity'].invalid">
+                            <span *ngIf="ProjectForm.controls['Activity'].errors">This field is mandatory.</span>
+                        </mat-error>
+                    </mat-form-field>&nbsp;
+
+                    <br>
+                    <mat-radio-group aria-label="Select an option" formControlName="PrjActive" class="margin-left">
+                        <mat-radio-button value="true">Active</mat-radio-button>
+                        <mat-radio-button value="false">In Active</mat-radio-button>
+                        <mat-error
+                            *ngIf="ProjectForm.controls['PrjActive'].touched && ProjectForm.controls['PrjActive'].invalid">
+                            <span *ngIf="ProjectForm.controls['PrjActive'].errors">This field is mandatory.</span>
+                        </mat-error>
+                    </mat-radio-group>
+                    <br>
+                    <br>
+                    <button mat-raised-button class="Save" type="submit" [disabled]="!ProjectForm.valid"
+                        (click)="SavePrjDetails()">Save Details</button>&nbsp;
+                    <button mat-raised-button class="Save" type="submit" color="primary"
+                        (click)="Cancel_form()">Back</button>
+                </div>
+            </div>
+
+            <div *ngIf="IsEditable == true">
+                <div class="box">
+
+                    <mat-form-field class="form-field" appearance="outline">
+                        <mat-label> Project Name
+                        </mat-label>
+                        <input matInput formControlName="PrjName" required>
+                        <mat-error
+                            *ngIf="ProjectForm.controls['PrjName'].touched &&ProjectForm.controls['PrjName'].invalid">
+                            <span *ngIf="ProjectForm.controls['PrjName'].errors">This field is mandatory.</span>
+                        </mat-error>
+                    </mat-form-field>&nbsp;
+
+                    <mat-form-field class="form-field" appearance="outline">
+                        <mat-label>Client Name</mat-label>
+                        <mat-select disableRipple placeholder="Client Name*" formControlName="ClientName" required>
+                            <mat-option *ngFor="let ClientName2 of SelectedClientNames" [value]="ClientName2.clientid">
+                                {{ClientName2.clientname}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>&nbsp;
+                    <mat-form-field class="form-field" appearance="outline">
+                        <mat-label> Owner</mat-label>
+                        <input matInput formControlName="PrjOwner" required>
+                        <mat-error
+                            *ngIf="ProjectForm.controls['PrjOwner'].touched && ProjectForm.controls['PrjOwner'].invalid">
+                            <span *ngIf="ProjectForm.controls['PrjOwner'].errors">This field is mandatory.</span>
+                        </mat-error>
+                    </mat-form-field>&nbsp;
+
+
+                    <br>
+                    <mat-form-field appearance="outline">
+                        <mat-label> Project Start Date</mat-label>
+                        <input matInput [matDatepicker]="picker" formControlName="fromdate" placeholder="From date">
+                        <mat-hint [style]="'color: rgb(96, 45, 224);'">MM/DD/YYYY</mat-hint>
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                    </mat-form-field>&nbsp;
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Project End Date</mat-label>
+                        <input matInput [matDatepicker]="picker1" formControlName="todate" placeholder="To date">
+                        <mat-hint [style]="'color: rgb(96, 45, 224);'">MM/DD/YYYY</mat-hint>
+                        <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                        <mat-datepicker #picker1></mat-datepicker>
+                    </mat-form-field>&nbsp;
+
+                    <mat-form-field class="form-field" appearance="outline">
+                        <mat-label> Efforts In Hrs
+                        </mat-label>
+                        <input matInput formControlName="PlannedEfforts" type="number" required>
+                        <mat-error
+                            *ngIf="ProjectForm.controls['PlannedEfforts'].touched &&ProjectForm.controls['PlannedEfforts'].invalid">
+                            <span *ngIf="ProjectForm.controls['PlannedEfforts'].errors">This field is mandatory.</span>
+                        </mat-error>
+                    </mat-form-field>&nbsp;
+                    <mat-form-field class="form-field" appearance="outline">
+                        <mat-label>Project Type</mat-label>
+                        <mat-select disableRipple placeholder="Project Type*" formControlName="PrjType" required>
+                            <mat-option *ngFor="let ProjectType of ProjectTypes" [value]="ProjectType.typeid">
+                                {{ProjectType.name}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>&nbsp;
+
+                    <mat-form-field class="form-field" appearance="outline">
+                        <mat-label>Project Status</mat-label>
+                        <mat-select disableRipple placeholder="Project Type*" formControlName="PrjStatus" required>
+                            <mat-option *ngFor="let ProjectState of ProjectStates" [value]="ProjectState.typeid">
+                                {{ProjectState.name}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>&nbsp;
+
+
+                    <mat-form-field class="form-field" appearance="outline">
+                        <mat-label>Project Stage</mat-label>
+                        <mat-select disableRipple placeholder="Project Stage*" formControlName="PrjStage" required>
+                            <mat-option *ngFor="let ProjectStage of ProjectStages" [value]="ProjectStage.typeid">
+                                {{ProjectStage.name}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>&nbsp;
+                    <mat-form-field class="form-field" appearance="outline">
+                        <mat-label> Description</mat-label>
+                        <input matInput formControlName="Activity" placeholder="Description" required>
+                        <mat-error
+                            *ngIf="ProjectForm.controls['Activity'].touched && ProjectForm.controls['Activity'].invalid">
+                            <span *ngIf="ProjectForm.controls['Activity'].errors">This field is mandatory.</span>
+                        </mat-error>
+                    </mat-form-field>&nbsp;
+
+                    <br>
+                    <mat-radio-group aria-label="Select an option" formControlName="PrjActive" class="margin-left">
+                        <mat-radio-button value="true">Active</mat-radio-button>
+                        <mat-radio-button value="false">In Active</mat-radio-button>
+                        <mat-error
+                            *ngIf="ProjectForm.controls['PrjActive'].touched && ProjectForm.controls['PrjActive'].invalid">
+                            <span *ngIf="ProjectForm.controls['PrjActive'].errors">This field is mandatory.</span>
+                        </mat-error>
+                    </mat-radio-group>
+                    <br>
+                    <br>
+
+                    <button mat-raised-button class="Save" type="submit" [disabled]="!ProjectForm.valid"
+                        (click)="UpdateProject()">Edit Details</button>&nbsp;
+                    <button mat-raised-button class="Save" type="submit" color="primary" (click)="Cancel_form()">Back
+                    </button>
+
+                </div>
+            </div>
+
+
+        </form>
+
+    </div>
+</div> -->

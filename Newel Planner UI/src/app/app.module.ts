@@ -11,6 +11,7 @@ import { AdminLayoutComponent } from './layout/admin-layout/admin-layout.compone
 import { ToastModule } from 'primeng/toast';
 import { InputTextModule } from 'primeng/inputtext';
 
+
 import {
   PERFECT_SCROLLBAR_CONFIG,
   PerfectScrollbarConfigInterface,
@@ -52,9 +53,9 @@ import {
 } from '@coreui/angular';
 
 import { IconModule, IconSetService } from '@coreui/icons-angular';
-import { TimesheetComponent } from './views/timesheet/timesheet.component';
 import { TimesheetModule } from './views/timesheet/timesheet.module';
 import { ApiserviceService } from './Service/apiservice.service';
+import { NewTaskModule } from './views/new-task/new-task.module';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
@@ -97,6 +98,7 @@ const APP_CONTAINERS = [
     ListGroupModule,
     CardModule,
     TimesheetModule,
+    NewTaskModule,
     HttpClientModule,
     // MessagesModule,
     // MessageModule,

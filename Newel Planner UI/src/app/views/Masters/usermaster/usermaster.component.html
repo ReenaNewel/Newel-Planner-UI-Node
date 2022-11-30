@@ -1,0 +1,216 @@
+<!-- <div *ngIf="isCreate==true">
+  <div class="form-container">
+    <mat-card class="mat-card-1">
+      <mat-card-header>
+        <mat-card-title>
+          User Master
+        </mat-card-title>
+        <button class="btn-close btn-close-white" aria-label="Close" (click)="Cancel()"></button>
+      </mat-card-header>
+    </mat-card>
+
+    <div class="formclass">
+      <form autocomplete="off" [formGroup]="ProjectForm">
+
+        <mat-form-field class="form-field" appearance="outline">
+          <mat-label>Name</mat-label>
+          <input matInput formControlName="name" required>
+          <mat-error *ngIf="ProjectForm.controls['name'].touched &&ProjectForm.controls['name'].invalid">
+            <span *ngIf="ProjectForm.controls['name'].errors">This field is mandatory.</span>
+          </mat-error>
+        </mat-form-field>&nbsp;&nbsp;
+
+        <mat-form-field class="form-field" appearance="outline">
+          <mat-label>Email</mat-label>
+          <input matInput type="email" formControlName="emailid" required placeholder="Ex. abc@newel.com" required>
+
+          <mat-error *ngIf="ProjectForm.hasError('emailid') && !ProjectForm.hasError('required')">
+            Please enter a valid email address
+            <span *ngIf="ProjectForm.controls['emailid'].errors">This field is mandatory.</span>
+          </mat-error>
+
+        </mat-form-field>
+
+        <br />
+        <mat-form-field class="form-field" appearance="outline">
+          <mat-label>Password
+          </mat-label>
+          <input matInput type="password" formControlName="password" required>
+          <mat-error *ngIf="ProjectForm.controls['password'].touched &&ProjectForm.controls['password'].invalid">
+            <span *ngIf="ProjectForm.controls['password'].errors">This field is mandatory.</span>
+          </mat-error>
+        </mat-form-field>&nbsp;&nbsp;
+
+        <mat-form-field class="form-field" appearance="outline">
+          <mat-label>Role Name</mat-label>
+          <mat-select disableRipple placeholder="Role Name*" formControlName="defaultroleid"
+            (selectionChange)="changeemployeeid($event.value)" required>
+            <mat-option *ngFor="let Role of UserData" [value]="Role.typeid">
+              {{Role.name}}
+
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <br />
+        <mat-radio-group aria-label="Select an option" formControlName="isactive" required class="margin-left">
+          <mat-radio-button value="true">Active</mat-radio-button>
+          <mat-radio-button value="false">In Active</mat-radio-button>
+        </mat-radio-group>
+        <br>
+        <br>
+        <button mat-raised-button type="submit" color="primary" [disabled]="!ProjectForm.valid"
+          (click)="submit()">Save</button>&nbsp;&nbsp;
+        <button mat-raised-button type="submit" color="primary" (click)=" OnBack()">Back</button>
+
+      </form>
+    </div>
+  </div>
+</div>
+
+
+<div *ngIf="isEditable==true">
+  <div class="form-container">
+    <mat-card class="mat-card-1">
+      <mat-card-header>
+        <mat-card-title>
+          User Master
+        </mat-card-title>
+        <button class="btn-close btn-close-white" aria-label="Close" (click)="Cancel()"></button>
+      </mat-card-header>
+    </mat-card>
+    <div class="formclass">
+      <form autocomplete="off" [formGroup]="ProjectForm">
+
+        <mat-form-field class="form-field" appearance="outline">
+          <mat-label>Name</mat-label>
+          <input matInput formControlName="name" required>
+          <mat-error *ngIf="ProjectForm.controls['name'].touched &&ProjectForm.controls['name'].invalid">
+            <span *ngIf="ProjectForm.controls['name'].errors">This field is mandatory.</span>
+          </mat-error>
+        </mat-form-field>&nbsp;&nbsp;
+
+        <mat-form-field class="form-field" appearance="outline">
+          <mat-label>Email</mat-label>
+          <input matInput type="email" formControlName="emailid" required placeholder="Ex. abc@newel.com" required>
+
+          <mat-error *ngIf="ProjectForm.hasError('emailid') && !ProjectForm.hasError('required')">
+            Please enter a valid email address
+            <span *ngIf="ProjectForm.controls['emailid'].errors">This field is mandatory.</span>
+          </mat-error>
+
+        </mat-form-field>
+
+        <br />
+        <mat-form-field class="form-field" appearance="outline">
+          <mat-label>Password
+          </mat-label>
+          <input matInput type="password" formControlName="password" required>
+          <mat-error *ngIf="ProjectForm.controls['password'].touched &&ProjectForm.controls['password'].invalid">
+            <span *ngIf="ProjectForm.controls['password'].errors">This field is mandatory.</span>
+          </mat-error>
+        </mat-form-field>&nbsp;&nbsp;
+
+        <mat-form-field class="form-field" appearance="outline">
+          <mat-label>Role Name</mat-label>
+          <mat-select disableRipple placeholder="Role Name*" formControlName="defaultroleid"
+            (selectionChange)="changeemployeeid($event.value)" required>
+            <mat-option *ngFor="let Role of UserData" [value]="Role.typeid">
+              {{Role.name}}
+
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <br />
+        <mat-radio-group aria-label="Select an option" formControlName="isactive" required class="margin-left">
+          <mat-radio-button value="true">Active</mat-radio-button>
+          <mat-radio-button value="false">In Active</mat-radio-button>
+        </mat-radio-group>
+        <br>
+        <br>
+        <button mat-raised-button type="submit" color="primary" (click)="UpdateUser()">Edit</button>&nbsp;&nbsp;
+        <button mat-raised-button type="submit" color="primary" (click)=" OnBack()">Back</button>
+
+      </form>
+
+    </div>
+  </div>
+</div>
+
+
+<div *ngIf="isViewable">
+
+
+  <div class="container">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>
+          UserDetails
+        </mat-card-title>
+        <button class="btn-close btn-close-white" aria-label="Close" (click)="Cancel()"></button>
+      </mat-card-header>
+    </mat-card>
+
+    <mat-form-field fxFlex="0 0 calc(85%-15px)" fxFlex.sm="0 0 100%" fxFlex.xs="0 0 100%" appearance="fill"
+      appearance="standard">
+      <mat-label class="filter">Filter</mat-label>
+      <input matInput (keyup)="applyFilter($event)" placeholder="Search" #input>
+    </mat-form-field>
+    <button mat-flat-button color="primary" class="custom-btn">
+      <mat-icon mat-list-icon class="Add-New" (click)="AddForm()">add_circle</mat-icon>Create
+    </button>
+
+    <table class="table" mat-table [dataSource]="dataSource" class="mat-elevation-z0">
+
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef [hidden]="true"> Id </th>
+        <td mat-cell *matCellDef="let element" [hidden]="true"> {{element.id}} </td>
+      </ng-container>
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>Name</th>
+        <td mat-cell *matCellDef="let element"> {{element.uname}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="emailid">
+        <th mat-header-cell *matHeaderCellDef>Email Id </th>
+        <td mat-cell *matCellDef="let element"> {{element.emailid}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="password">
+        <th mat-header-cell *matHeaderCellDef> Password </th>
+        <td mat-cell *matCellDef="let element"> {{element.password}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="defaultroleid">
+        <th mat-header-cell *matHeaderCellDef>Role </th>
+        <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+      </ng-container>
+
+
+      <ng-container matColumnDef="isactive">
+        <th mat-header-cell *matHeaderCellDef> IsActive </th>
+        <td mat-cell *matCellDef="let element"> {{element.isactive}} </td>
+      </ng-container>
+
+
+      <ng-container matColumnDef="Action">
+
+        <th mat-header-cell *matHeaderCellDef> Action </th>
+        <td mat-cell *matCellDef="let element">
+          <button mat-icon-button color="primary" (click)="EditEmployee(element)">
+            <mat-icon>edit</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns1"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns1;"></tr>
+    </table>
+
+
+
+    <mat-paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 25, 100]">
+    </mat-paginator>
+
+  </div>
+</div> -->

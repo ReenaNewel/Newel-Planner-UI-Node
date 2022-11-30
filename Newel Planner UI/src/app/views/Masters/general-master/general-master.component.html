@@ -1,0 +1,240 @@
+<!-- <div class="form-container">
+    <div *ngIf="isCreate" class="">
+        <div class="container">
+            <mat-card>
+                <mat-card-title>
+                    Genaral Master
+                    <button class="btn-close btn-close-white" aria-label="Close" (click)="Cancel()"></button>
+                </mat-card-title>
+
+                <div>
+                    <form [formGroup]="GeneralmasterForm" (submit)="submit()">
+                        <div class="row">
+                            <mat-form-field class="form-field">
+                                <mat-label> Group Name </mat-label>
+                                <input matInput>
+                                <ng-select formControlName="GrpName" placeholder="select Group name"
+                                    [(ngModel)]="selectedItemGroupName" (change)="OnChangeGroupNameDetails($event)"
+                                    (change)="getParentId($event)" ngSelectMat appendTo="body" bindLabel="groupname"
+                                    [items]="getGroupId">
+
+                                </ng-select>
+                                <mat-error *ngIf="GrpName?.hasError('required')">
+                                    GeneralmasterForm is required
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div class="row">
+                            <mat-form-field class="form-field" appearance="outline">
+                                <mat-label> Name
+                                </mat-label>
+                                <input matInput formControlName="Name" required>
+                                <mat-error
+                                    *ngIf="GeneralmasterForm.controls['Name'].touched && GeneralmasterForm.controls['Name'].invalid">
+                                    <span *ngIf="GeneralmasterForm.controls['Name'].errors">This field is
+                                        mandatory.</span>
+                                </mat-error>
+                            </mat-form-field>
+
+                            <mat-form-field class="form-field" appearance="outline">
+                                <mat-label> Parent Id
+                                </mat-label>
+
+                                <input *ngIf="grpId != null || grpId != 0" matInput placeholder=" " readonly
+                                    value="{{grpId}}">
+
+                                <mat-error
+                                    *ngIf="GeneralmasterForm.controls['ParantId'].touched && GeneralmasterForm.controls['ParantId'].invalid">
+                                    <span *ngIf="GeneralmasterForm.controls['ParantId'].errors">This field is
+                                        mandatory.</span>
+                                </mat-error>
+                            </mat-form-field>
+
+
+                            <div class="col-12 col-md-12">
+                                <mat-form-field fxFlex="0 0 calc(85%-15px)" fxFlex.sm="0 0 100%" fxFlex.xs="0 0 100%"
+                                    appearance="fill" appearance="standard">
+                                    <mat-label class="filter">Filter</mat-label>
+                                    <input matInput (keyup)="applyFilter($event)" placeholder="Search" #input>
+                                </mat-form-field>
+                                <ng-container>
+                                    <button type="button" class="btn btn-success" (click)="onSave()">Save</button>&nbsp;
+                                    <button type="button" class="btn btn-primary" (click)="OnBack()">Cancel</button>
+                                </ng-container>
+                            </div>
+                        </div>
+
+
+                    </form>
+                </div>
+            </mat-card>
+        </div>
+    </div>
+    <div *ngIf="isViewable" class="">
+        <div class="container">
+            <mat-card>
+                <mat-card-title>
+                    Genaral Master
+                    <button class="btn-close btn-close-white" aria-label="Close" (click)="Cancel()"></button>
+                </mat-card-title>
+                <div class="" style="margin: 20px;">
+                    <form [formGroup]="GeneralmasterForm" (submit)="submit()">
+                        <br>
+                        <mat-form-field class="form-field">
+                            <label> Group Name </label>
+                            <input matInput>
+                            <ng-select formControlName="GrpName" [(ngModel)]="Edit_Group_Name"
+                                placeholder="select Group name" ngSelectMat appendTo="body" bindLabel="groupname"
+                                [items]="getGroupId">
+
+                            </ng-select>
+                            <mat-error *ngIf="GrpName?.hasError('required')">
+                                GeneralmasterForm is required
+                            </mat-error>
+                        </mat-form-field> &nbsp;
+                        <br>
+                        <mat-form-field class="form-field" appearance="outline">
+                            <mat-label> Name
+                            </mat-label>
+                            <input matInput formControlName="Name" [(ngModel)]="Edit_Name" required>
+                            <mat-error
+                                *ngIf="GeneralmasterForm.controls['Name'].touched && GeneralmasterForm.controls['Name'].invalid">
+                                <span *ngIf="GeneralmasterForm.controls['Name'].errors">This field is mandatory.</span>
+                            </mat-error>
+                        </mat-form-field> &nbsp; &nbsp;
+                        <mat-form-field class="form-field" appearance="outline">
+                            <mat-label> Parent Id
+                            </mat-label>
+                            <input matInput formControlName="ParantId" [(ngModel)]="Edit_Parent_id" required>
+                            <mat-error
+                                *ngIf="GeneralmasterForm.controls['ParantId'].touched && GeneralmasterForm.controls['ParantId'].invalid">
+                                <span *ngIf="GeneralmasterForm.controls['ParantId'].errors">This field is
+                                    mandatory.</span>
+                            </mat-error>
+                        </mat-form-field>
+                        <br>
+                        <mat-form-field fxFlex="0 0 calc(85%-15px)" fxFlex.sm="0 0 100%" fxFlex.xs="0 0 100%"
+                            appearance="fill" appearance="standard">
+                            <mat-label class="filter">Filter</mat-label>
+                            <input matInput (keyup)="applyFilter($event)" placeholder="Search" #input>
+                        </mat-form-field>
+                        <button type="button" class="btn btn-success" tooltip="Save"
+                            (click)="onUpdate()">Update</button>&nbsp;
+                        <button type="button" class="btn btn-primary" tooltip="Cancel"
+                            (click)=" OnBackToCreate()">Back</button>
+                    </form>
+                </div>
+            </mat-card>
+        </div>
+    </div>
+    <div class="container">
+
+        <div class="row ms-1">
+            <div class="" fxLayout.xl="column wrap" fxLayout.lg="column" fxLayout.sm="column" fxLayout.xs="column"
+                fxLayoutGap="20px" fxLayoutGap.sm="0" fxLayoutGap.xs="0" class="table-responsive example-container">
+
+                <table class="table" mat-table fxFlex [dataSource]="dataSource" matSort class="mat-elevation-z0">
+
+                    <ng-container matColumnDef="Id">
+                        <th mat-header-cell class="mat-header-cell" *matHeaderCellDef mat-sort-header>Id </th>
+                        <td mat-cell class="mat-cell" *matCellDef="let row">
+                            <span>{{row.id}} </span>
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Group Name">
+                        <th mat-header-cell class="mat-header-cell" *matHeaderCellDef mat-sort-header>Group Name </th>
+                        <td mat-cell class="mat-cell" *matCellDef="let row">
+                            <span>{{row.groupname}} </span>
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Name">
+                        <th mat-header-cell class="mat-header-cell" *matHeaderCellDef mat-sort-header> Name </th>
+                        <td mat-cell class="mat-cell" *matCellDef="let row">
+                            <span>{{row.name}} </span>
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Type Id">
+                        <th mat-header-cell class="mat-header-cell" *matHeaderCellDef mat-sort-header> Type Id
+                        </th>
+                        <td mat-cell class="mat-cell" *matCellDef="let row">
+                            <span>{{row.typeid}} </span>
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Seq Order">
+                        <th mat-header-cell class="mat-header-cell" *matHeaderCellDef mat-sort-header> Seq Order
+                        </th>
+                        <td mat-cell class="mat-cell" *matCellDef="let row">
+                            <span>{{row.seqorder}} </span>
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Parent Id">
+                        <th mat-header-cell class="mat-header-cell" *matHeaderCellDef mat-sort-header> Parent Id
+                        </th>
+                        <td mat-cell class="mat-cell" *matCellDef="let row">
+                            <span>{{row.parentid}} </span>
+                        </td>
+                    </ng-container>
+
+
+                    <ng-container matColumnDef="Action">
+                        <th mat-header-cell class="mat-header-cell" *matHeaderCellDef mat-sort-header> Action </th>
+                        <td mat-cell class="mat-cell" *matCellDef="let row">
+                            <button type="button" class="btn btn-action" data-target="#updateModal" tooltip="Export"
+                                (click)="onEditById(row.id)">
+                                <mat-icon>edit</mat-icon>
+                            </button>
+                        </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+                </table>
+                <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade show" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-body" *ngFor="let result of tableData; index as i">
+                <form #updateForm="ngForm" [formGroup]="GeneralmasterForm">
+
+                    <div class="form-group col-md-3">
+                        <div class="custom-input-wrapper">
+                            <label for="GrpName">Group Name</label>
+                            <input type="text" class="form-control" [(ngModel)]="Edit_Group_Name"
+                                placeholder="Enter Group Name" formControlName="GrpName">
+                            <span *ngIf="GrpName && GrpName.invalid && GrpName.touched"
+                                style="color: rgb(226, 38, 63);">Please, Enter a Valid Batch Name</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-md-3">
+                        <div class="custom-input-wrapper">
+                            <label for="Name">Name</label>
+                            <input type="text" class="form-control" [(ngModel)]="generalUpdate.Name"
+                                placeholder="Enter Group Name" formControlName="Name">
+                            <span *ngIf="Name && Name.invalid && Name.touched" style="color: rgb(226, 38, 63);">Please,
+                                Enter a Valid Batch Name</span>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)=" OnBack()">Close</button>
+                <button type="update" class="btn btn-primary" data-dismiss="modal" (click)=" onUpdate()">Update
+                    Task</button>
+            </div>
+        </div>
+    </div>
+</div> -->

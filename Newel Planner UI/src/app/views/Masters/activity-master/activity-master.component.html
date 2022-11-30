@@ -1,0 +1,44 @@
+<!-- <div class="form-container">
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title>
+                Activity Master
+            </mat-card-title>
+            <button class="btn-close  btn-close-white" aria-label="Close" (click)="Cancel()"></button>
+        </mat-card-header>
+    </mat-card>
+    <div class="container">
+        <form [formGroup]="ProjectForm" (submit)="submit()">
+
+            <mat-form-field class="form-field" appearance="outline">
+                <mat-label> Activity Name
+                </mat-label>
+                <input matInput formControlName="ActName" required>
+                <mat-error *ngIf="ProjectForm.controls['ActName'].touched &&ProjectForm.controls['ActName'].invalid">
+                    <span *ngIf="ProjectForm.controls['ActName'].errors">This field is mandatory.</span>
+                </mat-error>
+            </mat-form-field>&nbsp;
+
+            <br /><br />
+            <mat-radio-group aria-label="Select an option" formControlName="PrjActive" class="margin-left">
+                <mat-radio-button value="Active">Active</mat-radio-button>
+                <mat-radio-button value="In Active">In Active</mat-radio-button>
+                <mat-error
+                    *ngIf="ProjectForm.controls['PrjActive'].touched && ProjectForm.controls['PrjActive'].invalid">
+                    <span *ngIf="ProjectForm.controls['PrjActive'].errors">This field is mandatory.</span>
+                </mat-error>
+            </mat-radio-group>
+            <br>
+            <br><br />
+
+
+            <button mat-raised-button class="Save" type="submit"
+                [disabled]="!ProjectForm.valid">Save</button>&nbsp;&nbsp;&nbsp;
+            <button mat-raised-button class="Save" type="submit" color="primary">Edit</button>&nbsp;&nbsp;&nbsp;
+            <button mat-raised-button class="Save" type="submit" color="primary" (click)="Cancel()">Exit</button>
+
+
+        </form>
+
+    </div>
+</div> -->

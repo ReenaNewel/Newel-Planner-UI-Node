@@ -8,14 +8,19 @@ export const navItems: INavData[] = [
     url: '/timesheet',
     iconComponent: { name: 'cil-calculator' },
   },
+  {
+    name: 'New Task',
+    url: '/new-task',
+    iconComponent: { name: 'cil-puzzle' },
+  },
   // {
   //   name: 'Dashboard',
   //   url: '/dashboard',
   //   iconComponent  : {name: 'cil-speedometer'},
-    // badge: {
-    //   color: 'info',
-    //   text: 'NEW'
-    // }
+  // badge: {
+  //   color: 'info',
+  //   text: 'NEW'
+  // }
   // },
 
   // {
@@ -226,7 +231,45 @@ export const navItems: INavData[] = [
   //   title: true,
   //   name: 'Extras'
   // },
+  {
+    name: 'Masters',
+    url: '/masters',
+    iconComponent: { name: 'cil-notes' },
+    children: [
+      {
+        name: 'Activity',
+        url: '/masters/activity'
+      },
+      {
+        name: 'Client',
+        url: '/masters/client'
+      },
+      {
+        name: 'General',
+        url: '/masters/general'
+      },
+      {
+        name: 'Holiday',
+        url: '/masters/holiday'
+      },
+      {
+        name: 'Leave',
+        url: '/masters/leave'
+      },
+      {
+        name: 'Project',
+        url: '/masters/project'
+      },
+      {
+        name: 'User',
+        url: '/user'
+      }
+    ]
+  },
+ 
+ 
   // {
+
   //   name: 'Pages',
   //   url: '/login',
   //   iconComponent: { name: 'cil-star' },

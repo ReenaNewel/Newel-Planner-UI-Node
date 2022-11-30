@@ -9,6 +9,7 @@ import { Page500Component } from './page500/page500.component';
 import { ButtonModule, CardModule, FormModule, GridModule } from '@coreui/angular';
 import { IconModule } from '@coreui/icons-angular';
 import { ToastModule } from 'primeng/toast';
+import { LoginRoutingModule } from './login/login-routing.module';
 
 @NgModule({
   declarations: [
@@ -19,6 +20,7 @@ import { ToastModule } from 'primeng/toast';
   ],
   imports: [
     CommonModule,
+    LoginRoutingModule,
     PagesRoutingModule,
     CardModule,
     ButtonModule,

@@ -4,7 +4,7 @@ var sequelize = connect.sequelize;
 var Sequelize = connect.Sequelize;
 const Model = connect.Sequelize.Model;
 
-// Log Tables
+// Log Table
 class ErrorLog extends Model { }
 class MailLog extends Model { }
 
