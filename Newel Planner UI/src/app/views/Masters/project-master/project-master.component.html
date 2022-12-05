@@ -109,8 +109,8 @@
 
 
 
-<p-dialog header="Project Master" [(visible)]="projectDialog" [breakpoints]="{'960px': '75vw'}"
-    [style]="{width: '70vw'}" [draggable]="false" [resizable]="false" class="pb-2" (click)="Cancel_form()">
+<p-dialog header="Project Master" [(visible)]="projectDialog" [breakpoints]="{'960px': '75vw'}" (onHide)="Cancel_form()"
+    [style]="{width: '70vw'}" [draggable]="false" [resizable]="false" class="pb-2">
     <form [formGroup]="ProjectForm" (submit)="submit()">
         <c-row class="">
             <c-col sm="12" md="4" lg="4" class="mb-3">
@@ -210,7 +210,7 @@
                     label="Save" styleClass="p-button-warning px-3 py-2"></p-button>
                 <p-button *ngIf="!showSaveBtn" type="submit" [disabled]="!ProjectForm.valid" (click)="UpdateProject()"
                     label="Update" styleClass="p-button-warning px-3 py-2"></p-button>
-                <p-button (click)="projectDialog=false" label="Back" styleClass="p-button-text pb-2"></p-button>
+                <p-button (click)="projectDialog=false" (click)="Cancel_form()" label="Back" styleClass="p-button-text pb-2"></p-button>
                 <!-- <p-button (click)="ProjectForm.resetForm()" (click)="timesheetform.resetForm()"
                     (click)="createTaskDialog=false" label="Back" styleClass="p-button-text pb-2"></p-button> -->
 

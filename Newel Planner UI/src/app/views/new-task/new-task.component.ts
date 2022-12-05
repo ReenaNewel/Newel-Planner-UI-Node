@@ -3,6 +3,7 @@ import { RestService } from 'src/app/services/rest.service';
 import { Global } from 'src/app/common/global';
 import { Message, MessageService, PrimeNGConfig } from 'primeng/api';
 import * as moment from 'moment';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-new-task',
@@ -37,34 +38,63 @@ export class NewTaskComponent implements OnInit {
   Tasknames: any;
   projectId: any;
   projectName: string;
-
+  NewTaskDialog:boolean;
+  showSaveBtn:boolean;
 
   constructor(
     private rest: RestService,
     private Global: Global,
     private messageService: MessageService,
+    private fb : FormBuilder,
+  
   ) { }
+  userLoggedIn: any;
+  userid:any
+  ProjectForm !: FormGroup
+  displayedColumns: string[] = ['Id','name', 'taskname','tasktype_name', 'assigneename','efforts','startdate',
+  'enddate','attachment','comments','Actions'];
 
+
+SelectedProjectNames: any[];
   ngOnInit(): void {
+
+    this.userLoggedIn = JSON.parse(localStorage.getItem('userLoggedIn')!);
+    this.userId = this.userLoggedIn.id;
+    this.showallData();
+    this.ShowDetails();
+    this.getProjectName();
+    this.GetProjectbyTask();
+    this.getUserByProjectId();
+    console.log("hiii",this.selectedTaskProject);
+    
+    // this.selectedTaskProject ;
+   
   }
 
   tasksubmit(isvalid: boolean) {
     if (isvalid) {
       console.log('task isvalid', isvalid)
-      this.SubmitNewTask()
+      // this.SubmitNewTask()
     }
 
   }
-
+  Assignprojectid:any
   getUserByProjectId() {
+  //  this.Assignprojectid =this.selectedProject;
+  //   console.log("selectedProject",this.selectedProject);
+    
     if (this.selectedProject) {
       var model = {
-        projectid: this.selectedProject.projectid
+        projectid: this.selectedProject
       }
       console.log('project id', model)
       this.rest.postParams(this.Global.getapiendpoint() + '/NewTask/GetAllUsersByProjectID', model).subscribe((data: any) => {
+      //  console.log("...........",data);
+       
         if (data.Success) {
           this.UserData = data.Data;
+          console.log("UserData",this.UserData);
+          
         }
       })
     }
@@ -75,19 +105,24 @@ export class NewTaskComponent implements OnInit {
     this.AssigneeId = value.id
   }
 
+  showCreateNewTaskDialog(){
+    this.NewTaskDialog = true;
+    this.showSaveBtn = true;
+  }
+
   SubmitNewTask() {
     var model = {
-      projectid: this.selectedProject.projectid,
+      projectid: this.selectedProject,
       taskname: this.selectedTaskName,
-      tasktypeid: this.selectedTaskTypeName.typeid,
-      status: this.selectedtaskstatus.typeid,
+      tasktypeid: this.selectedTaskTypeName,
+      status: this.selectedtaskstatus,
       created_by: this.userId,
       efforts: this.selectedEfforts,
       startdate: moment(this.selectedStartDate).format('YYYY-MM-DD'),
       enddate: moment(this.selectedEndate).format('YYYY-MM-DD'),
       // attachment: this.ProjectForm.controls['attachment'].value,
       comments: this.selectedComment,
-      userid: this.selectedTaskAssignee.id
+      userid: this.selectedTaskAssignee
     }
 
     console.log("save task model", model);
@@ -113,17 +148,75 @@ export class NewTaskComponent implements OnInit {
     this.getProjectName()
     this.GetProjectbyTask()
     this.showallData()
+    this.NewTaskDialog=false;
+    
+  }
+  colId:any;
+  EditTaskDetails(row: any) {
 
+    console.log('project rows :', row)
+
+    this.NewTaskDialog = true;
+    this.showSaveBtn = false;
+   
+    this.selectedProject = row.projectid;
+    this.selectedTaskName = row.taskname;
+    this.selectedTaskTypeName = row.tasktypeid;
+    this.selectedtaskstatus = row.status;
+    this.selectedTaskAssignee = row.assignee_name_id;
+    this.selectedEfforts = Math.round(row.efforts);
+    this.selectedStartDate =new Date(row.startdate);
+    this.selectedEndate = new Date(row.enddate);
+    this.selectedComment = row.comments;
+    this.colId = row.id;
+  }
+
+  UpdateTask(){
+    var model ={
+      id :  this.colId,
+      projectid:this.selectedProject,
+      taskname:  this.selectedTaskName,
+      tasktypeid:this.selectedTaskTypeName,
+      created_by:this.userId,
+      efforts: this.selectedEfforts,
+      startdate: this.selectedStartDate,
+      enddate: this.selectedEndate,
+      comments: this.selectedComment,
+      userid:this.selectedTaskAssignee,
+     
+    }
+    console.log("UpdateTask model",model)
+    this.rest.postParams(this.Global.getapiendpoint() +'/NewTask/UpdateTask',model).subscribe((data: any) => {
+      console.log('data',data.Message)
+      if (data.Success) {
+        this.messageService.add({ severity: 'success', summary: 'Service Message', detail: 'Task details updated successfully' });
+        this.Cancel_form()
+      }
+      else{
+        this.messageService.add({ severity: 'warn', summary: 'Success', detail: 'Record not updated..!!' });
+      }
+  
+     }) 
+  }
+
+
+  projectid:any;
+  GetAllProjectName(value: any) {
+    this.projectid = value
   }
 
   ShowDetails() {
     // get All data from newtask
     this.rest.getAll(this.Global.getapiendpoint() + '/NewTask/GetAllNewTask').subscribe((data: any) => {
-      console.log(data.Data);
+      console.log("GetAllNewTask",data.Data);
       // this.dataSource = new MatTableDataSource(data.Data);
       // //  console.log(this.dataSource);
       // this.dataSource.paginator = this.paginator;
       // this.dataSource.sort = this.sort;
+      if (data.Success) {
+        this.SelectedProjectNames = data.Data
+      }
+      console.log('project data', this.SelectedProjectNames)
 
     })
   }
@@ -148,12 +241,13 @@ export class NewTaskComponent implements OnInit {
   }
 
   GetTaskNameByProject(Project: any) {
+console.log("Project",Project);
 
     this.projectName = Project.projectname;
-    console.log(this.projectName)
+    // console.log(this.projectName)
     this.selectedTaskProject = this.projectName
     this.projectId = Project.projectid
-    console.log(this.projectId)
+    // console.log(this.projectId)
 
     var model = {
       projectid: this.projectId,
@@ -175,6 +269,8 @@ export class NewTaskComponent implements OnInit {
       userid: this.userId
 
     }
+    console.log("model",model);
+    
 
     this.rest.postParams(this.Global.getapiendpoint() + '/timesheet/GetTaskname', model).subscribe((data: any) => {
 

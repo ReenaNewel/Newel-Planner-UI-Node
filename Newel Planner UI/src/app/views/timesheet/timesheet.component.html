@@ -7,14 +7,14 @@
     <form #timesheetform="ngForm" (ngSubmit)="submit(timesheetform.valid) ; timesheetform.resetForm()">
       <c-row class="shadow border-1 py-2 mx-2">
 
-        <c-col sm="12" md="12" lg="12" xl="12" xxl="auto" class="border-1 ps-0 onlyCalendarIcon">
+        <c-col sm="12" md="12" lg="12" xl="auto" xxl="auto" class="border-1 ps-0 onlyCalendarIcon">
 
           <p-calendar [(ngModel)]="taskDate" name="taskdate" [showIcon]="true" appendTo="body"
             [inputStyle]="{'width':'0px', 'border':'0', 'padding':'0'}" class="">
           </p-calendar> {{taskDate | date:'shortDate'}}
         </c-col>
         <!-- Project Name    formControlName="ProjectName"-->
-        <c-col sm="12" md="12" lg="12" xl="12" xxl="auto" class="border-1">
+        <c-col sm="12" md="12" lg="12" xl="auto" xxl="auto" class="border-1 ps-0">
           <p-dropdown [options]="ProjectNames" [(ngModel)]="selectedProject" value="projectid" optionLabel="projectname"
             [filter]="true" required name="projectname" (onChange)="GetTaskNameByProject(selectedProject)"
             filterBy="projectname" [showClear]="true" placeholder="Project Name" class="borderNone">
@@ -35,7 +35,7 @@
 
         <!-- Task Name formControlName="TaskName"-->
 
-        <c-col sm="12" md="12" lg="12" xl="12" xxl="auto" class="border-1">
+        <c-col sm="12" md="12" lg="12" xl="auto" xxl="auto" class="border-1 ps-0">
           <p-dropdown [options]="Tasknames" [(ngModel)]="selectedTask" value="taskid" optionLabel="taskname"
             [filter]="true" filterBy="taskname" [showClear]="true" name="taskname" placeholder="Task Name"
             class="borderNone" required>
@@ -62,7 +62,7 @@
           </c-col> -->
 
         <!-- formControlName="Activity"  -->
-        <c-col sm="12" md="12" lg="12" xl="12" xxl="auto" class="border-1">
+        <c-col sm="12" md="12" lg="12" xl="auto" xxl="auto" class="border-1 ps-0">
           <p-dropdown [options]="ProjectActivities" [(ngModel)]="selectedactivity" optionLabel="name" [filter]="true"
             name="projectact" filterBy="name" [showClear]="true" value="typeid" placeholder="Activity"
             class="borderNone" required>
@@ -80,7 +80,7 @@
         </c-col>
 
         <!-- formControlName="TaskDesc"  -->
-        <c-col sm="12" md="12" lg="12" xl="12" xxl="4" class="border-1">
+        <c-col sm="12" md="12" lg="12" xl="2" xxl="4" class="border-1">
           <input pTooltip="Description" tooltipPosition="top" type="text" pInputText placeholder="Description" class="w-full" [(ngModel)]="selectedDescription"
             name="desc" required />
           <!-- <div *ngIf="desc.invalid || (desc.touched && f.submitted)">
@@ -88,7 +88,7 @@
           <!--  </div> -->
         </c-col>
         <!--  formControlName="TimeHr" -->
-        <c-col sm="12" md="12" lg="12" xl="12" xxl="auto" class="border-1 my-2 my-md-0">
+        <c-col sm="12" md="12" lg="12" xl="auto" xxl="auto" class="border-1 my-2 my-md-0">
           <p-dropdown pTooltip="Hours" tooltipPosition="top" [options]="hours" [(ngModel)]="selectedhours" required name="hours" placeholder="00"
             class="time borderNone">
 
@@ -100,7 +100,7 @@
           </p-dropdown>
         </c-col>
         <!-- [disabled]="!TimeSheetForm.valid"  -->
-        <c-col sm="12" md="12" lg="12" xl="12" xxl="auto" class="border-1 mt-2 mt-md-2 mt-lg-0 px-1">
+        <c-col sm="12" md="12" lg="12" xl="1" xxl="auto" class="border-1 mt-2 mt-md-2 mt-lg-0 px-1">
           <p-button type="submit" [disabled]="timesheetform.invalid" label="Add"
             styleClass="p-button-warning px-3 py-2 mb-md-1">
           </p-button>
@@ -123,7 +123,8 @@
   </c-card-body>
 </c-card>
 
-<p-dialog header="Create New Task" (click)="ProjectForm.resetForm(); timesheetform.resetForm()"
+<!-- (click)="ProjectForm.resetForm(); timesheetform.resetForm()" -->
+<p-dialog header="Create New Task" 
  [(visible)]="createTaskDialog" [breakpoints]="{'960px': '75vw'}"
   [style]="{width: '70vw'}" [draggable]="false" [resizable]="false" class="pb-2">
 
@@ -163,11 +164,12 @@
 
       <c-col sm="12" md="4" lg="4" class="mb-3">
         <p-dropdown [options]="UserData" [style]="{'minWidth':'100%'}" optionLabel="name" 
-        [filter]="true" filterBy="name"
-        [showClear]="true"  value="id" (click)="getUserByProjectId()" (selectionChange)="changeAssigneeId($event.value)"
+        [filter]="true" filterBy="name" 
+        [showClear]="true"  value="id" (click)="getUserByProjectId()"
         placeholder="Assignee Name*" class="" required 
         [(ngModel)]="selectedTaskAssignee" name ="assignee_name">
         </p-dropdown>
+        {{selectedTaskAssignee}}
       </c-col>
 
       <c-col sm="12" md="4" lg="4" class="mb-3">
@@ -223,7 +225,7 @@
     </c-row>
     <!-- (click)="SubmitNewTask()" -->
     <p-button type="submit" [disabled]="ProjectForm.invalid"  label="Save" styleClass="p-button-warning px-3 py-2"></p-button>
-    <p-button  (click)="ProjectForm.resetForm()" (click) ="timesheetform.resetForm()" (click)="createTaskDialog=false" label="Back" styleClass="p-button-text pb-2"></p-button>
+    <p-button (click)="createTaskDialog=false" (click)="ProjectForm.resetForm()" (click)="timesheetform.resetForm()"  label="Back" styleClass="p-button-text pb-2"></p-button>
    
   </form>
 

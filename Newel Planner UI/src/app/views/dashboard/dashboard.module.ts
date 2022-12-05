@@ -2,6 +2,18 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
+// import { FullCalendarModule } from '@fullcalendar/angular';
+// import dayGridPlugin from '@fullcalendar/daygrid';
+// import timeGridPlugin from '@fullcalendar/timegrid';
+// import listPlugin from '@fullcalendar/list';
+// import interactionPlugin from '@fullcalendar/interaction';
+
+// FullCalendarModule.registerPlugins([
+//   dayGridPlugin,
+//   timeGridPlugin,
+//   listPlugin,
+//   interactionPlugin
+// ])
 
 import {
   AvatarModule,
@@ -12,7 +24,7 @@ import {
   GridModule,
   NavModule,
   ProgressModule,
-  // TableModule,
+  
   TabsModule
 } from '@coreui/angular';
 import { IconModule } from '@coreui/icons-angular';
@@ -30,6 +42,9 @@ import { AccordionModule, SharedModule } from '@coreui/angular';
 import {TabViewModule} from 'primeng/tabview';
 import {ScrollPanelModule} from 'primeng/scrollpanel';
 import { DropdownModule } from 'primeng/dropdown';
+import { TimesheetDashboardComponent } from './components/timesheet-dashboard/timesheet-dashboard.component';
+import { TableModule } from 'primeng/table';
+// import { BrowserModule } from '@angular/platform-browser';
 
 @NgModule({
   imports: [
@@ -53,9 +68,13 @@ import { DropdownModule } from 'primeng/dropdown';
     SharedModule,
     DropdownModule,
     TabViewModule,
-    ScrollPanelModule
+    ScrollPanelModule,
+    TableModule
+    // FullCalendarModule,
+    // BrowserModule
+
   ],
-  declarations: [DashboardComponent]
+  declarations: [DashboardComponent, TimesheetDashboardComponent]
 })
 export class DashboardModule {
 }

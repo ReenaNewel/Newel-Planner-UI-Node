@@ -38,6 +38,13 @@ const routes: Routes = [
           import('./views/new-task/new-task.module').then((m) => m.NewTaskModule)
       },
       {
+
+        path: 'Task',
+        loadChildren: () =>
+          import('./views/task-details/task-details.module').then((m) => m.TaskDetailsModule)
+
+      },
+      {
         path: 'theme',
         loadChildren: () =>
           import('./views/theme/theme.module').then((m) => m.ThemeModule)

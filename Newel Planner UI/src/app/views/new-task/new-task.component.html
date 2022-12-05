@@ -1,106 +1,206 @@
+
+<p-toast></p-toast>
+<p-toolbar styleClass="mb-4 gap-2">
+    <ng-template pTemplate="left">
+        <span class="p-input-icon-left">
+            <i class="pi pi-search"></i>
+            <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
+                placeholder="Search..." />
+        </span>
+
+    </ng-template>
+
+    <ng-template pTemplate="right">
+        <p-button (click)="showCreateNewTaskDialog()" icon="pi pi-plus" label="New Task"
+            styleClass="p-button-warning px-3 py-2 mb-md-1">
+        </p-button>
+    </ng-template>
+</p-toolbar>
+
+<p-dialog  [(visible)]="NewTaskDialog" [breakpoints]="{'960px': '75vw'}"
+    [style]="{width: '70vw'}" [draggable]="false" [resizable]="false" class="pb-2" (onHide)="ProjectForm.resetForm()">
+    <form #ProjectForm="ngForm" (ngSubmit)="tasksubmit(ProjectForm.valid) ;ProjectForm.resetForm(); ">
+        <!-- (ngSubmit)="tasksubmit(ProjectForm.valid) ;ProjectForm.resetForm(); timesheetform.resetForm()"> -->
+        <!-- <form autocomplete="off" [formGroup]="ProjectForm" (Submit)="tasksubmit()"> -->
+
+        <c-row class="">
+            <c-col sm="12" md="4" lg="4" class="mb-3">
+                <!-- <span class="p-float-label">
+                    <input type="text" class="w-full" placeholder="Normal" pInputText name="name"
+                        [value]="selectedTaskProject" [(ngModel)]="selectedTaskProject" required
+                        [readOnly]="true" />
+                </span> -->
+
+                <p-dropdown [options]="ProjectNames"  [style]="{'minWidth':'100%'}" optionValue="projectid" [(ngModel)]="selectedProject" value="projectid" optionLabel="projectname"
+                [filter]="true" required name="projectname" 
+                filterBy="projectname" [showClear]="true" placeholder="Project Name" class="borderNone">
+               
+                
+              </p-dropdown>
+
+            </c-col>
+
+            <c-col sm="12" md="8" lg="8" class="mb-3">
+                <input type="text" class="w-full" placeholder="Task Name*" pInputText required name="taskname"
+                    [(ngModel)]="selectedTaskName" />
+            </c-col>
+
+            <c-col sm="12" md="4" lg="4" class="mb-3">
+                <p-dropdown [options]="tasktypes" [style]="{'minWidth':'100%'}" optionLabel="name" [filter]="true"
+                    filterBy="name" [showClear]="true" value="typeid" placeholder="Task Type*" class="" required
+                    name="tasktype_name" [(ngModel)]="selectedTaskTypeName" optionValue="typeid">
+                </p-dropdown>
+            </c-col>
+
+            <c-col sm="12" md="4" lg="4" class="mb-3">
+                <p-dropdown [options]="tasks" [style]="{'minWidth':'100%'}" optionLabel="name" [filter]="true"
+                    filterBy="name" name="taskstatus" [showClear]="true" value="typeid" placeholder="Task Status*"
+                    class="" required [(ngModel)]="selectedtaskstatus" optionValue="typeid">
+                </p-dropdown>
+            </c-col>
+
+            <c-col sm="12" md="4" lg="4" class="mb-3">
+                <p-dropdown [options]="UserData" [style]="{'minWidth':'100%'}" optionLabel="name" [filter]="true"
+                    filterBy="name" [showClear]="true" value="userid" (click)="getUserByProjectId()"
+                    (selectionChange)="changeAssigneeId($event.value)" placeholder="Assignee Name*" class=""
+                    required [(ngModel)]="selectedTaskAssignee" optionValue="userid" name="assignee_name">
+                </p-dropdown>
+            </c-col>
+
+            <c-col sm="12" md="4" lg="4" class="mb-3">
+                <input type="number" class="w-full" placeholder="Efforts In Hrs*" pInputText name="efforts"
+                    [(ngModel)]="selectedEfforts" />
+                   
+            </c-col>
+
+            <c-col sm="12" md="4" lg="4" class="mb-3">
+                <p-calendar [style]="{'minWidth':'100%'}" [showIcon]="true" appendTo="body" placeholder="Start Date"
+                    inputId="icon" required name="startdate" [(ngModel)]="selectedStartDate"></p-calendar>
+            </c-col>
+
+            <c-col sm="12" md="4" lg="4" class="mb-3">
+                <p-calendar [style]="{'minWidth':'100%'}" [showIcon]="true" appendTo="body" placeholder="End Date"
+                    inputId="icon" required name="enddate" [(ngModel)]="selectedEndate"></p-calendar>
+            </c-col>
+
+            <c-col sm="12" md="8" lg="8" class="mb-3">
+                <input type="text" class="w-full" placeholder="Comment" pInputText name="comments"
+                    [(ngModel)]="selectedComment"  form/>
+            </c-col>         
+          
+
+        </c-row>
+       
+     
+    
+    
+    <p-button *ngIf="showSaveBtn" type="submit" [disabled]="!ProjectForm.valid" (click)="SubmitNewTask()"
+    label="Save" styleClass="p-button-warning px-3 py-2"></p-button>
+<p-button *ngIf="!showSaveBtn" type="submit" [disabled]="!ProjectForm.valid" (click)="UpdateTask()"
+    label="Update" styleClass="p-button-warning px-3 py-2"></p-button>
+<p-button (click)="NewTaskDialog=false" label="Back" styleClass="p-button-text pb-2"></p-button>
+
+    </form>
+
+</p-dialog>
+
 <c-card class="mb-4">
-    <c-card-header>Add Task</c-card-header>
-    <c-card-body class="">
-        <form #ProjectForm="ngForm" (ngSubmit)="tasksubmit(ProjectForm.valid) ;ProjectForm.resetForm(); ">
-            <!-- (ngSubmit)="tasksubmit(ProjectForm.valid) ;ProjectForm.resetForm(); timesheetform.resetForm()"> -->
-            <!-- <form autocomplete="off" [formGroup]="ProjectForm" (Submit)="tasksubmit()"> -->
+    <c-card-header>Create New Task</c-card-header>
+    <c-card-body class="px-3">
 
-            <c-row class="">
-                <c-col sm="12" md="4" lg="4" class="mb-3">
-                    <span class="p-float-label">
-                        <input type="text" class="w-full" placeholder="Normal" pInputText name="name"
-                            [value]="selectedTaskProject" [(ngModel)]="selectedTaskProject" required
-                            [readOnly]="true" />
-                    </span>
-                </c-col>
+        <div class="card">
+            <p-table #dt [value]="SelectedProjectNames" [rows]="10" [paginator]="true"
+                [globalFilterFields]="['Id','name', 'taskname','tasktype_name', 'assigneename','efforts','startdate',
+                'enddate','attachment','comments','Actions']"
+                dataKey="id" editMode="row" [tableStyle]="{'min-width': '50rem'}" [rowHover]="true"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                [showCurrentPageReport]="true">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <!-- <th style="width:2rem !important">Project Name
+                        </th> -->
+                        <th [hidden]="true">Id
+                        </th>
+                        <th>Project Name
+                        </th>
+                        <th>Task Name
+                        </th>
+                        <th>Task Type
+                        </th>
+                        <th>Assign To
+                        </th>
+                        <th>Efforts Hr
+                        </th>
+                        <th>Start Date
+                        </th>
+                        <th>End Date
+                        </th>
+                        <th>Comments
+                        </th>
+                        <th style="width:2rem !important">Action</th>
+                    </tr>
+                    <!-- <tr>
+                        <th style="width:3rem !important" class="w-14rem" pSortableColumn="projectname">Project Name <p-sortIcon
+                                field="projectname"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="clientname">Client Name <p-sortIcon field="clientname"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="projecttype">Project Type <p-sortIcon field="projecttype"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="prjstartdate">Start Date <p-sortIcon field="prjstartdate"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="prjtodate">End Date <p-sortIcon field="prjtodate"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="projectstatus">Project Status <p-sortIcon field="projectstatus">
+                            </p-sortIcon>
+                        </th>
+                        <th pSortableColumn="projectstage">Project Stage <p-sortIcon field="projectstage"></p-sortIcon>
+                        </th>
+                        <th style="width:2rem">Action</th>
+                    </tr> -->
+                </ng-template>
+                <ng-template pTemplate="body" let-SelectedProject let-editing="editing" let-ri="rowIndex">
+                    <tr [pEditableRow]="SelectedProject">
+                        <td [hidden]="true">
+                            {{SelectedProject.id  }}
+                        </td>
+                        <td>
+                            {{SelectedProject.name}}
+                        </td>
+                        <td>
+                            {{SelectedProject.taskname }}
+                        </td>
+                        <td>
+                            {{SelectedProject.tasktype_name    }}
+                        </td>
+                        <td>
+                            {{SelectedProject.assignee_name }}
+                        </td>
+                        <td>
+                            {{SelectedProject.efforts | number}}  Hrs
+                        </td>
+                        <td>
+                            {{SelectedProject.startdate| date:'dd/MM/yyyy'}}
+                        </td>
+                        <td>
+                            {{SelectedProject.enddate| date:'dd/MM/yyyy'}}
 
-                <c-col sm="12" md="8" lg="8" class="mb-3">
-                    <input type="text" class="w-full" placeholder="Task Name*" pInputText required name="taskname"
-                        [(ngModel)]="selectedTaskName" />
-                </c-col>
+                        </td>
+                        <td>
+                            {{SelectedProject.comments }}
+                        </td>
+                      
+                        <td>
+                            <div class="flex align-items-center justify-content-center gap-2">
+                                <button pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil"
+                                    (click)="EditTaskDetails(SelectedProject)"
+                                    class="p-button-rounded p-button-text"></button>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
 
-                <c-col sm="12" md="4" lg="4" class="mb-3">
-                    <p-dropdown [options]="tasktypes" [style]="{'minWidth':'100%'}" optionLabel="name" [filter]="true"
-                        filterBy="name" [showClear]="true" value="typeid" placeholder="Task Type*" class="" required
-                        name="tasktype_name" [(ngModel)]="selectedTaskTypeName">
-                    </p-dropdown>
-                </c-col>
-
-                <c-col sm="12" md="4" lg="4" class="mb-3">
-                    <p-dropdown [options]="tasks" [style]="{'minWidth':'100%'}" optionLabel="name" [filter]="true"
-                        filterBy="name" name="taskstatus" [showClear]="true" value="typeid" placeholder="Task Status*"
-                        class="" required [(ngModel)]="selectedtaskstatus">
-                    </p-dropdown>
-                </c-col>
-
-                <c-col sm="12" md="4" lg="4" class="mb-3">
-                    <p-dropdown [options]="UserData" [style]="{'minWidth':'100%'}" optionLabel="name" [filter]="true"
-                        filterBy="name" [showClear]="true" value="id" (click)="getUserByProjectId()"
-                        (selectionChange)="changeAssigneeId($event.value)" placeholder="Assignee Name*" class=""
-                        required [(ngModel)]="selectedTaskAssignee" name="assignee_name">
-                    </p-dropdown>
-                </c-col>
-
-                <c-col sm="12" md="4" lg="4" class="mb-3">
-                    <input type="number" class="w-full" placeholder="Efforts In Hrs*" pInputText name="efforts"
-                        [(ngModel)]="selectedEfforts"  />
-                        <!-- <p-inputNumber inputId="minmax" [min]="0" [max]="500" 
-                        inputId="integeronly" placeholder="Efforts In Hrs*"
-                        required name="efforts" [(ngModel)]="selectedEfforts">
-                        </p-inputNumber> -->
-                        
-                </c-col>
-
-                <c-col sm="12" md="4" lg="4" class="mb-3">
-                    <p-calendar [style]="{'minWidth':'100%'}" [showIcon]="true" appendTo="body" placeholder="Start Date"
-                        inputId="icon" required name="startdate" [(ngModel)]="selectedStartDate"></p-calendar>
-                </c-col>
-
-                <c-col sm="12" md="4" lg="4" class="mb-3">
-                    <p-calendar [style]="{'minWidth':'100%'}" [showIcon]="true" appendTo="body" placeholder="End Date"
-                        inputId="icon" required name="enddate" [(ngModel)]="selectedEndate"></p-calendar>
-                </c-col>
-
-                <c-col sm="12" md="8" lg="8" class="mb-3">
-                    <input type="text" class="w-full" placeholder="Comment" pInputText name="comments"
-                        [(ngModel)]="selectedComment" />
-                </c-col>
-
-                <c-col sm="12" md="8" lg="8" class="mb-3">
-                    <!-- <p-fileUpload id="uploadFile" name="uploadFile" url="./upload.php" (onUpload)="onUpload($event)"
-            multiple="multiple" accept="image/*" maxFileSize="1000000" formControlName="attachment">
-            <ng-template pTemplate="content">
-              <ul *ngIf="uploadedFiles.length">
-                <li *ngFor="let file of uploadedFiles">{{file.name}} - {{file.size}} bytes</li>
-              </ul>
-            </ng-template>
-          </p-fileUpload> -->
-
-                    <!-- <p-fileUpload #fubauto mode="basic" name="uploadFile" accept="image/*" maxFileSize="1000000"
-          (onUpload)="onUpload($event)" [auto]="true" chooseLabel="Browse" multiple="multiple" id="uploadFile"
-            name="uploadFile" formControlName="attachment"></p-fileUpload>
-          </c-col>
-          <c-col sm="12" md="4" lg="4" class="mb-3">
-          <ul *ngIf="uploadedFiles.length">
-            <li *ngFor="let file of uploadedFiles">{{file.name}} - {{file.size}} bytes</li>
-          </ul> -->
-                </c-col>
-                <!-- <ng-template pTemplate="footer">
-          <p-button (click)="displayResponsive=false" label="Back" styleClass="p-button-text pb-2"></p-button>
-          <p-button [disabled]="!ProjectForm.valid" (click)="SubmitNewTask()" label="Save" styleClass="p-button-warning px-3 py-2">
-          </p-button>
-        </ng-template> -->
-
-            </c-row>
-            <!-- (click)="SubmitNewTask()" -->
-            <p-button type="submit" [disabled]="ProjectForm.invalid" label="Save"
-                styleClass="p-button-warning px-3 py-2">
-            </p-button>
-            <!-- <p-button (click)="ProjectForm.resetForm()" label="Back"
-        styleClass="p-button-text pb-2"></p-button> -->
-            <!-- <p-button (click)="ProjectForm.resetForm()" (click)="timesheetform.resetForm()" label="Back"
-        styleClass="p-button-text pb-2"></p-button> -->
-
-        </form>
     </c-card-body>
 </c-card>

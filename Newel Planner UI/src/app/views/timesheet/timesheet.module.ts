@@ -22,6 +22,7 @@ import { ToastModule } from 'primeng/toast';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { FileUploadModule } from 'primeng/fileupload';
 import {TooltipModule} from 'primeng/tooltip';
+import { IconModule } from '@coreui/icons-angular';
 
 @NgModule({
   declarations: [TimesheetComponent],
@@ -45,7 +46,8 @@ import {TooltipModule} from 'primeng/tooltip';
     InputNumberModule,
     FileUploadModule,
     HttpClientModule,
-    TooltipModule
+    TooltipModule,
+    IconModule
   ]
 })
 export class TimesheetModule { }

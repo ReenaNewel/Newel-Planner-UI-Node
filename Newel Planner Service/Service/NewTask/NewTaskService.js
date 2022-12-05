@@ -23,10 +23,42 @@ var routes = function () {
             .query(querytext,param)
             .then(function (result) {
                 result.shift();
-                console.log('result...',result)
+                // console.log('result...',result)
                 res.status(200).json({
                     Success: true,
                     Message: "Get all Task Details successfully",
+                    Data: result
+                });
+            }, function (err) {
+                // dataconn.ARC_Errorlogger('homepageService', 'getConfirmDetails', err);
+                res.status(200).json({ Success: false, Message: ' NewTask table API failed.', Data: null });
+            });
+        }catch(err)    {
+            res.status(200).json({ Success: false, Message: ' NewTask table API failed.', Data: null });
+        }
+});
+
+
+router.route('/GetAllUsersByProjectID')
+        .post(function (req, res) {
+            try {
+            var querytext = 'SELECT "getUserNameByProject"(:p_projectid,:p_active,:p_ref);FETCH ALL IN "abc"';
+            var param = {
+                replacements: {
+                    p_projectid:req.body.projectid,
+                    p_active: true,
+                    p_ref: 'abc'
+                },
+                type: connect.sequelize.QueryTypes.SELECT
+            }
+            connect.sequelize
+            .query(querytext,param)
+            .then(function (result) {
+                result.shift();
+                // console.log('result...',result)
+                res.status(200).json({
+                    Success: true,
+                    Message: "Get all user Details successfully",
                     Data: result
                 });
             }, function (err) {

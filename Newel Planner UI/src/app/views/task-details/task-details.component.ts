@@ -1,16 +1,20 @@
-import { Component, OnInit } from '@angular/core';
-import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import { Component, OnInit, ViewChild } from '@angular/core';
+//import { PlannerDashboardComponent } from '../DashBoard/planner-dashboard/planner-dashboard.component';
+import { FormBuilder, FormGroup, Validators,FormControl} from '@angular/forms';
 
-import { DashboardChartsData, IChartProps } from './dashboard-charts-data';
-import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
-// import { MatPaginator } from '@angular/material/paginator';
-// import { MatSort } from '@angular/material/sort';
-// import { MatRow, MatTableDataSource } from '@angular/material/table';
+//import { MatPaginator } from '@angular/material/paginator';
+//import { MatSort } from '@angular/material/sort';
+//import { MatRow, MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { RestService } from 'src/app/services/rest.service';
 import { Global } from 'src/app/common/global';
-// import { MatSnackBar } from '@angular/material/snack-bar';
+//import { MatSnackBar } from '@angular/material/snack-bar';
 import { ApiserviceService } from 'src/app/Service/apiservice.service';
+import * as moment from 'moment';
+import { count } from 'rxjs';
+
+import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import { ScrollTopModule } from 'primeng/scrolltop';
 import { ScrollPanelModule } from 'primeng/scrollpanel';
 
 
@@ -28,38 +32,64 @@ interface IUser {
   color: string;
 }
 
-@Component({
-  templateUrl: 'dashboard.component.html',
-  styleUrls: ['dashboard.component.scss']
-})
-export class DashboardComponent implements OnInit {
 
-   activeIndex1: number = 0;
+@Component({
+  selector: 'app-task-details',
+  templateUrl: './task-details.component.html',
+  styleUrls: ['./task-details.component.scss']
+})
+export class TaskDetailsComponent implements OnInit {
+
+  activeIndex1: number = 0;
   countries: any[];
   member: any[];
   selectedCountry: string;
   selectedMem: string;
 
-  ProjectForm !: FormGroup
+ // @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-   displayedColumns: string[] = [  'taskname','assignee_name','enddate' ];
-   TaskName:any;
-   AssigneeNmae:any;
-   StartDtae:any;
-   UserData: any;
-   TaskData: any;
-   item:any;
-   taskstatus:any;
-    projectnames: any;
-    data: any;
-    projectNmaes:any;
-    completedTask: any;
-    progressTask: any;
-    notstartedTask: any;
-    dataSource4: any;
-    dataSource: any;
-    allTask: any;
-    element:any
+   //@ViewChild(MatSort) sort!: MatSort;
+
+   ProjectForm !: FormGroup
+
+   displayedColumns: string[] = [  'taskname','assignee_name','startdate' ];
+  
+        TaskName:any;
+        AssigneeNmae:any;
+        StartDtae:any;
+        UserData: any;
+        TaskData: any;
+      
+        item:any;
+        taskstatus:any;
+        projectnames: any;
+        data: any;
+        projectNmaes:any;
+        completedTask: any;
+        progressTask: any;
+        notstartedTask: any;
+        dataSource4: any;
+        dataSource: any;
+        allTask: any;
+        
+
+  constructor(private fb : FormBuilder ,private router: Router,  
+    private rest :RestService , private Global : Global ,
+    private ApiService: ApiserviceService
+    
+    ) { }
+
+  ngOnInit(): void {
+    this.ShowProjectNmaes();
+    this.ShowAllfromDetails();
+  }
+
+  ShowAllfromDetails(){
+    this.ProjectForm = this.fb.group({
+      projectname :[''],
+  })
+}
+element:any
 filterdata:any;
 completed: any;
 inprogress: any;
@@ -71,53 +101,11 @@ totalProgess:any;
 totalNotstarted:any;
 totalTask:any;
 TotalData:any;
-    
-
-
-  constructor(
-    private fb: FormBuilder, private router: Router,
-    private rest :RestService , private Global : Global ,
-    private ApiService: ApiserviceService
-    ) 
-    { }
-
-
-  ngOnInit(): void {
-
-    this.ShowProjectNmaes();
-    this.ShowAllfromDetails();
-
-    this.member = [
-      {name: 'Only Me', code: 'AU'},
-      {name: 'Team', code: 'BR'}
-    ]
-    this.countries = [
-      {name: 'Australia', code: 'AU'},
-      {name: 'Brazil', code: 'BR'},
-      {name: 'China', code: 'CN'},
-      {name: 'Egypt', code: 'EG'},
-      {name: 'France', code: 'FR'},
-      {name: 'Germany', code: 'DE'},
-      {name: 'India', code: 'IN'},
-      {name: 'Japan', code: 'JP'},
-      {name: 'Spain', code: 'ES'},
-      {name: 'United States', code: 'US'}
-  ];
-  
-  }
-
-  ShowAllfromDetails(){
-    this.ProjectForm = this.fb.group({
-      projectname :[''],
-  })
-
-  
-}
 
 ShowDetails(projectid:any){
    
   var model={
-    p_userid:3,
+    p_userid:40,
     p_projectid:projectid
   }
   console.log('showdetails',model)
@@ -134,8 +122,8 @@ ShowDetails(projectid:any){
             this.completed = this.filterdata.filter(task => task.status === 1);
         
             this.completedTask=this.completed;
-            //console.log('tasks',this.completedTask);
-            //console.log("this.compelete",this.completed.length);
+            console.log('tasks',this.completedTask);
+            console.log("this.compelete",this.completed.length);
             this.totalcompleted= this.completed.length;
              
   
@@ -144,7 +132,12 @@ ShowDetails(projectid:any){
                this.totalProgess=0;
                 this.inprogress = this.filterdata.filter(task => task.status === 2);
                 this.progressTask = this.inprogress;
-              
+              //   this.dataSource2 = new MatTableDataSource(this.inprogress);
+  
+              //  //console.log("this.progess",this.inprogress.length);
+              //    this. totalProgess= this.inprogress.length;
+              //    this.dataSource2.paginator = this.paginator;
+              //      this.dataSource2.sort = this.sort;
   
   //for Not started
                this.totalNotstarted=0;
@@ -172,7 +165,7 @@ ShowDetails(projectid:any){
 ShowProjectNmaes()
 {
   var model={
-    p_userid:3
+    p_userid:40
   }
   this.rest.postParams(this.Global.getapiendpoint() + '/NewTask/GetProjectNameByuser',model).subscribe((data: any) => {
     console.log('projectNames',data.Data);

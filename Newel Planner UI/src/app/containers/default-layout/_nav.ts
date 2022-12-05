@@ -13,15 +13,11 @@ export const navItems: INavData[] = [
     url: '/new-task',
     iconComponent: { name: 'cil-puzzle' },
   },
-  // {
-  //   name: 'Dashboard',
-  //   url: '/dashboard',
-  //   iconComponent  : {name: 'cil-speedometer'},
-  // badge: {
-  //   color: 'info',
-  //   text: 'NEW'
-  // }
-  // },
+  {
+    name: 'Dashboard',
+    url: '/dashboard',
+    iconComponent: { name: 'cil-speedometer' },
+  },
 
   // {
   //   title: true,
@@ -236,38 +232,38 @@ export const navItems: INavData[] = [
     url: '/masters',
     iconComponent: { name: 'cil-notes' },
     children: [
-      {
-        name: 'Activity',
-        url: '/masters/activity'
-      },
-      {
-        name: 'Client',
-        url: '/masters/client'
-      },
-      {
-        name: 'General',
-        url: '/masters/general'
-      },
-      {
-        name: 'Holiday',
-        url: '/masters/holiday'
-      },
-      {
-        name: 'Leave',
-        url: '/masters/leave'
-      },
+      // {
+      //   name: 'Activity',
+      //   url: '/masters/activity'
+      // },
+      // {
+      //   name: 'Client',
+      //   url: '/masters/client'
+      // },
+      // {
+      //   name: 'General',
+      //   url: '/masters/general'
+      // },
+      // {
+      //   name: 'Holiday',
+      //   url: '/masters/holiday'
+      // },
+      // {
+      //   name: 'Leave',
+      //   url: '/masters/leave'
+      // },
       {
         name: 'Project',
         url: '/masters/project'
       },
-      {
-        name: 'User',
-        url: '/user'
-      }
+      // {
+      //   name: 'User',
+      //   url: '/user'
+      // }
     ]
   },
- 
- 
+
+
   // {
 
   //   name: 'Pages',

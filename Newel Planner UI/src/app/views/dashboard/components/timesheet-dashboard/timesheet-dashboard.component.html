@@ -1,0 +1,56 @@
+<c-row>
+
+    <div class="flex justify-content-center flex-wrap">
+
+        <p-dropdown [options]="ProjectNames" [(ngModel)]="selectedProject" value="projectid" optionLabel="projectname"
+            [filter]="true" required name="projectname" (onChange)="GetTaskNameByProject(selectedProject)"
+            filterBy="projectname" [showClear]="true" placeholder="Project Name" class="borderNone">
+            <ng-template pTemplate="selectedItem">
+                <div class="country-item country-item-value" *ngIf="selectedProject">
+                    <div pTooltip="Project Name" tooltipPosition="top">{{selectedProject?.projectname | slice:0:12}}
+                    </div>
+                </div>
+            </ng-template>
+            <!-- <ng-template let-ProjectName pTemplate="item">
+          <div class="country-item">
+            <div>{{ProjectName.projectname + ' ' + ProjectName.projectid }}</div>
+          </div>
+        </ng-template>
+        -->
+        </p-dropdown>
+
+        <p-dropdown [options]="member" [(ngModel)]="selectedMem" placeholder="Select" class="mx-3">
+        </p-dropdown>
+
+        <p-dropdown *ngIf="selectedMem == 'Team' " [options]="countries" [(ngModel)]="selectedCountry"
+            optionLabel="name" [filter]="true" filterBy="name" [showClear]="true" placeholder="Select Team List">
+            <ng-template pTemplate="selectedItem">
+                <div class="country-item country-item-value" *ngIf="selectedCountry">
+                    <div>{{selectedCountry.name}}</div>
+                </div>
+            </ng-template>
+            <ng-template let-country pTemplate="item">
+                <div class="country-item">
+                    <div>{{country.name}}</div>
+                </div>
+            </ng-template>
+        </p-dropdown>
+
+    </div>
+
+    <c-col sm="12" class="mb-3">
+        <!-- <full-calendar deepChangeDetection="true" class="max-w-30rem" [options]="calendarOptions"></full-calendar> -->
+
+        <!-- <ul>
+            <li *ngFor='let event of calendarOptions.events'>
+                <b>{{event.startStr}}</b>
+                <i>{{event.title}}</i>
+            </li>
+        </ul> -->
+        <app-task-accordion></app-task-accordion>
+    </c-col>
+
+    <c-col sm="12" class="my-3">
+        <app-task-accordion></app-task-accordion>
+    </c-col>
+</c-row>

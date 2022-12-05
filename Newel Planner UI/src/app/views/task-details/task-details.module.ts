@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NewTaskComponent } from './new-task.component';
-
-import { NewTaskRoutingModule } from './new-task-routing.module';
+import { TaskDetailsComponent } from './task-details.component';
+import { TableModule } from 'primeng/table';
+import { TaskDetailsRoutingModule } from './task-details-routing.module';
 import { CardModule, GridModule } from '@coreui/angular';
 import { WidgetsModule } from '../widgets/widgets.module';
 import { HttpClientModule } from '@angular/common/http';
@@ -17,17 +17,17 @@ import { CalendarModule } from 'primeng/calendar';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { InputNumberModule } from 'primeng/inputnumber';
-import { DialogModule } from 'primeng/dialog';
-import {ToolbarModule} from 'primeng/toolbar';
-import { TableModule } from 'primeng/table';
+import {ScrollPanelModule} from 'primeng/scrollpanel';
+
 @NgModule({
-  declarations: [NewTaskComponent],
+  declarations: [TaskDetailsComponent],
   imports: [
     CommonModule,
-    NewTaskRoutingModule,
+    TaskDetailsRoutingModule,
     CommonModule,
     ToastModule,
     FormsModule,
+    ReactiveFormsModule,
     InputTextModule,
     DropdownModule,
     CalendarModule,
@@ -38,9 +38,8 @@ import { TableModule } from 'primeng/table';
     CardModule,
     HttpClientModule,
     InputNumberModule,
-    DialogModule,
-    ToolbarModule,
-    TableModule
+    TableModule,
+    ScrollPanelModule
   ]
 })
-export class NewTaskModule { }
+export class TaskDetailsModule { }

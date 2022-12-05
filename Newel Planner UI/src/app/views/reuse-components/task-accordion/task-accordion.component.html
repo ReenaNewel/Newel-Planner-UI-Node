@@ -1,21 +1,148 @@
+<p-toast></p-toast>
 <c-accordion>
-    <div *ngIf="totaltimehr4>0">
-        <c-accordion-item #item0="cAccordionItem" [visible]="false">
-            <ng-template cTemplateId="accordionHeaderTemplate">
-                <button (click)="item0.toggleItem()" [collapsed]="!item0.visible" cAccordionButton>
-                    <span class="text-primary">Today{{TimesheetDate5}}</span>
-                    <span class="ml-auto">Total hours: <span class="font-semibold">{{totaltimehr4|number : '1.2-2'}}</span></span>
-                </button>
-            </ng-template>
-            <div *ngIf="totaltimehr4 > 0">
-            <ng-template cTemplateId="accordionBodyTemplate">
-                <div class="accordion-body">
+  <div *ngIf="totaltimehr4>0">
+    <c-accordion-item #item0="cAccordionItem" [visible]="false">
+      <ng-template cTemplateId="accordionHeaderTemplate">
+        <button (click)="item0.toggleItem()" [collapsed]="!item0.visible" cAccordionButton>
+          <span class="text-primary">{{TimesheetDate5}}</span>
+          <span class="ml-auto">Total hours: <span class="font-semibold">{{totaltimehr4|number :
+              '1.2-2'}}</span></span>
+        </button>
+      </ng-template>
+      <div *ngIf="totaltimehr4 > 0">
+        <ng-template cTemplateId="accordionBodyTemplate">
+          <div class="accordion-body">
+            <p-table [value]="dataSource5" dataKey="id" editMode="row" [tableStyle]="{'min-width': '50rem'}">
+              <ng-template pTemplate="header">
+                <tr>
+                  <th>Project Name</th>
+                  <th>Task Name</th>
+                  <th>Task Desc</th>
+                  <th>Activity</th>
+                  <th>Hrs</th>
+                  <th>Mins</th>
+                  <th style="width:2rem !important">Action</th>
+                </tr>
+              </ng-template>
 
-                    <p-table [value]="dataSource5" styleClass="p-datatable-sm" [tableStyle]="{'min-width': '50rem'}">
+              <ng-template pTemplate="body" let-TimesheetData5 let-editing="editing" let-ri="rowIndex">
+                <tr [pEditableRow]="TimesheetData5">
+                  <td>
+                    <p-cellEditor>
+                      <ng-template pTemplate="input">
+                        <p-dropdown [options]="ProjectNames" optionValue="projectid"
+                          [(ngModel)]="TimesheetData5.projectid" optionLabel="projectname" [filter]="true" required
+                          filterBy="projectname" [showClear]="true" appendTo="body" (onChange)="GetTaskNameByProject(TimesheetData5)">
+                        </p-dropdown>
+                      </ng-template>
+                      <ng-template pTemplate="output">
+                        {{TimesheetData5.projectname}}
+                      </ng-template>
+                    </p-cellEditor>
+                  </td>
+
+                  <td>
+                    <p-cellEditor>
+                      <ng-template pTemplate="input">
+                        <p-dropdown [options]="Tasknames" [(ngModel)]="TimesheetData5.taskid" optionValue="taskid"
+                          optionLabel="taskname" [filter]="true" filterBy="name" [showClear]="true" appendTo="body"
+                          required>
+                        </p-dropdown>
+
+                        <!-- <input pInputText type="text" [(ngModel)]="item.taskname"> -->
+                      </ng-template>
+                      <ng-template pTemplate="output">
+                        {{TimesheetData5.taskname}}
+                      </ng-template>
+                    </p-cellEditor>
+                  </td>
+
+                  <td>
+                    <p-cellEditor>
+                      <ng-template pTemplate="input">
+                        <input pInputText type="text" [(ngModel)]="TimesheetData5.description">
+                      </ng-template>
+                      <ng-template pTemplate="output">
+                        {{TimesheetData5.description}}
+                      </ng-template>
+                    </p-cellEditor>
+                  </td>
+
+                  <td>
+                    <p-cellEditor>
+                      <ng-template pTemplate="input">
+                        <p-dropdown [options]="ProjectActivities" [(ngModel)]="TimesheetData5.activityid"
+                          optionValue="typeid" optionLabel="name" [filter]="true" name="projectact" filterBy="name"
+                          [showClear]="true" appendTo="body" required> </p-dropdown>
+                        <!-- <input pInputText type="text" [(ngModel)]="item.activity"> -->
+                      </ng-template>
+                      <ng-template pTemplate="output">
+                        {{TimesheetData5.activity}}
+                      </ng-template>
+                    </p-cellEditor>
+                  </td>
+
+                  <td>
+                    <p-cellEditor>
+                      <ng-template pTemplate="input">
+                        <p-dropdown pTooltip="Hours" tooltipPosition="top" [options]="hours"
+                          [(ngModel)]="TimesheetData5.timeinhours" required name="hours" placeholder="00" class="time"
+                          appendTo="body">
+                        </p-dropdown>
+
+                        <!-- <input pInputText type="text" [(ngModel)]="item.timeinhours"> -->
+                      </ng-template>
+                      <ng-template pTemplate="output">
+                        {{TimesheetData5.timeinhours}}
+                      </ng-template>
+                    </p-cellEditor>
+                  </td>
+
+                  <td>
+                    <p-cellEditor>
+                      <ng-template pTemplate="input">
+                        <p-dropdown pTooltip="Minutes" tooltipPosition="top" [options]="minutes"
+                          [(ngModel)]="TimesheetData5.timeinminutes" placeholder="00" class="time" name="time" required
+                          appendTo="body">
+                        </p-dropdown>
+                        <!-- <input pInputText type="text" [(ngModel)]="item.timeinminutes"> -->
+                      </ng-template>
+                      <ng-template pTemplate="output">
+                        {{TimesheetData5.timeinminutes}}
+                      </ng-template>
+                    </p-cellEditor>
+                  </td>
+                  <td>
+                    <div class="flex align-items-center justify-content-center gap-2">
+                      <!-- <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil"
+                        class="p-button-rounded p-button-text" (click)="editRow(TimesheetData5)"></button> -->
+                        <span *ngIf="disabledEdit">
+                          <button *ngIf="!editing" pButton pRipple type="button" icon="pi pi-pencil"
+                          class="p-button-rounded p-button-text p-button-secondary" (click)="showError()"></button>
+                        </span>
+      
+                        <span *ngIf="!disabledEdit">
+                          <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil"
+                          [disabled]="disabledEdit"
+                          class="p-button-rounded p-button-text p-button-primary" (click)="editRow(TimesheetData5)"></button>
+                        </span>
+                      <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check"
+                        class="p-button-rounded p-button-text p-button-success mr-2"
+                        (click)="saveRow(TimesheetData5)"></button>
+                      <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow icon="pi pi-times"
+                      (click)="CancelRow()" class="p-button-rounded p-button-text p-button-danger"></button>
+                    </div>
+                  </td>
+                </tr>
+              </ng-template>
+
+
+            </p-table>
+
+            <!-- <p-table [value]="dataSource5" styleClass="p-datatable-sm" [tableStyle]="{'min-width': '50rem'}">
                      
                             <ng-template pTemplate="header">
                                 <tr>
-                                    <!-- <th>Sr.No</th> -->
                                     <th>Project Name</th>
                                     <th>Task Name</th>
                                     <th>Task Desc</th>
@@ -27,7 +154,6 @@
                             </ng-template>
                             <ng-template pTemplate="body" let-dataSource5>
                                 <tr>
-                                    <!-- <td>{{index+1}}</td> -->
                                     <td>{{dataSource5.projectname}}</td>
                                     <td>{{dataSource5.taskname}}</td>
                                     <td>{{dataSource5.description}}</td>
@@ -37,29 +163,29 @@
                                 </tr>
                             </ng-template>
                      
-                    </p-table>
+                    </p-table> -->
 
-                </div>
-            </ng-template>
-            </div>
-        </c-accordion-item>
-    </div>
-   <div *ngIf="totaltimehr3>0">
-        <c-accordion-item #item1="cAccordionItem" [visible]="false">
-            <ng-template cTemplateId="accordionHeaderTemplate">
-                <button (click)="item1.toggleItem()" [collapsed]="!item1.visible" cAccordionButton>
-                    <span class="text-900">{{TimesheetDate4}}</span>
-                    <span class="ml-auto">Total hours: <span class="font-semibold">{{totaltimehr3|number : '1.2-2'}}</span></span>
-                </button>
-            </ng-template>
-    
-            <ng-template cTemplateId="accordionBodyTemplate">
-                <div class="accordion-body">
-                    <p-table [value]="dataSource4" styleClass="p-datatable-sm" [tableStyle]="{'min-width': '50rem'}">
+          </div>
+        </ng-template>
+      </div>
+    </c-accordion-item>
+  </div>
+  <div *ngIf="totaltimehr3>0">
+    <c-accordion-item #item1="cAccordionItem" [visible]="false">
+      <ng-template cTemplateId="accordionHeaderTemplate">
+        <button (click)="item1.toggleItem()" [collapsed]="!item1.visible" cAccordionButton>
+          <span class="text-900">{{TimesheetDate4}}</span>
+          <span class="ml-auto">Total hours: <span class="font-semibold">{{totaltimehr3|number :
+              '1.2-2'}}</span></span>
+        </button>
+      </ng-template>
+
+      <ng-template cTemplateId="accordionBodyTemplate">
+        <div class="accordion-body">
+          <!-- <p-table [value]="dataSource4" styleClass="p-datatable-sm" [tableStyle]="{'min-width': '50rem'}">
                     
                             <ng-template pTemplate="header">
                                 <tr>
-                                    <!-- <th>Sr.No</th> -->
                                     <th>Project Name</th>
                                     <th>Task Name</th>
                                     <th>Task Desc</th>
@@ -71,7 +197,6 @@
                             </ng-template>
                             <ng-template pTemplate="body" let-dataSource4>
                                 <tr>
-                                    <!-- <td>{{index+1}}</td> -->
                                     <td>{{dataSource4.projectname}}</td>
                                     <td>{{dataSource4.taskname}}</td>
                                     <td>{{dataSource4.description}}</td>
@@ -80,28 +205,155 @@
                                     <td>{{dataSource4.timeinminutes}}</td>
                                 </tr>
                             </ng-template>
-                    </p-table>
+                    </p-table> -->
+          <p-table [value]="dataSource4" dataKey="id" editMode="row" [tableStyle]="{'min-width': '50rem'}">
+            <ng-template pTemplate="header">
+              <tr>
+                <th>Project Name</th>
+                <th>Task Name</th>
+                <th>Task Desc</th>
+                <th>Activity</th>
+                <th>Hrs</th>
+                <th>Mins</th>
+                <th style="width:2rem !important">Action</th>
 
-                </div>
+              </tr>
             </ng-template>
-        </c-accordion-item>
-   </div>
+
+            <ng-template pTemplate="body" let-TimesheetData4 let-editing="editing" let-ri="rowIndex">
+              <tr [pEditableRow]="TimesheetData4">
+                <td>
+                  <p-cellEditor>
+                    <ng-template pTemplate="input">
+                      <p-dropdown [options]="ProjectNames" optionValue="projectid"
+                        [(ngModel)]="TimesheetData4.projectid" optionLabel="projectname" [filter]="true" required
+                        filterBy="projectname" [showClear]="true" appendTo="body" (onChange)="GetTaskNameByProject(TimesheetData4)">
+                      </p-dropdown>
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                      {{TimesheetData4.projectname}}
+                    </ng-template>
+                  </p-cellEditor>
+                </td>
+
+                <td>
+                  <p-cellEditor>
+                    <ng-template pTemplate="input">
+                      <p-dropdown [options]="Tasknames" [(ngModel)]="TimesheetData4.taskid" optionValue="taskid"
+                        optionLabel="taskname" [filter]="true" filterBy="name" [showClear]="true" appendTo="body"
+                        required>
+                      </p-dropdown>
+
+                      <!-- <input pInputText type="text" [(ngModel)]="item.taskname"> -->
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                      {{TimesheetData4.taskname}}
+                    </ng-template>
+                  </p-cellEditor>
+                </td>
+
+                <td>
+                  <p-cellEditor>
+                    <ng-template pTemplate="input">
+                      <input pInputText type="text" [(ngModel)]="TimesheetData4.description">
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                      {{TimesheetData4.description}}
+                    </ng-template>
+                  </p-cellEditor>
+                </td>
+
+                <td>
+                  <p-cellEditor>
+                    <ng-template pTemplate="input">
+                      <p-dropdown [options]="ProjectActivities" [(ngModel)]="TimesheetData4.activityid"
+                        optionValue="typeid" optionLabel="name" [filter]="true" name="projectact" filterBy="name"
+                        [showClear]="true" appendTo="body" required> </p-dropdown>
+                      <!-- <input pInputText type="text" [(ngModel)]="item.activity"> -->
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                      {{TimesheetData4.activity}}
+                    </ng-template>
+                  </p-cellEditor>
+                </td>
+
+                <td>
+                  <p-cellEditor>
+                    <ng-template pTemplate="input">
+                      <p-dropdown pTooltip="Hours" tooltipPosition="top" [options]="hours"
+                        [(ngModel)]="TimesheetData4.timeinhours" required name="hours" placeholder="00" class="time"
+                        appendTo="body">
+                      </p-dropdown>
+
+                      <!-- <input pInputText type="text" [(ngModel)]="item.timeinhours"> -->
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                      {{TimesheetData4.timeinhours}}
+                    </ng-template>
+                  </p-cellEditor>
+                </td>
+
+                <td>
+                  <p-cellEditor>
+                    <ng-template pTemplate="input">
+                      <p-dropdown pTooltip="Minutes" tooltipPosition="top" [options]="minutes"
+                        [(ngModel)]="TimesheetData4.timeinminutes" placeholder="00" class="time" name="time" required
+                        appendTo="body">
+                      </p-dropdown>
+                      <!-- <input pInputText type="text" [(ngModel)]="item.timeinminutes"> -->
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                      {{TimesheetData4.timeinminutes}}
+                    </ng-template>
+                  </p-cellEditor>
+                </td>
+                <td>
+                  <div class="flex align-items-center justify-content-center gap-2">
+                    <!-- <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil"
+                      class="p-button-rounded p-button-text" (click)="editRow(TimesheetData4)"></button> -->
+                      <span *ngIf="disabledEdit">
+                        <button *ngIf="!editing" pButton pRipple type="button" icon="pi pi-pencil"
+                        class="p-button-rounded p-button-text p-button-secondary" (click)="showError()"></button>
+                      </span>
     
-   <div *ngIf="totaltimehr2>0">
-        <c-accordion-item #item2="cAccordionItem" [visible]="false">
-            <ng-template cTemplateId="accordionHeaderTemplate">
-                <button (click)="item2.toggleItem()" [collapsed]="!item2.visible" cAccordionButton>
-                    <span class="text-blue-600">    {{TimesheetDate3}}</span>
-                    <span class="ml-auto">Total hours: <span class="font-semibold">{{totaltimehr2|number : '1.2-2'}}</span></span>
-                </button>
+                      <span *ngIf="!disabledEdit">
+                        <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil"
+                        [disabled]="disabledEdit"
+                        class="p-button-rounded p-button-text p-button-primary" (click)="editRow(TimesheetData4)"></button>
+                      </span>
+                    <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check"
+                      class="p-button-rounded p-button-text p-button-success mr-2"
+                      (click)="saveRow(TimesheetData4)"></button>
+                    <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow icon="pi pi-times"
+                    (click)="CancelRow()"class="p-button-rounded p-button-text p-button-danger"></button>
+                  </div>
+                </td>
+              </tr>
             </ng-template>
-            <ng-template cTemplateId="accordionBodyTemplate">
-                <div class="accordion-body">
-                    <p-table [value]="dataSource3" styleClass="p-datatable-sm" [tableStyle]="{'min-width': '50rem'}">
+
+
+          </p-table>
+        </div>
+      </ng-template>
+    </c-accordion-item>
+  </div>
+
+  <div *ngIf="totaltimehr2>0">
+    <c-accordion-item #item2="cAccordionItem" [visible]="false">
+      <ng-template cTemplateId="accordionHeaderTemplate">
+        <button (click)="item2.toggleItem()" [collapsed]="!item2.visible" cAccordionButton>
+          <span class="text-blue-600"> {{TimesheetDate3}}</span>
+          <span class="ml-auto">Total hours: <span class="font-semibold">{{totaltimehr2|number :
+              '1.2-2'}}</span></span>
+        </button>
+      </ng-template>
+      <ng-template cTemplateId="accordionBodyTemplate">
+        <div class="accordion-body">
+          <!-- <p-table [value]="dataSource3" styleClass="p-datatable-sm" [tableStyle]="{'min-width': '50rem'}">
                        
                             <ng-template pTemplate="header">
                                 <tr>
-                                    <!-- <th>Sr.No</th> -->
+                                    
                                     <th>Project Name</th>
                                     <th>Task Name</th>
                                     <th>Task Desc</th>
@@ -113,7 +365,7 @@
                             </ng-template>
                             <ng-template pTemplate="body" let-dataSource3>
                                 <tr>
-                                    <!-- <td>index+1</td> -->
+                                    
                                     <td>{{dataSource3.projectname}}</td>
                                     <td>{{dataSource3.taskname}}</td>
                                     <td>{{dataSource3.description}}</td>
@@ -123,29 +375,156 @@
                                 </tr>
                             </ng-template>
                       
-                    </p-table>
+                    </p-table> -->
+          <p-table [value]="dataSource3" dataKey="id" editMode="row" [tableStyle]="{'min-width': '50rem'}">
+            <ng-template pTemplate="header">
+              <tr>
+                <th>Project Name</th>
+                <th>Task Name</th>
+                <th>Task Desc</th>
+                <th>Activity</th>
+                <th>Hrs</th>
+                <th>Mins</th>
+                <th style="width:2rem !important">Action</th>
 
-                </div>
+              </tr>
             </ng-template>
-        </c-accordion-item>
-   </div>
+
+            <ng-template pTemplate="body" let-TimesheetData3 let-editing="editing" let-ri="rowIndex">
+              <tr [pEditableRow]="TimesheetData3">
+                <td>
+                  <p-cellEditor>
+                    <ng-template pTemplate="input">
+                      <p-dropdown [options]="ProjectNames" optionValue="projectid"
+                        [(ngModel)]="TimesheetData3.projectid" optionLabel="projectname" [filter]="true" required
+                        filterBy="projectname" [showClear]="true" appendTo="body"(onChange)="GetTaskNameByProject(TimesheetData3)">
+                      </p-dropdown>
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                      {{TimesheetData3.projectname}}
+                    </ng-template>
+                  </p-cellEditor>
+                </td>
+
+                <td>
+                  <p-cellEditor>
+                    <ng-template pTemplate="input">
+                      <p-dropdown [options]="Tasknames" [(ngModel)]="TimesheetData3.taskid" optionValue="taskid"
+                        optionLabel="taskname" [filter]="true" filterBy="name" [showClear]="true" appendTo="body"
+                        required>
+                      </p-dropdown>
+
+                      <!-- <input pInputText type="text" [(ngModel)]="item.taskname"> -->
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                      {{TimesheetData3.taskname}}
+                    </ng-template>
+                  </p-cellEditor>
+                </td>
+
+                <td>
+                  <p-cellEditor>
+                    <ng-template pTemplate="input">
+                      <input pInputText type="text" [(ngModel)]="TimesheetData3.description">
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                      {{TimesheetData3.description}}
+                    </ng-template>
+                  </p-cellEditor>
+                </td>
+
+                <td>
+                  <p-cellEditor>
+                    <ng-template pTemplate="input">
+                      <p-dropdown [options]="ProjectActivities" [(ngModel)]="TimesheetData3.activityid"
+                        optionValue="typeid" optionLabel="name" [filter]="true" name="projectact" filterBy="name"
+                        [showClear]="true" appendTo="body" required> </p-dropdown>
+                      <!-- <input pInputText type="text" [(ngModel)]="item.activity"> -->
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                      {{TimesheetData3.activity}}
+                    </ng-template>
+                  </p-cellEditor>
+                </td>
+
+                <td>
+                  <p-cellEditor>
+                    <ng-template pTemplate="input">
+                      <p-dropdown pTooltip="Hours" tooltipPosition="top" [options]="hours"
+                        [(ngModel)]="TimesheetData3.timeinhours" required name="hours" placeholder="00" class="time"
+                        appendTo="body">
+                      </p-dropdown>
+
+                      <!-- <input pInputText type="text" [(ngModel)]="item.timeinhours"> -->
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                      {{TimesheetData3.timeinhours}}
+                    </ng-template>
+                  </p-cellEditor>
+                </td>
+
+                <td>
+                  <p-cellEditor>
+                    <ng-template pTemplate="input">
+                      <p-dropdown pTooltip="Minutes" tooltipPosition="top" [options]="minutes"
+                        [(ngModel)]="TimesheetData3.timeinminutes" placeholder="00" class="time" name="time" required
+                        appendTo="body">
+                      </p-dropdown>
+                      <!-- <input pInputText type="text" [(ngModel)]="item.timeinminutes"> -->
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                      {{TimesheetData3.timeinminutes}}
+                    </ng-template>
+                  </p-cellEditor>
+                </td>
+                <td>
+                  <div class="flex align-items-center justify-content-center gap-2">
+                    <!-- <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil"
+                      class="p-button-rounded p-button-text" (click)="editRow(TimesheetData3)"></button> -->
+                      <span *ngIf="disabledEdit">
+                        <button *ngIf="!editing" pButton pRipple type="button" icon="pi pi-pencil"
+                        class="p-button-rounded p-button-text p-button-secondary" (click)="showError()"></button>
+                      </span>
     
-
-    <div *ngIf="totaltimehr1>0">
-        <c-accordion-item #item3="cAccordionItem" [visible]="false">
-            <ng-template cTemplateId="accordionHeaderTemplate">
-                <button (click)="item3.toggleItem()" [collapsed]="!item3.visible" cAccordionButton>
-                    <span class="text-purple-500">{{TimesheetDate2}}</span>
-                    <span class="ml-auto">Total hours: <span class="font-semibold">{{totaltimehr1 | number : '1.2-2' }}</span></span>
-                </button>
+                      <span *ngIf="!disabledEdit">
+                        <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil"
+                        [disabled]="disabledEdit"
+                        class="p-button-rounded p-button-text p-button-primary" (click)="editRow(TimesheetData3)"></button>
+                      </span>
+                    <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check"
+                      class="p-button-rounded p-button-text p-button-success mr-2"
+                      (click)="saveRow(TimesheetData3)"></button>
+                    <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow icon="pi pi-times"
+                    (click)="CancelRow()" class="p-button-rounded p-button-text p-button-danger"></button>
+                  </div>
+                </td>
+              </tr>
             </ng-template>
-            <ng-template cTemplateId="accordionBodyTemplate">
-                <div class="accordion-body">
-                    <p-table [value]="dataSource2" styleClass="p-datatable-sm" [tableStyle]="{'min-width': '50rem'}">
+
+          </p-table>
+
+        </div>
+      </ng-template>
+    </c-accordion-item>
+  </div>
+
+
+  <div *ngIf="totaltimehr1>0">
+    <c-accordion-item #item3="cAccordionItem" [visible]="false">
+      <ng-template cTemplateId="accordionHeaderTemplate">
+        <button (click)="item3.toggleItem()" [collapsed]="!item3.visible" cAccordionButton>
+          <span class="text-purple-500">{{TimesheetDate2}}</span>
+          <span class="ml-auto">Total hours: <span class="font-semibold">{{totaltimehr1 | number : '1.2-2'
+              }}</span></span>
+        </button>
+      </ng-template>
+      <ng-template cTemplateId="accordionBodyTemplate">
+        <div class="accordion-body">
+          <!-- <p-table [value]="dataSource2" styleClass="p-datatable-sm" [tableStyle]="{'min-width': '50rem'}">
                        
                             <ng-template pTemplate="header">
                                 <tr>
-                                    <!-- <th>Sr.No</th> -->
+                                
                                     <th>Project Name</th>
                                     <th>Task Name</th>
                                     <th>Task Desc</th>
@@ -157,7 +536,7 @@
                             </ng-template>
                             <ng-template pTemplate="body" let-dataSource2>
                                 <tr>
-                                    <!-- <td>index+1</td> -->
+                                
                                     <td>{{dataSource2.projectname}}</td>
                                     <td>{{dataSource2.taskname}}</td>
                                     <td>{{dataSource2.description}}</td>
@@ -166,28 +545,161 @@
                                     <td>{{dataSource2.timeinminutes}}</td>
                                 </tr>
                             </ng-template>
-                    </p-table>
+                    </p-table> -->
+          <p-table [value]="dataSource2" dataKey="id" editMode="row" [tableStyle]="{'min-width': '50rem'}">
+            <ng-template pTemplate="header">
+              <tr>
+                <th>Project Name</th>
+                <th>Task Name</th>
+                <th>Task Desc</th>
+                <th>Activity</th>
+                <th>Hrs</th>
+                <th>Mins</th>
+                <th style="width:2rem !important">Action</th>
 
-                </div>
+              </tr>
             </ng-template>
-        </c-accordion-item>
-    </div>
-    
-    <div *ngIf="totaltimehr>0">
-        <c-accordion-item #item4="cAccordionItem" [visible]="false">
-            <ng-template cTemplateId="accordionHeaderTemplate">
-                <button (click)="item4.toggleItem()" [collapsed]="!item4.visible" cAccordionButton>
-                    <span class="text-yellow-400">{{TimesheetDate1}}</span>
-                    <span class="ml-auto">Total hours: <span class="font-semibold">{{totaltimehr|number : '1.2-2'}}</span></span>
-                </button>
+
+            <ng-template pTemplate="body" let-timesheetData2 let-editing="editing" let-ri="rowIndex">
+              <tr [pEditableRow]="timesheetData2">
+                <td>
+                  <p-cellEditor>
+                    <ng-template pTemplate="input">
+                      <p-dropdown [options]="ProjectNames" optionValue="projectid"
+                        [(ngModel)]="timesheetData2.projectid" optionLabel="projectname" [filter]="true" required
+                        filterBy="projectname" [showClear]="true" appendTo="body"(onChange)="GetTaskNameByProject(timesheetData2)">
+                      </p-dropdown>
+                      <!-- <input pInputText type="text" [(ngModel)]="item.projectname"> -->
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                      {{timesheetData2.projectname}}
+                    </ng-template>
+                  </p-cellEditor>
+                </td>
+
+
+                <td>
+                  <p-cellEditor>
+                    <ng-template pTemplate="input">
+                      <p-dropdown [options]="Tasknames" [(ngModel)]="timesheetData2.taskid" optionValue="taskid"
+                        optionLabel="taskname" [filter]="true" filterBy="name" [showClear]="true" appendTo="body"
+                        required>
+                      </p-dropdown>
+
+                      <!-- <input pInputText type="text" [(ngModel)]="item.taskname"> -->
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                      {{timesheetData2.taskname}}
+                    </ng-template>
+                  </p-cellEditor>
+                </td>
+
+                <td>
+                  <p-cellEditor>
+                    <ng-template pTemplate="input">
+                      <input pInputText type="text" [(ngModel)]="timesheetData2.description">
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                      {{timesheetData2.description}}
+                    </ng-template>
+                  </p-cellEditor>
+                </td>
+
+                <td>
+                  <p-cellEditor>
+                    <ng-template pTemplate="input">
+                      <p-dropdown [options]="ProjectActivities" [(ngModel)]="timesheetData2.activityid"
+                        optionValue="typeid" optionLabel="name" [filter]="true" name="projectact" filterBy="name"
+                        [showClear]="true" appendTo="body" required> </p-dropdown>
+                      <!-- <input pInputText type="text" [(ngModel)]="item.activity"> -->
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                      {{timesheetData2.activity}}
+                    </ng-template>
+                  </p-cellEditor>
+                </td>
+
+                <td>
+                  <p-cellEditor>
+                    <ng-template pTemplate="input">
+                      <p-dropdown pTooltip="Hours" tooltipPosition="top" [options]="hours"
+                        [(ngModel)]="timesheetData2.timeinhours" required name="hours" placeholder="00" class="time"
+                        appendTo="body">
+                      </p-dropdown>
+
+                      <!-- <input pInputText type="text" [(ngModel)]="item.timeinhours"> -->
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                      {{timesheetData2.timeinhours}}
+                    </ng-template>
+                  </p-cellEditor>
+                </td>
+
+                <td>
+                  <p-cellEditor>
+                    <ng-template pTemplate="input">
+                      <p-dropdown pTooltip="Minutes" tooltipPosition="top" [options]="minutes"
+                        [(ngModel)]="timesheetData2.timeinminutes" placeholder="00" class="time" name="time" required
+                        appendTo="body">
+                      </p-dropdown>
+                      <!-- <input pInputText type="text" [(ngModel)]="item.timeinminutes"> -->
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                      {{timesheetData2.timeinminutes}}
+                    </ng-template>
+                  </p-cellEditor>
+                </td>
+                <td>
+                  <div class="flex align-items-center justify-content-center gap-2">
+                  <span *ngIf="disabledEdit">
+                    <button *ngIf="!editing" pButton pRipple type="button" icon="pi pi-pencil"
+                    
+                    class="p-button-rounded p-button-text p-button-secondary" (click)="showError()"></button>
+                  </span>
+
+                  <span *ngIf="!disabledEdit">
+                    <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil"
+                    [disabled]="disabledEdit"
+                    class="p-button-rounded p-button-text p-button-primary" (click)="editRow(timesheetData2)"></button>
+                  </span>
+                    
+                    <!-- <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil"
+                      [disabled]="disabledEdit" [ngClass]="disabledEdit ? 'p-button-secondary' : 'p-button-primary'"
+                      class="p-button-rounded p-button-text" (click)="editRow(timesheetData2)"></button> -->
+
+                    <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check"
+                      class="p-button-rounded p-button-text p-button-success mr-2"
+                      (click)="UpdateTimesheet(timesheetData2,TimesheetDate2)"></button>
+                    <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow icon="pi pi-times"
+                      (click)="CancelRow()" class="p-button-rounded p-button-text p-button-danger"></button>
+                  </div>
+                </td>
+              </tr>
             </ng-template>
-            <ng-template cTemplateId="accordionBodyTemplate">
-                <div class="accordion-body">
-                    <p-table [value]="dataSource" styleClass="p-datatable-sm" [tableStyle]="{'min-width': '50rem'}">
+
+          </p-table>
+
+        </div>
+      </ng-template>
+    </c-accordion-item>
+  </div>
+
+  <div *ngIf="totaltimehr>0">
+    <c-accordion-item #item4="cAccordionItem" [visible]="false">
+      <ng-template cTemplateId="accordionHeaderTemplate">
+        <button (click)="item4.toggleItem()" [collapsed]="!item4.visible" cAccordionButton>
+          <span class="text-yellow-400">{{TimesheetDate1}}</span>
+          <span class="ml-auto">Total hours: <span class="font-semibold">{{totaltimehr|number :
+              '1.2-2'}}</span></span>
+        </button>
+      </ng-template>
+      <ng-template cTemplateId="accordionBodyTemplate">
+        <div class="accordion-body">
+          <!-- <p-table [value]="dataSource" styleClass="p-datatable-sm" [tableStyle]="{'min-width': '50rem'}">
                     
                             <ng-template pTemplate="header">
                                 <tr>
-                                    <!-- <th>Sr.No</th> -->
+                            
                                     <th>Project Name</th>
                                     <th>Task Name</th>
                                     <th>Task Desc</th>
@@ -199,7 +711,7 @@
                             </ng-template>
                             <ng-template pTemplate="body" let-dataSource>
                                 <tr>
-                                    <!-- <td>index+1</td> -->
+                                
                                     <td>{{dataSource.projectname}}</td>
                                     <td>{{dataSource.taskname}}</td>
                                     <td>{{dataSource.description}}</td>
@@ -209,11 +721,139 @@
                                 </tr>
                             </ng-template>
                     
-                    </p-table>
-                    
-                </div>
+                    </p-table> -->
+          <p-table [value]="dataSource" dataKey="id" editMode="row" [tableStyle]="{'min-width': '50rem'}">
+            <ng-template pTemplate="header">
+              <tr>
+                <th>Project Name</th>
+                <th>Task Name</th>
+                <th>Task Desc</th>
+                <th>Activity</th>
+                <th>Hrs</th>
+                <th>Mins</th>
+                <th style="width:2rem !important">Action</th>
+
+              </tr>
             </ng-template>
-        </c-accordion-item>
-    </div>
+
+            <ng-template pTemplate="body" let-TimesheetData let-editing="editing" let-ri="rowIndex">
+              <tr [pEditableRow]="TimesheetData">
+                <td>
+                  <p-cellEditor>
+                    <ng-template pTemplate="input">
+                      <p-dropdown [options]="ProjectNames" optionValue="projectid" [(ngModel)]="TimesheetData.projectid"
+                        optionLabel="projectname" [filter]="true" required filterBy="projectname" [showClear]="true"
+                        appendTo="body" (onChange)="GetTaskNameByProject(TimesheetData)">
+                      </p-dropdown>
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                      {{TimesheetData.projectname}}
+                    </ng-template>
+                  </p-cellEditor>
+                </td>
+
+                <td>
+                  <p-cellEditor>
+                    <ng-template pTemplate="input">
+                      <p-dropdown [options]="Tasknames" [(ngModel)]="TimesheetData.taskid" optionValue="taskid"
+                        optionLabel="taskname" [filter]="true" filterBy="name" [showClear]="true" appendTo="body"
+                       required>
+                      </p-dropdown>
+
+                      <!-- <input pInputText type="text" [(ngModel)]="item.taskname"> -->
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                      {{TimesheetData.taskname}}
+                    </ng-template>
+                  </p-cellEditor>
+                </td>
+
+                <td>
+                  <p-cellEditor>
+                    <ng-template pTemplate="input">
+                      <input pInputText type="text" [(ngModel)]="TimesheetData.description">
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                      {{TimesheetData.description}}
+                    </ng-template>
+                  </p-cellEditor>
+                </td>
+
+                <td>
+                  <p-cellEditor>
+                    <ng-template pTemplate="input">
+                      <p-dropdown [options]="ProjectActivities" [(ngModel)]="TimesheetData.typeid"
+                        optionValue="typeid" optionLabel="name" [filter]="true" name="projectact" filterBy="name"
+                        [showClear]="true" appendTo="body"  required> </p-dropdown>
+                      <!-- <input pInputText type="text" [(ngModel)]="item.activity"> -->
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                      {{TimesheetData.activity}}
+                    </ng-template>
+                  </p-cellEditor>
+                </td>
+
+                <td>
+                  <p-cellEditor>
+                    <ng-template pTemplate="input">
+                      <p-dropdown pTooltip="Hours" tooltipPosition="top" [options]="hours"
+                        [(ngModel)]="TimesheetData.timeinhours" required name="hours" placeholder="00" class="time"
+                        appendTo="body">
+                      </p-dropdown>
+
+                      <!-- <input pInputText type="text" [(ngModel)]="item.timeinhours"> -->
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                      {{TimesheetData.timeinhours}}
+                    </ng-template>
+                  </p-cellEditor>
+                </td>
+
+                <td>
+                  <p-cellEditor>
+                    <ng-template pTemplate="input">
+                      <p-dropdown pTooltip="Minutes" tooltipPosition="top" [options]="minutes"
+                        [(ngModel)]="TimesheetData.timeinminutes" placeholder="00" class="time" name="time" required
+                        appendTo="body">
+                      </p-dropdown>
+                      <!-- <input pInputText type="text" [(ngModel)]="item.timeinminutes"> -->
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                      {{TimesheetData.timeinminutes}}
+                    </ng-template>
+                  </p-cellEditor>
+                </td>
+                <td>
+                  <div class="flex align-items-center justify-content-center gap-2">
+                    <!-- <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil"
+                      class="p-button-rounded p-button-text" (click)="editRow(TimesheetData)"></button> -->
+                      <span *ngIf="disabledEdit">
+                        <button *ngIf="!editing" pButton pRipple type="button" icon="pi pi-pencil"
+                        class="p-button-rounded p-button-text p-button-secondary" (click)="showError()"></button>
+                      </span>
     
+                      <span *ngIf="!disabledEdit">
+                        <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil"
+                        [disabled]="disabledEdit"
+                        class="p-button-rounded p-button-text p-button-primary" (click)="editRow(TimesheetData)"></button>
+                      </span>
+
+                    <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check"
+                      class="p-button-rounded p-button-text p-button-success mr-2"
+                      (click)="UpdateTimesheet(TimesheetData,TimesheetDate1)"></button>
+                    <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow icon="pi pi-times"
+                    (click)="CancelRow()" class="p-button-rounded p-button-text p-button-danger"></button>
+                  </div>
+                </td>
+              </tr>
+            </ng-template>
+
+          </p-table>
+
+
+        </div>
+      </ng-template>
+    </c-accordion-item>
+  </div>
+
 </c-accordion>

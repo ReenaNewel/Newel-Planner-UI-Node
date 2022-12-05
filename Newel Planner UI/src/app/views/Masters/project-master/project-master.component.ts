@@ -113,7 +113,7 @@ export class ProjectMasterComponent implements OnInit {
     console.log("products7", this.products2);
 
   }
-
+  editing:boolean
   showCreateNewProjectDialog() {
     this.projectDialog = true;
     this.showSaveBtn = true;
@@ -129,15 +129,15 @@ export class ProjectMasterComponent implements OnInit {
 
 
 
-  onRowEditSave() {
-    // delete this.clonedProducts[product.id];
-    this.messageService.add({
-      severity: 'success',
-      summary: 'Success',
-      detail: 'Product is updated',
-    });
+  // onRowEditSave() {
+  //   // delete this.clonedProducts[product.id];
+  //   this.messageService.add({
+  //     severity: 'success',
+  //     summary: 'Success',
+  //     detail: 'Product is updated',
+  //   });
 
-  }
+  // }
 
   showformdetails() {
     // this.ProjectForm.reset()
@@ -317,13 +317,13 @@ export class ProjectMasterComponent implements OnInit {
     // debugger;
     this.ProjectForm = this.fb.group({
       PrjName: [row.projectname],
-      ClientName: [row.clientid],
+      ClientName: [row.clientnameid],
       PrjType: [row.projecttypeid],
       PrjStatus: [row.projectstatusid],
       PrjOwner: [row.owner],
       PrjStage: [row.projectstageid],
       Activity: [row.projectdesc],
-      PrjActive: [row.isactive],
+      PrjActive: [row.activestatus],
       fromdate: [new Date(row.prjstartdate)],
       // fromdate: [row.prjtodate],
       todate: [new Date(row.prjtodate)],

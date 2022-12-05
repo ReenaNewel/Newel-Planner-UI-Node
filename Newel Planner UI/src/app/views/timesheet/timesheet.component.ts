@@ -58,7 +58,6 @@ export class TimesheetComponent implements OnInit,AfterViewInit {
 
 
 
-  countries: any[];
   hours: number[];
   minutes: number[];
   createTaskDialog: boolean;
@@ -190,6 +189,8 @@ export class TimesheetComponent implements OnInit,AfterViewInit {
     // this.child.ShowDetails();
   }
 
+
+
   ngOnInit(): void {
     this.hours = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24];
     this.minutes = [15, 30, 45]
@@ -200,6 +201,7 @@ export class TimesheetComponent implements OnInit,AfterViewInit {
     this.userEmail = this.userLoggedIn.emailid;
     // this.showformdetails()
     // this.ShowAllformdetails();
+    
     this.getProjectActivity()
     this.getProjectName()
     this.GetProjectbyTask()
@@ -210,9 +212,11 @@ export class TimesheetComponent implements OnInit,AfterViewInit {
 
   showCreateNewTaskDialog() {
     this.createTaskDialog = true;
+
   }
 
   submit(isvalid: boolean) {
+    console.log('isvalid', isvalid)
     if (isvalid) {
       this.saveTimesheet()
     
@@ -284,10 +288,10 @@ export class TimesheetComponent implements OnInit,AfterViewInit {
   GetTaskNameByProject(Project: any) {
 
     this.projectName = Project.projectname;
-    console.log(this.projectName)
+    // console.log(this.projectName)
     this.selectedTaskProject =  this.projectName 
     this.projectId = Project.projectid
-    console.log(this.projectId)
+    // console.log(this.projectId)
 
     var model = {
       projectid: this.projectId,
@@ -329,7 +333,7 @@ export class TimesheetComponent implements OnInit,AfterViewInit {
       description: this.selectedDescription,
       timeinhours: this.selectedhours,
       timeinminutes: this.selectedminutes,
-      date: this.taskDate,
+      date: moment(new Date(this.taskDate)).format('YYYY-MM-DD'),
       isactive: true,
       activityid: this.selectedactivity.typeid,
       created_date: moment().format('YYYY-MM-DD'),
@@ -352,7 +356,7 @@ export class TimesheetComponent implements OnInit,AfterViewInit {
 
   tasksubmit(isvalid:boolean) {
     if (isvalid) {
-      console.log('task isvalid',isvalid)
+      // console.log('task isvalid',isvalid)
       this.SubmitNewTask()
     }
 
@@ -380,7 +384,7 @@ export class TimesheetComponent implements OnInit,AfterViewInit {
   }
 
   changeAssigneeId(value: any) {
-    console.log(value.id)
+    // console.log(value.id)
     this.AssigneeId = value.id
   }
 
@@ -389,22 +393,23 @@ export class TimesheetComponent implements OnInit,AfterViewInit {
       var model={
         projectid: this.selectedProject.projectid
       }
-      console.log('project id', model)
+      // console.log('project id', model)
       this.rest.postParams(this.Global.getapiendpoint() + '/NewTask/GetAllUsersByProjectID',model).subscribe((data: any) => {
         if(data.Success){
           this.UserData = data.Data;
+          // console.log('user',this.UserData)
         }
         })
     }
   }
 
   onUpload(event) {
-    console.log("event", event);
-    console.log("event.files", event.files);
+    // console.log("event", event);
+    // console.log("event.files", event.files);
 
     for (let file of event.files) {
       this.uploadedFiles.push(file);
-      console.log("uploadedFiles", this.uploadedFiles);
+      // console.log("uploadedFiles", this.uploadedFiles);
     }
 
     this.messageService.add({ severity: 'info', summary: 'File Uploaded', detail: '' });
@@ -423,7 +428,7 @@ export class TimesheetComponent implements OnInit,AfterViewInit {
   ShowDetails() {
     // get All data from newtask
     this.rest.getAll(this.Global.getapiendpoint() + '/NewTask/GetAllNewTask').subscribe((data: any) => {
-      console.log(data.Data);
+      // console.log(data.Data);
       // this.dataSource = new MatTableDataSource(data.Data);
       // //  console.log(this.dataSource);
       // this.dataSource.paginator = this.paginator;
@@ -433,6 +438,8 @@ export class TimesheetComponent implements OnInit,AfterViewInit {
   }
 
   SubmitNewTask() {
+    console.log("selectedTaskAssignee",this.selectedTaskAssignee);
+    
         var model = {
           projectid: this.selectedProject.projectid,
           taskname: this.selectedTaskName,
@@ -444,10 +451,10 @@ export class TimesheetComponent implements OnInit,AfterViewInit {
           enddate: moment(this.selectedEndate).format('YYYY-MM-DD'),
           // attachment: this.ProjectForm.controls['attachment'].value,
           comments: this.selectedComment,
-          userid:this.selectedTaskAssignee.id
+          userid:this.selectedTaskAssignee.userid
         }
 
-        console.log("save task model", model);
+        // console.log("save task model", model);
         var apiUrl = '';
         apiUrl = '/NewTask/CreateNewTask';
 
