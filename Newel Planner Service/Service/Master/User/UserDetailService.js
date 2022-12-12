@@ -8,13 +8,60 @@ var commonfunc = require('../../../Common/CommonFunctions');
 
 var routes = function () {
 
-    router.route('/GetAllAssign')
+  router.route('/GetAllAssign')
+.post(function (req, res) {
+    
+    try {
+        let user= req.body;
+   
+    var querytext = `SELECT "GetallUserName"('${user.projectid}','abc'); FETCH ALL IN "abc"`;
+//console.log("querytext",querytext);
+    var param = {
+        replacements: {
+            // p_active: true,
+            p_ref: 'abc'
+        },
+        type: connect.sequelize.QueryTypes.SELECT
+    }
+    connect.sequelize
+    .query(querytext,param)
+    .then(function (result) {
+        //console.log("result",result);
+        result.shift();
+        res.status(200).json({
+
+            Success: true,
+            Message: "Get all Assignee successfully",
+            Data: result
+        }); 
+    }, function (err) {
+        // //console.log(err);
+        dataconn.errorlogger('UserDetailService', 'GetAllAssign', err);
+        res.status(200).json({ Success: false, Message: '  table API f ailed.', Data: null });
+    });
+}catch(err)    {
+    dataconn.errorlogger('UserDetailService', 'GetAllAssign', err);
+    res.status(200).json({ Success: false, Message: '  table API failed.', Data: null });
+}  
+}); 
+
+    router.route('/GetAllAssign-old')
         .get(function (req, res) {
             try {
 
-            const UserMST = datamodel.tbl_master_userdetails();
-            dataaccess.FindAll(UserMST)
-        .then(function (result) {
+            // const UserMST = datamodel.tbl_master_userdetails();
+            var querytext = 'SELECT "GetallUserName"(:p_ref);FETCH ALL IN "abc"';
+            var param = {
+              replacements: {
+                  p_ref: 'abc'
+              },
+              type: connect.sequelize.QueryTypes.SELECT
+          }
+            connect.sequelize
+            .query(querytext,param)
+            // dataaccess.FindAll(UserMST)
+            .then(function (result) {
+            result.shift();
             if (result != null) {
                 res.status(200).json({ Success: true, Message: 'Get all Project Task Type successfully', Data: result });
             } else {
@@ -22,18 +69,20 @@ var routes = function () {
                 res.status(200).json({ Success: false, Message: 'Error occurred while Getting record', Data: null });
             }
         }, function (err) {
-            // dataconn.ARC_Errorlogger('GenaralMasterService', 'getProjectStatus', err);
-            res.status(200).json({ Success: false, Message: ' Genaral Master table API failed.', Data: null });
+            dataconn.errorlogger('UserDetailService', 'GetAllAssign', err);
+            res.status(200).json({ Success: false, Message: ' User Master table API failed.', Data: null });
         });
     }
     catch(err)    {
-        res.status(200).json({ Success: false, Message: ' General Master table API failed.', Data: null });
+        dataconn.errorlogger('UserDetailService', 'GetAllAssign', err);
+        res.status(200).json({ Success: false, Message: ' User Master table API failed.', Data: null });
     } 
 })
    
          
 //get user details by id
 router.route("/Getuserdeatils/:id").get(function (req, res) {
+  try{
     const userMst = datamodel.tbl_master_userdetails();
     var param = {
       where: { id: req.params.id},
@@ -42,7 +91,7 @@ router.route("/Getuserdeatils/:id").get(function (req, res) {
     dataaccess.FindAll(userMst, param).then(
       function (result) {
         if (result != null) {
-          console.log("result",result);
+          //console.log("result",result);
           res
             .status(200)
             .json({
@@ -60,7 +109,8 @@ router.route("/Getuserdeatils/:id").get(function (req, res) {
         }
       },
       function (err) {
-        //dataconn.errorlogger("transaction", "M_TransferOrder", err);
+        dataconn.errorlogger('UserDetailService', 'Getuserdeatils/:id', err);
+        res.status(200).json({ Success: false, Message: ' Updation for NewTask table API failed.', Data: null });
         res
           .status(200)
           .json({
@@ -70,7 +120,13 @@ router.route("/Getuserdeatils/:id").get(function (req, res) {
           });
       }
     );
-  });            
+  }
+  catch(err){
+    dataconn.errorlogger('UserDetailService', 'Getuserdeatils/:id', err);
+    res.status(200).json({ Success: false, Message: ' Updation for NewTask table API failed.', Data: null });
+    
+  }
+});            
 
 return router;
 };

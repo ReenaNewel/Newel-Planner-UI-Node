@@ -2,19 +2,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-// import { FullCalendarModule } from '@fullcalendar/angular';
-// import dayGridPlugin from '@fullcalendar/daygrid';
-// import timeGridPlugin from '@fullcalendar/timegrid';
-// import listPlugin from '@fullcalendar/list';
-// import interactionPlugin from '@fullcalendar/interaction';
-
-// FullCalendarModule.registerPlugins([
-//   dayGridPlugin,
-//   timeGridPlugin,
-//   listPlugin,
-//   interactionPlugin
-// ])
-
 import {
   AvatarModule,
   ButtonGroupModule,
@@ -24,7 +11,7 @@ import {
   GridModule,
   NavModule,
   ProgressModule,
-  
+
   TabsModule
 } from '@coreui/angular';
 import { IconModule } from '@coreui/icons-angular';
@@ -39,17 +26,30 @@ import { ReuseComponentsModule } from '../reuse-components/reuse-components.modu
 import { AccordionModule, SharedModule } from '@coreui/angular';
 
 //prime-ng
-import {TabViewModule} from 'primeng/tabview';
-import {ScrollPanelModule} from 'primeng/scrollpanel';
+import { TabViewModule } from 'primeng/tabview';
+import { ScrollPanelModule } from 'primeng/scrollpanel';
 import { DropdownModule } from 'primeng/dropdown';
 import { TimesheetDashboardComponent } from './components/timesheet-dashboard/timesheet-dashboard.component';
 import { TableModule } from 'primeng/table';
+import { FullCalendarModule } from '@fullcalendar/angular';
+import dayGridPlugin from '@fullcalendar/daygrid';
+import timeGridPlugin from '@fullcalendar/timegrid';
+import listPlugin from '@fullcalendar/list';
+import interactionPlugin from '@fullcalendar/interaction';
 // import { BrowserModule } from '@angular/platform-browser';
+
+FullCalendarModule.registerPlugins([
+  dayGridPlugin,
+  timeGridPlugin,
+  listPlugin,
+  interactionPlugin
+])
 
 @NgModule({
   imports: [
     DashboardRoutingModule,
     FormsModule,
+    FullCalendarModule,
     CardModule,
     NavModule,
     IconModule,

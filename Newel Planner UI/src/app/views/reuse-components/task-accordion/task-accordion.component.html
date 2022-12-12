@@ -1,10 +1,12 @@
 <p-toast></p-toast>
+<p-confirmDialog header="Confirmation" icon="fa fa-exclamation-triangle" width="425"></p-confirmDialog>
+<!-- <p-messages [value]="msgs"></p-messages> -->
 <c-accordion>
   <div *ngIf="totaltimehr4>0">
     <c-accordion-item #item0="cAccordionItem" [visible]="false">
       <ng-template cTemplateId="accordionHeaderTemplate">
         <button (click)="item0.toggleItem()" [collapsed]="!item0.visible" cAccordionButton>
-          <span class="text-primary">{{TimesheetDate5}}</span>
+          <span class="text-primary">{{TimesheetDate5 | date:'shortDate'}}</span>
           <span class="ml-auto">Total hours: <span class="font-semibold">{{totaltimehr4|number :
               '1.2-2'}}</span></span>
         </button>
@@ -32,7 +34,8 @@
                       <ng-template pTemplate="input">
                         <p-dropdown [options]="ProjectNames" optionValue="projectid"
                           [(ngModel)]="TimesheetData5.projectid" optionLabel="projectname" [filter]="true" required
-                          filterBy="projectname" [showClear]="true" appendTo="body" (onChange)="GetTaskNameByProject(TimesheetData5)">
+                          filterBy="projectname" [showClear]="true" appendTo="body"
+                          (onChange)="GetTaskNameByProject(TimesheetData5)">
                         </p-dropdown>
                       </ng-template>
                       <ng-template pTemplate="output">
@@ -116,21 +119,21 @@
                     <div class="flex align-items-center justify-content-center gap-2">
                       <!-- <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil"
                         class="p-button-rounded p-button-text" (click)="editRow(TimesheetData5)"></button> -->
-                        <span *ngIf="disabledEdit">
-                          <button *ngIf="!editing" pButton pRipple type="button" icon="pi pi-pencil"
+                      <span *ngIf="disabledEdit">
+                        <button *ngIf="!editing" pButton pRipple type="button" icon="pi pi-pencil"
                           class="p-button-rounded p-button-text p-button-secondary" (click)="showError()"></button>
-                        </span>
-      
-                        <span *ngIf="!disabledEdit">
-                          <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil"
-                          [disabled]="disabledEdit"
-                          class="p-button-rounded p-button-text p-button-primary" (click)="editRow(TimesheetData5)"></button>
-                        </span>
+                      </span>
+
+                      <span *ngIf="!disabledEdit">
+                        <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil"
+                          [disabled]="disabledEdit" class="p-button-rounded p-button-text p-button-primary"
+                          (click)="editRow(TimesheetData5)"></button>
+                      </span>
                       <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check"
-                        class="p-button-rounded p-button-text p-button-success mr-2"
-                        (click)="saveRow(TimesheetData5)"></button>
+                        class="p-button-rounded p-button-text p-button-success mr-2" [disabled]="!TimesheetData5.description || !TimesheetData5.taskname"
+                        (click)="UpdateTimesheet(TimesheetData5,TimesheetDate5)"></button>
                       <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow icon="pi pi-times"
-                      (click)="CancelRow()" class="p-button-rounded p-button-text p-button-danger"></button>
+                      (click)="Showconfirm(TimesheetData5)" class="p-button-rounded p-button-text p-button-danger"></button>
                     </div>
                   </td>
                 </tr>
@@ -174,7 +177,7 @@
     <c-accordion-item #item1="cAccordionItem" [visible]="false">
       <ng-template cTemplateId="accordionHeaderTemplate">
         <button (click)="item1.toggleItem()" [collapsed]="!item1.visible" cAccordionButton>
-          <span class="text-900">{{TimesheetDate4}}</span>
+          <span class="text-900">{{TimesheetDate4 | date:'shortDate'}}</span>
           <span class="ml-auto">Total hours: <span class="font-semibold">{{totaltimehr3|number :
               '1.2-2'}}</span></span>
         </button>
@@ -227,7 +230,8 @@
                     <ng-template pTemplate="input">
                       <p-dropdown [options]="ProjectNames" optionValue="projectid"
                         [(ngModel)]="TimesheetData4.projectid" optionLabel="projectname" [filter]="true" required
-                        filterBy="projectname" [showClear]="true" appendTo="body" (onChange)="GetTaskNameByProject(TimesheetData4)">
+                        filterBy="projectname" [showClear]="true" appendTo="body"
+                        (onChange)="GetTaskNameByProject(TimesheetData4)">
                       </p-dropdown>
                     </ng-template>
                     <ng-template pTemplate="output">
@@ -311,21 +315,21 @@
                   <div class="flex align-items-center justify-content-center gap-2">
                     <!-- <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil"
                       class="p-button-rounded p-button-text" (click)="editRow(TimesheetData4)"></button> -->
-                      <span *ngIf="disabledEdit">
-                        <button *ngIf="!editing" pButton pRipple type="button" icon="pi pi-pencil"
+                    <span *ngIf="disabledEdit">
+                      <button *ngIf="!editing" pButton pRipple type="button" icon="pi pi-pencil"
                         class="p-button-rounded p-button-text p-button-secondary" (click)="showError()"></button>
-                      </span>
-    
-                      <span *ngIf="!disabledEdit">
-                        <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil"
-                        [disabled]="disabledEdit"
-                        class="p-button-rounded p-button-text p-button-primary" (click)="editRow(TimesheetData4)"></button>
-                      </span>
+                    </span>
+
+                    <span *ngIf="!disabledEdit">
+                      <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil"
+                        [disabled]="disabledEdit" class="p-button-rounded p-button-text p-button-primary"
+                        (click)="editRow(TimesheetData4)"></button>
+                    </span>
                     <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check"
-                      class="p-button-rounded p-button-text p-button-success mr-2"
-                      (click)="saveRow(TimesheetData4)"></button>
+                      class="p-button-rounded p-button-text p-button-success mr-2" [disabled]="!TimesheetData4.description || !TimesheetData4.taskname"
+                      (click)="UpdateTimesheet(TimesheetData4,TimesheetDate4)"></button>
                     <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow icon="pi pi-times"
-                    (click)="CancelRow()"class="p-button-rounded p-button-text p-button-danger"></button>
+                    (click)="Showconfirm(TimesheetData4)" class="p-button-rounded p-button-text p-button-danger"></button>
                   </div>
                 </td>
               </tr>
@@ -342,7 +346,7 @@
     <c-accordion-item #item2="cAccordionItem" [visible]="false">
       <ng-template cTemplateId="accordionHeaderTemplate">
         <button (click)="item2.toggleItem()" [collapsed]="!item2.visible" cAccordionButton>
-          <span class="text-blue-600"> {{TimesheetDate3}}</span>
+          <span class="text-blue-600"> {{TimesheetDate3 | date:'shortDate'}}</span>
           <span class="ml-auto">Total hours: <span class="font-semibold">{{totaltimehr2|number :
               '1.2-2'}}</span></span>
         </button>
@@ -397,7 +401,8 @@
                     <ng-template pTemplate="input">
                       <p-dropdown [options]="ProjectNames" optionValue="projectid"
                         [(ngModel)]="TimesheetData3.projectid" optionLabel="projectname" [filter]="true" required
-                        filterBy="projectname" [showClear]="true" appendTo="body"(onChange)="GetTaskNameByProject(TimesheetData3)">
+                        filterBy="projectname" [showClear]="true" appendTo="body"
+                        (onChange)="GetTaskNameByProject(TimesheetData3)">
                       </p-dropdown>
                     </ng-template>
                     <ng-template pTemplate="output">
@@ -481,21 +486,21 @@
                   <div class="flex align-items-center justify-content-center gap-2">
                     <!-- <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil"
                       class="p-button-rounded p-button-text" (click)="editRow(TimesheetData3)"></button> -->
-                      <span *ngIf="disabledEdit">
-                        <button *ngIf="!editing" pButton pRipple type="button" icon="pi pi-pencil"
+                    <span *ngIf="disabledEdit">
+                      <button *ngIf="!editing" pButton pRipple type="button" icon="pi pi-pencil"
                         class="p-button-rounded p-button-text p-button-secondary" (click)="showError()"></button>
-                      </span>
-    
-                      <span *ngIf="!disabledEdit">
-                        <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil"
-                        [disabled]="disabledEdit"
-                        class="p-button-rounded p-button-text p-button-primary" (click)="editRow(TimesheetData3)"></button>
-                      </span>
+                    </span>
+
+                    <span *ngIf="!disabledEdit">
+                      <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil"
+                        [disabled]="disabledEdit" class="p-button-rounded p-button-text p-button-primary"
+                        (click)="editRow(TimesheetData3)"></button>
+                    </span>
                     <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check"
-                      class="p-button-rounded p-button-text p-button-success mr-2"
-                      (click)="saveRow(TimesheetData3)"></button>
+                      class="p-button-rounded p-button-text p-button-success mr-2" [disabled]="!TimesheetData3.description || !TimesheetData3.taskname"
+                      (click)="UpdateTimesheet(TimesheetData3,TimesheetDate3)"></button>
                     <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow icon="pi pi-times"
-                    (click)="CancelRow()" class="p-button-rounded p-button-text p-button-danger"></button>
+                    (click)="Showconfirm(TimesheetData3)" class="p-button-rounded p-button-text p-button-danger"></button>
                   </div>
                 </td>
               </tr>
@@ -513,7 +518,7 @@
     <c-accordion-item #item3="cAccordionItem" [visible]="false">
       <ng-template cTemplateId="accordionHeaderTemplate">
         <button (click)="item3.toggleItem()" [collapsed]="!item3.visible" cAccordionButton>
-          <span class="text-purple-500">{{TimesheetDate2}}</span>
+          <span class="text-purple-500">{{TimesheetDate2 | date:'shortDate'}}</span>
           <span class="ml-auto">Total hours: <span class="font-semibold">{{totaltimehr1 | number : '1.2-2'
               }}</span></span>
         </button>
@@ -567,7 +572,8 @@
                     <ng-template pTemplate="input">
                       <p-dropdown [options]="ProjectNames" optionValue="projectid"
                         [(ngModel)]="timesheetData2.projectid" optionLabel="projectname" [filter]="true" required
-                        filterBy="projectname" [showClear]="true" appendTo="body"(onChange)="GetTaskNameByProject(timesheetData2)">
+                        filterBy="projectname" [showClear]="true" appendTo="body"
+                        (onChange)="GetTaskNameByProject(timesheetData2)">
                       </p-dropdown>
                       <!-- <input pInputText type="text" [(ngModel)]="item.projectname"> -->
                     </ng-template>
@@ -651,27 +657,26 @@
                 </td>
                 <td>
                   <div class="flex align-items-center justify-content-center gap-2">
-                  <span *ngIf="disabledEdit">
-                    <button *ngIf="!editing" pButton pRipple type="button" icon="pi pi-pencil"
-                    
-                    class="p-button-rounded p-button-text p-button-secondary" (click)="showError()"></button>
-                  </span>
+                    <span *ngIf="disabledEdit">
+                      <button *ngIf="!editing" pButton pRipple type="button" icon="pi pi-pencil"
+                        class="p-button-rounded p-button-text p-button-secondary" (click)="showError()"></button>
+                    </span>
 
-                  <span *ngIf="!disabledEdit">
-                    <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil"
-                    [disabled]="disabledEdit"
-                    class="p-button-rounded p-button-text p-button-primary" (click)="editRow(timesheetData2)"></button>
-                  </span>
-                    
+                    <span *ngIf="!disabledEdit">
+                      <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil"
+                        [disabled]="disabledEdit" class="p-button-rounded p-button-text p-button-primary"
+                        (click)="editRow(timesheetData2)"></button>
+                    </span>
+
                     <!-- <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil"
                       [disabled]="disabledEdit" [ngClass]="disabledEdit ? 'p-button-secondary' : 'p-button-primary'"
                       class="p-button-rounded p-button-text" (click)="editRow(timesheetData2)"></button> -->
 
                     <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check"
-                      class="p-button-rounded p-button-text p-button-success mr-2"
+                      class="p-button-rounded p-button-text p-button-success mr-2" [disabled]="!timesheetData2.description || !timesheetData2.taskname"
                       (click)="UpdateTimesheet(timesheetData2,TimesheetDate2)"></button>
                     <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow icon="pi pi-times"
-                      (click)="CancelRow()" class="p-button-rounded p-button-text p-button-danger"></button>
+                    (click)="Showconfirm(timesheetData2)" class="p-button-rounded p-button-text p-button-danger"></button>
                   </div>
                 </td>
               </tr>
@@ -688,7 +693,7 @@
     <c-accordion-item #item4="cAccordionItem" [visible]="false">
       <ng-template cTemplateId="accordionHeaderTemplate">
         <button (click)="item4.toggleItem()" [collapsed]="!item4.visible" cAccordionButton>
-          <span class="text-yellow-400">{{TimesheetDate1}}</span>
+          <span class="text-yellow-400">{{TimesheetDate1 | date:'shortDate'}}</span>
           <span class="ml-auto">Total hours: <span class="font-semibold">{{totaltimehr|number :
               '1.2-2'}}</span></span>
         </button>
@@ -741,9 +746,10 @@
                 <td>
                   <p-cellEditor>
                     <ng-template pTemplate="input">
-                      <p-dropdown [options]="ProjectNames" optionValue="projectid" [(ngModel)]="TimesheetData.projectid"
-                        optionLabel="projectname" [filter]="true" required filterBy="projectname" [showClear]="true"
-                        appendTo="body" (onChange)="GetTaskNameByProject(TimesheetData)">
+                      <p-dropdown [options]="ProjectNames" optionValue="projectid" #projectid="ngModel" id="projectid"
+                        name="projectid" [(ngModel)]="TimesheetData.projectid" optionLabel="projectname" [filter]="true"
+                        required filterBy="projectname" appendTo="body"
+                        (onChange)="GetTaskNameByProject(TimesheetData)">
                       </p-dropdown>
                     </ng-template>
                     <ng-template pTemplate="output">
@@ -756,8 +762,7 @@
                   <p-cellEditor>
                     <ng-template pTemplate="input">
                       <p-dropdown [options]="Tasknames" [(ngModel)]="TimesheetData.taskid" optionValue="taskid"
-                        optionLabel="taskname" [filter]="true" filterBy="name" [showClear]="true" appendTo="body"
-                       required>
+                        optionLabel="taskname" [filter]="true" filterBy="name" appendTo="body" required>
                       </p-dropdown>
 
                       <!-- <input pInputText type="text" [(ngModel)]="item.taskname"> -->
@@ -771,7 +776,15 @@
                 <td>
                   <p-cellEditor>
                     <ng-template pTemplate="input">
-                      <input pInputText type="text" [(ngModel)]="TimesheetData.description">
+                      <input pInputText type="text" [(ngModel)]="TimesheetData.description" id="description"
+                        name="description" class="" required #description="ngModel">
+
+                      <!-- <span *ngIf="description.invalid && (description.dirty || description.touched)" class="alert">
+                        <small *ngIf="description.errors?.['required']">
+                          Description is required.
+                        </small>
+                      </span> -->
+
                     </ng-template>
                     <ng-template pTemplate="output">
                       {{TimesheetData.description}}
@@ -782,9 +795,9 @@
                 <td>
                   <p-cellEditor>
                     <ng-template pTemplate="input">
-                      <p-dropdown [options]="ProjectActivities" [(ngModel)]="TimesheetData.typeid"
-                        optionValue="typeid" optionLabel="name" [filter]="true" name="projectact" filterBy="name"
-                        [showClear]="true" appendTo="body"  required> </p-dropdown>
+                      <p-dropdown [options]="ProjectActivities" [(ngModel)]="TimesheetData.typeid" optionValue="typeid"
+                        optionLabel="name" [filter]="true" name="projectact" filterBy="name" appendTo="body" required>
+                      </p-dropdown>
                       <!-- <input pInputText type="text" [(ngModel)]="item.activity"> -->
                     </ng-template>
                     <ng-template pTemplate="output">
@@ -827,22 +840,23 @@
                   <div class="flex align-items-center justify-content-center gap-2">
                     <!-- <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil"
                       class="p-button-rounded p-button-text" (click)="editRow(TimesheetData)"></button> -->
-                      <span *ngIf="disabledEdit">
-                        <button *ngIf="!editing" pButton pRipple type="button" icon="pi pi-pencil"
+                    <span *ngIf="disabledEdit">
+                      <button *ngIf="!editing" pButton pRipple type="button" icon="pi pi-pencil"
                         class="p-button-rounded p-button-text p-button-secondary" (click)="showError()"></button>
-                      </span>
-    
-                      <span *ngIf="!disabledEdit">
-                        <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil"
-                        [disabled]="disabledEdit"
-                        class="p-button-rounded p-button-text p-button-primary" (click)="editRow(TimesheetData)"></button>
-                      </span>
+                    </span>
+
+                    <span *ngIf="!disabledEdit">
+                      <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil"
+                        [disabled]="disabledEdit" class="p-button-rounded p-button-text p-button-primary"
+                        (click)="editRow(TimesheetData)"></button>
+                    </span>
 
                     <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check"
-                      class="p-button-rounded p-button-text p-button-success mr-2"
+                      class="p-button-rounded p-button-text p-button-success mr-2" [disabled]="!TimesheetData.description || !TimesheetData.taskname"
                       (click)="UpdateTimesheet(TimesheetData,TimesheetDate1)"></button>
                     <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow icon="pi pi-times"
-                    (click)="CancelRow()" class="p-button-rounded p-button-text p-button-danger"></button>
+                      (click)="Showconfirm(TimesheetData)"
+                      class="p-button-rounded p-button-text p-button-danger"></button>
                   </div>
                 </td>
               </tr>

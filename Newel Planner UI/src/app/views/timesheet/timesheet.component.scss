@@ -13,11 +13,11 @@
   border: none;
 }
 
-:host ::ng-deep .p-inputtext:enabled:focus {
+:host ::ng-deep .borderNone .p-inputtext:enabled:focus {
   box-shadow: none;
 }
 
-:host ::ng-deep .p-button:focus {
+:host ::ng-deep .borderNone .p-button:focus {
   box-shadow: none;
 }
 
@@ -49,24 +49,13 @@
   box-shadow: none;
 }
 
-:host ::ng-deep .p-multiselect-trigger {
-  display: none;
-}
 
-:host ::ng-deep .borderNone .p-multiselect {
-  border: none;
-  width: auto;
-}
 
-:host ::ng-deep .p-multiselect:not(.p-disabled).p-focus {
-  box-shadow: none;
-}
-
-:host ::ng-deep .p-overlay {
+:host ::ng-deep .borderNone .p-overlay {
   width: 200px;
 }
 
-:host ::ng-deep .form-control:focus {
+:host ::ng-deep .borderNone .form-control:focus {
   box-shadow: none;
 }
 
@@ -79,10 +68,10 @@
 }
 
 :host ::ng-deep .time .p-overlay {
-  width: 55px;
+  width: 55px !important;
 }
 
-:host ::ng-deep .p-overlay {
+:host ::ng-deep .borderNone .p-overlay {
   width: 500px;
 }
 

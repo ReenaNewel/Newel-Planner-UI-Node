@@ -9,7 +9,7 @@ module.exports.CheckConnection = function (res) {
         .then(function (result) {
              res.status(200).json({ Success: true, Message: 'Connection has been establised successfully', Data: null });
         }, function (err) {
-            // console.log("result",res);
+            // //console.log("result",res);
             res.status(200).json({ Success: false, Message: 'Unable to connect to the database : ' + err, Data: null });
         });
 }
@@ -32,16 +32,16 @@ module.exports.errorlogger = function (servicename, functionname, errorobj) {
     var err = 'Message : ' + errorobj.message + '\n' + 'Stack : ' + errorobj.stack;
 
     var values = {
-        ServiceName: servicename,
-        FunctionName: functionname,
-        ErrorObject: err
+        servicename: servicename,
+        functionname: functionname,
+        Errorsubject: errorobj.message
     };
 
     dataaccess.Create(datamodel.Error_Log(), values)
         .then(function (result) {
-            console.log(JSON.stringify(result));
+            //console.log(JSON.stringify(result));
         }, function (err) {
-            console.log('Error: ' + JSON.stringify(err));
+            //console.log('Error: ' + JSON.stringify(err));
         });
 }
 

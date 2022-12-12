@@ -22,7 +22,7 @@ var routes = function () {
           },
         };
 
-        console.log(param);
+        //console.log(param);
 
         dataaccess
           .FindAll(GeneralMst, param)
@@ -50,8 +50,7 @@ var routes = function () {
               }
             },
             function (err) {
-              // dataconn.ARC_Errorlogger('GenaralMasterService', 'getProjectStatus', err);
-
+              dataconn.errorlogger('RoleMAsterService', 'GetAllRole', { message: 'No object found', stack: '' });
               res
                 .status(200)
                 .json({
@@ -62,6 +61,7 @@ var routes = function () {
             }
           );
       } catch (err) {
+        dataconn.errorlogger('RoleMAsterService', 'GetAllRole', { message: 'No object found', stack: '' });
         res
           .status(200)
           .json({
@@ -73,7 +73,7 @@ var routes = function () {
     });
 
   router.route("/SaveProjectUserRoleMapping").post(function (req, res) {
-    console.log(`req.body`, req.body.roleid.length);
+    //console.log(`req.body`, req.body.roleid.length);
     for (var i = 0; i < req.body.roleid.length; i++) {
       var values = {
         projectid: req.body.projectid,
@@ -96,8 +96,8 @@ var routes = function () {
           }
         },
         function (err) {
-          // dataconn.errorlogger("timesheetService", "Createtimesheet", err);
-          console.log(`err`, err);
+          dataconn.errorlogger('RoleMAsterService', 'SaveProjectUserRoleMapping', { message: 'No object found', stack: '' });
+          //console.log(`err`, err);
           res.status(200).json({
             Success: false,
             Message: "Error occurred while saving record",
@@ -114,11 +114,11 @@ var routes = function () {
   });
 
   router.route("/GetUserRoleProjectDetails").post(function (req, res) {
-    console.log(`req.body`, req.body);
+    //console.log(`req.body`, req.body);
     try {
       //  let user= req.body;
       var querytext = `SELECT "GetUserRoleProjectMapping"(:p_projectid,:p_ref); FETCH ALL IN "abc"`;
-      console.log("querytext", querytext);
+      //console.log("querytext", querytext);
       var param = {
         replacements: {
           p_projectid: req.body.projectid,
@@ -128,7 +128,7 @@ var routes = function () {
       };
       connect.sequelize.query(querytext, param).then(
         function (result) {
-          console.log("result", result);
+          //console.log("result", result);
           result.shift();
           res.status(200).json({
             Success: true,
@@ -137,8 +137,7 @@ var routes = function () {
           });
         },
         function (err) {
-          console.log(err);
-          // dataconn.ARC_Errorlogger('homepageService', 'getConfirmDetails', err);
+          dataconn.errorlogger('RoleMAsterService', 'GetUserRoleProjectDetails', { message: 'No object found', stack: '' });
           res
             .status(200)
             .json({
@@ -149,6 +148,7 @@ var routes = function () {
         }
       );
     } catch (err) {
+      dataconn.errorlogger('RoleMAsterService', 'GetUserRoleProjectDetails', { message: 'No object found', stack: '' });
       res
         .status(200)
         .json({
@@ -158,6 +158,96 @@ var routes = function () {
         });
     }
   });
+
+
+  router.route("/UpdateRoleMaster").post(function (req, res) {
+    try {
+      var reqbody = req.body;
+      var reqinsert = reqbody.insert;
+      var reqdelete = reqbody.delete;
+      console.log(`reqdelete`,reqdelete );
+     console.log(`reqinsert length`, reqinsert.length);
+
+      for (let i = 0; i < reqinsert.length; i++) {
+     
+        userid = reqbody.userid;
+        projectid = reqbody.projectid;    
+      console.log(`Insert`, reqinsert);
+        var querytext = `SELECT "insertprojectmappingdetails"(:p_userid,:p_projectid,:p_rolename)`;
+        var param = {
+          replacements: {
+            p_userid: reqbody.userid,
+            p_projectid: reqbody.projectid,
+            p_rolename: reqinsert[i],
+          },
+          type: connect.sequelize.QueryTypes.SELECT,
+        };
+        console.log(`param`, param);
+        connect.sequelize.query(querytext, param).then(
+          function (result) {
+            
+          },
+          function (err) {
+            res
+              .status(200)
+              .json({
+                Success: false,
+                Message: " insert Userproject Mappingtable API failed.",
+                Data: null,
+              });
+          }
+        );
+      }
+
+      for (let i = 0; i < reqdelete.length; i++) {
+        userid = reqbody.userid;
+        projectid = reqbody.projectid;
+      
+
+        var querytext = `SELECT "updateprojectmappingdetails"(:p_userid,:p_projectid,:p_rolename)`;
+        var param = {
+          replacements: {
+            p_userid: reqbody.userid,
+            p_projectid: reqbody.projectid,
+            p_rolename: reqdelete[i],
+          },
+          type: connect.sequelize.QueryTypes.SELECT,
+        };
+        connect.sequelize.query(querytext, param).then(
+          function (result1) {
+            
+          },
+          function (err) {
+            res
+              .status(200)
+              .json({
+                Success: false,
+                Message: " Delete Userproject Mapping table API failed.",
+                Data: null,
+              });
+          }
+        );
+      }
+
+      res.status(200).json({
+
+        Success: true,
+        Message: "Userproject Mapping Details successfully"
+    });
+
+     
+    } catch (err) {
+      res
+        .status(200)
+        .json({
+          Success: false,
+          Message: " Userproject Mapping table API failed.",
+          Data: null,
+        });
+    }
+     
+  });
+
   return router;
 };
 

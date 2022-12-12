@@ -1,0 +1,132 @@
+<!-- <p>project-role-mapping works!</p> -->
+<p-toast></p-toast>
+<p-toolbar styleClass="mb-4 gap-2">
+    <ng-template pTemplate="left">
+        <span class="p-input-icon-left">
+            <i class="pi pi-search"></i>
+            <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
+                placeholder="Search..." />
+        </span>
+    </ng-template>
+
+    <ng-template pTemplate="right">
+        <p-dropdown [options]="projectDetails" (onChange)="GetAllProjectName($event.value)" optionValue="projectid"
+            [(ngModel)]="projectname" value="projectid" optionLabel="projectname" [filter]="true" required
+            name="projectname" filterBy="projectname" [showClear]="true" placeholder="Project Name" class="me-5">
+        </p-dropdown>
+
+        <p-button (click)="ShowProjectRoleDialogBox()" icon="pi pi-plus" label="ADD RESOURECS"
+            styleClass="p-button-warning px-3 py-2 mb-md-1">
+        </p-button>
+    </ng-template>
+</p-toolbar>
+
+    <p-dialog [modal]="true" [(visible)]="ProjectRoleDialog" header="Project Role Mapping"
+        [breakpoints]="{'960px': '75vw', '640px': '100vw'}" [style]="{width: '45vw'}" [draggable]="false"
+        [resizable]="false" class="pb-2">
+
+        <form [formGroup]="ProjectRoleMappingForm" (submit)="submit()">
+
+            <c-row class="mb-4">
+                <c-col sm="12" md="6" lg="6" class="mb-3">
+                    <label class="pb-2">User Name</label>
+                    <p-dropdown [options]="userDetails" [style]="{'width':'100%'}"
+                        (onChange)="GetSelectedUserName($event.value)" optionLabel="name" [filter]="true"
+                        filterBy="name" formControlName="userName" [showClear]="true" [(ngModel)]="username" value="id"
+                        placeholder="User Name*" class="" required name="name" optionValue="id" appendTo="body">
+                    </p-dropdown>
+                </c-col>
+
+                <c-col sm="12" md="6" lg="6" class="mb-3">
+                    <div *ngIf="flag==0">
+                        <label class="pb-2">Role</label>
+                        <p-multiSelect [options]="RoleDetails" [style]="{'width':'100%'}"
+                            (onChange)="GetRoleId($event.value)" optionLabel="name" [filter]="true" filterBy="name"
+                            name="name" formControlName="role" [(ngModel)]="selected3" [showClear]="true"
+                            placeholder="Role *" class="" required optionValue="typeid" appendTo="body">
+                        </p-multiSelect>
+                    </div>
+                    <div *ngIf="flag==1">
+                        <label class="pb-2">Role</label>
+                        <p-multiSelect [options]="RoleDetails" [style]="{'width':'100%'}"
+                            (onChange)="GetRoleId($event.value)" optionLabel="name" [filter]="true" filterBy="name"
+                            name="name" formControlName="role" [(ngModel)]="selected3" [showClear]="true"
+                            placeholder="Role *" class="" required optionValue="name" appendTo="body">
+                        </p-multiSelect>
+                    </div>
+                </c-col>
+
+            </c-row>
+        </form>
+
+        <p-button *ngIf="showSaveBtn" type="submit" (click)="SaveResource()" label="Save"
+            styleClass="p-button-warning px-3 py-2"></p-button>
+        <p-button *ngIf="!showSaveBtn" type="submit" (click)="UpdateRoleMapping()" label="Update"
+            styleClass="p-button-warning px-3 py-2"></p-button>
+        <p-button (click)="ProjectRoleDialog=false" label="Back" styleClass="p-button-text pb-2"></p-button>
+
+    </p-dialog>
+
+
+<c-card class="mb-4">
+    <c-card-header>Project Role Mapping</c-card-header>
+    <c-card-body class="px-3">
+
+        <div class="card">
+            <p-table #dt [value]="projectTableDetails" [rows]="10" [paginator]="true" [globalFilterFields]="[ 'Sr.No',
+                'username',
+                'rolename',
+                'userid',
+                'roleid',
+                'Action',]" dataKey="id" editMode="row" [tableStyle]="{'min-width': '50rem'}" [rowHover]="true"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                [showCurrentPageReport]="true">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <!-- <th style="width:2rem !important">Project Name
+                        </th> -->
+                        <th [hidden]="true">Id
+                        </th>
+                        <th [hidden]="true">User Id
+                        </th>
+                        <th [hidden]="true">Role Id
+                        </th>
+                        <th>User Name
+                        </th>
+                        <th>Role Name
+                        </th>
+                        <th style="width:2rem !important">Action
+                        </th>
+                    </tr>
+
+                </ng-template>
+                <ng-template pTemplate="body" let-SelectedProject let-editing="editing" let-ri="rowIndex">
+                    <tr [pEditableRow]="SelectedProject">
+                        <td [hidden]="true">
+                            {{SelectedProject.userid }}
+                        </td>
+                        <td [hidden]="true">
+                            {{SelectedProject.roleid }}
+                        </td>
+                        <td>
+                            {{SelectedProject.username }}
+                        </td>
+                        <td>
+                            {{SelectedProject.rolename}}
+                        </td>
+
+
+                        <td>
+                            <div class="flex align-items-center justify-content-center gap-2">
+                                <button pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil"
+                                    (click)="EditProjectRoleDetails(SelectedProject)"
+                                    class="p-button-rounded p-button-text"></button>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+
+    </c-card-body>
+</c-card>

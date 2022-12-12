@@ -1,0 +1,156 @@
+<p-toast></p-toast>
+<!-- <div class="card"> -->
+<p-toolbar styleClass="mb-4 gap-2">
+    <ng-template pTemplate="left">
+        <span class="p-input-icon-left">
+            <i class="pi pi-search"></i>
+            <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
+                placeholder="Search..." />
+        </span>
+
+    </ng-template>
+
+    <ng-template pTemplate="right">
+        <p-button (click)="showCreateNewProjectDialog()" icon="pi pi-plus" label="New Leave Request"
+            styleClass="p-button-warning px-3 py-2 mb-md-1">
+        </p-button>
+    </ng-template>
+</p-toolbar>
+
+<c-card class="mb-4">
+    <c-card-header>Leave Request</c-card-header>
+    <c-card-body class="px-3">
+
+        <div class="card">
+            <p-table #dt [value]="leaveData" [rows]="5" [paginator]="true"
+                [globalFilterFields]="['username','fromdate','todate','no_of_leaves','leavetype', 'description', 'Approvedon', 'approvedby', 'leavestatus', 'remark']"
+                dataKey="id" editMode="row" [tableStyle]="{'min-width': '50rem'}" [rowHover]="true"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                [showCurrentPageReport]="true">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="width:2rem !important">UserName
+                        </th>
+                        <th>Fromdate
+                        </th>
+                        <th>Todate
+                        </th>
+                        <th>Applied leave
+                        </th>
+                        <th>LeaveType
+                        </th>
+                        <th>Reason
+                        </th>
+                        <!-- <th>Approvedon
+                        </th> -->
+                        <th>Approvedby
+                        </th>
+                        <th>Status
+                        </th>
+                        <th>Remark
+                        <!-- </th>
+                        <th style="width:2rem !important">Action</th> -->
+                    </tr>
+                 
+                </ng-template>
+                <ng-template pTemplate="body" let-SelectedProject let-editing="editing" let-ri="rowIndex">
+                    <tr [pEditableRow]="SelectedProject">
+                        <td>
+                            {{SelectedProject.username }}
+                        </td>
+                        <td>
+                            {{SelectedProject.fromdate | date:'dd/MM/yyyy'}}
+                        </td>
+                        <td>
+                            {{SelectedProject.todate | date:'dd/MM/yyyy'}}
+                        </td>
+                        <td>
+                            {{SelectedProject.no_of_leaves}}
+                        </td>
+                        <td>
+                            {{SelectedProject.leavetype}}
+
+                        </td>
+                        <td>
+                            {{SelectedProject.description}}
+                        </td>
+                       
+                        <td>
+                            {{SelectedProject.approvedby}}
+                        </td>
+                        <td>
+                            {{SelectedProject.leavestatus}}
+                        </td>
+                        <td>
+                            {{SelectedProject.remark}}
+                        </td>
+                   
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+
+    </c-card-body>
+</c-card>
+
+
+<p-dialog [modal]= "true" header="Leave Request" [(visible)]="projectDialog" [breakpoints]="{'960px': '75vw'}"
+    [style]="{width: '70vw'}" [draggable]="false" [resizable]="false" class="pb-2" (onHide)="Cancel_form()">
+    <form [formGroup]="ProjectForm" (submit)="submit()">
+        <c-row class="">
+            
+            <c-col sm="12" md="6" lg="6" class="mb-3">
+                <p-calendar [style]="{'minWidth':'100%'}" [showIcon]="true" appendTo="body"
+                    placeholder="Project Start Date" inputId="icon"  name="startdate" formControlName="startdate" >
+                </p-calendar>
+            </c-col>
+            <c-col sm="12" md="6" lg="6" class="mb-3">
+                <p-calendar [style]="{'minWidth':'100%'}" [showIcon]="true" appendTo="body"
+                    placeholder="Project End Date" inputId="icon" required name="enddate" formControlName="enddate" (onSelect)="leavecount()">
+                </p-calendar>
+            </c-col>
+            <!-- <c-col sm="12" md="6" lg="6" class="mb-3">
+            </c-col> -->
+            <c-col sm="12" md="4" lg="6" class="mb-3">
+                <p-dropdown [options]="leavetypeDropdown" [style]="{'minWidth':'100%'}" optionValue="typeid" optionLabel="name"
+                    [filter]="true" filterBy="name" [showClear]="true" value="typeid" placeholder="LeaveType*" required
+                    formControlName="LeaveDropdwon">
+                </p-dropdown>
+
+
+            </c-col>
+
+            <c-col sm="12" md="6" lg="6" class="mb-3">
+                <input type="text" class="w-full" placeholder="No of Leaves*" pInputText required readonly
+                    formControlName="LeaveNO" />
+                <small *ngIf="ProjectForm.controls['LeaveNO'].touched && ProjectForm.controls['LeaveNO'].invalid"
+                    class="p-error block">
+                    <span *ngIf="ProjectForm.controls['LeaveNO'].errors">This field is mandatory.</span>
+                </small>
+            </c-col>
+
+            <c-col sm="12" md="6" lg="6" class="mb-3">
+               
+                <textarea cFormControl class="w-30rem" id="exampleFormControlTextarea1" rows="3"
+                    placeholder="Reason" formControlName="Reason" required></textarea>
+                <small class="p-error block"
+                    *ngIf="ProjectForm.controls['Reason'].touched && ProjectForm.controls['Reason'].invalid">
+                    <span *ngIf="ProjectForm.controls['Reason'].errors">This field is mandatory.</span>
+                </small>
+            </c-col>
+            <c-col sm="12" md="6" lg="6" class="mb-3">
+            </c-col>
+            <br>
+            <c-col>
+                <p-button  type="submit"  (click)="leaveRequestSaveData()"
+                    label="Save" styleClass="p-button-warning px-3 py-2" [disabled]="!ProjectForm.valid"></p-button>
+                
+                <p-button (click)="projectDialog=false" (click)="Cancel_form()" label="Back"
+                    styleClass="p-button-text pb-2" ></p-button>
+            </c-col>
+
+            
+        </c-row>
+    </form>
+
+</p-dialog>

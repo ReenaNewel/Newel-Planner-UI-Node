@@ -40,6 +40,9 @@ export class NewTaskComponent implements OnInit {
   projectName: string;
   NewTaskDialog:boolean;
   showSaveBtn:boolean;
+  flag: any;
+  getAssigneName: any;
+  colunqId: any;
 
   constructor(
     private rest: RestService,
@@ -64,8 +67,9 @@ SelectedProjectNames: any[];
     this.ShowDetails();
     this.getProjectName();
     this.GetProjectbyTask();
-    this.getUserByProjectId();
-    console.log("hiii",this.selectedTaskProject);
+    // this.getUserByProjectId();
+    // console.log("hiii",this.selectedTaskProject);
+    this.flag = 0;
     
     // this.selectedTaskProject ;
    
@@ -73,19 +77,19 @@ SelectedProjectNames: any[];
 
   tasksubmit(isvalid: boolean) {
     if (isvalid) {
-      console.log('task isvalid', isvalid)
+      // console.log('task isvalid', isvalid)
       // this.SubmitNewTask()
     }
 
   }
   Assignprojectid:any
-  getUserByProjectId() {
+  getUserByProjectId(prjID:any) {
   //  this.Assignprojectid =this.selectedProject;
   //   console.log("selectedProject",this.selectedProject);
     
-    if (this.selectedProject) {
+    if (prjID) {
       var model = {
-        projectid: this.selectedProject
+        projectid: prjID
       }
       console.log('project id', model)
       this.rest.postParams(this.Global.getapiendpoint() + '/NewTask/GetAllUsersByProjectID', model).subscribe((data: any) => {
@@ -93,7 +97,7 @@ SelectedProjectNames: any[];
        
         if (data.Success) {
           this.UserData = data.Data;
-          console.log("UserData",this.UserData);
+          // console.log("UserData",this.UserData);
           
         }
       })
@@ -101,16 +105,18 @@ SelectedProjectNames: any[];
   }
 
   changeAssigneeId(value: any) {
-    console.log(value.id)
+    // console.log(value.id)
     this.AssigneeId = value.id
   }
 
   showCreateNewTaskDialog(){
+    this.flag=0
     this.NewTaskDialog = true;
     this.showSaveBtn = true;
   }
 
   SubmitNewTask() {
+    this.flag = 0;
     var model = {
       projectid: this.selectedProject,
       taskname: this.selectedTaskName,
@@ -122,10 +128,10 @@ SelectedProjectNames: any[];
       enddate: moment(this.selectedEndate).format('YYYY-MM-DD'),
       // attachment: this.ProjectForm.controls['attachment'].value,
       comments: this.selectedComment,
-      userid: this.selectedTaskAssignee
+      userid: this.getAssigneName
     }
 
-    console.log("save task model", model);
+    // console.log("save task model", model);
     var apiUrl = '';
     apiUrl = '/NewTask/CreateNewTask';
 
@@ -149,12 +155,17 @@ SelectedProjectNames: any[];
     this.GetProjectbyTask()
     this.showallData()
     this.NewTaskDialog=false;
+    this.flag=0
     
   }
   colId:any;
   EditTaskDetails(row: any) {
+    this.flag = 1
 
     console.log('project rows :', row)
+    debugger;
+    this.getUserByProjectId(row.projectid)
+
 
     this.NewTaskDialog = true;
     this.showSaveBtn = false;
@@ -169,11 +180,15 @@ SelectedProjectNames: any[];
     this.selectedEndate = new Date(row.enddate);
     this.selectedComment = row.comments;
     this.colId = row.id;
+    this.colunqId = row.unqid;
+
+
   }
 
   UpdateTask(){
     var model ={
       id :  this.colId,
+      unqid: this.colunqId,
       projectid:this.selectedProject,
       taskname:  this.selectedTaskName,
       tasktypeid:this.selectedTaskTypeName,
@@ -182,12 +197,12 @@ SelectedProjectNames: any[];
       startdate: this.selectedStartDate,
       enddate: this.selectedEndate,
       comments: this.selectedComment,
+      status:this.selectedtaskstatus,
       userid:this.selectedTaskAssignee,
      
     }
     console.log("UpdateTask model",model)
     this.rest.postParams(this.Global.getapiendpoint() +'/NewTask/UpdateTask',model).subscribe((data: any) => {
-      console.log('data',data.Message)
       if (data.Success) {
         this.messageService.add({ severity: 'success', summary: 'Service Message', detail: 'Task details updated successfully' });
         this.Cancel_form()
@@ -208,7 +223,7 @@ SelectedProjectNames: any[];
   ShowDetails() {
     // get All data from newtask
     this.rest.getAll(this.Global.getapiendpoint() + '/NewTask/GetAllNewTask').subscribe((data: any) => {
-      console.log("GetAllNewTask",data.Data);
+      // console.log("GetAllNewTask",data.Data);
       // this.dataSource = new MatTableDataSource(data.Data);
       // //  console.log(this.dataSource);
       // this.dataSource.paginator = this.paginator;
@@ -216,7 +231,7 @@ SelectedProjectNames: any[];
       if (data.Success) {
         this.SelectedProjectNames = data.Data
       }
-      console.log('project data', this.SelectedProjectNames)
+      // console.log('project data', this.SelectedProjectNames)
 
     })
   }
@@ -224,7 +239,9 @@ SelectedProjectNames: any[];
 
   getProjectActivity() {
     this.rest.getAll(this.Global.getapiendpoint() + '/General/getProjectStatus/' + 60).subscribe((data: any) => {
-      this.ProjectActivities = data.Data;
+      if(data.Success){
+        this.ProjectActivities = data.Data;
+      }
     })
   }
 
@@ -233,15 +250,16 @@ SelectedProjectNames: any[];
       userid: this.userId
 
     }
-    console.log(`model`, model);
+    // console.log(`model`, model);
     this.rest.postParams(this.Global.getapiendpoint() + '/timesheet/GetTimesheetProject', model).subscribe((data: any) => {
-
+      if(data.Success){
       this.ProjectTypes = data.Data;
+      }
     })
   }
 
   GetTaskNameByProject(Project: any) {
-console.log("Project",Project);
+  // console.log("Project",Project);
 
     this.projectName = Project.projectname;
     // console.log(this.projectName)
@@ -269,9 +287,7 @@ console.log("Project",Project);
       userid: this.userId
 
     }
-    console.log("model",model);
-    
-
+    // console.log("model",model);
     this.rest.postParams(this.Global.getapiendpoint() + '/timesheet/GetTaskname', model).subscribe((data: any) => {
 
       if (data.Success) {
@@ -282,14 +298,17 @@ console.log("Project",Project);
     })
   }
 
-
   showallData() {
     this.rest.getAll(this.Global.getapiendpoint() + '/General/getAllTaskTypes').subscribe((data: any) => {
-      this.tasktypes = data.Data;
+      if(data.Success){
+        this.tasktypes = data.Data;
+      }
 
     })
     this.rest.getAll(this.Global.getapiendpoint() + '/Project/GetAllProjectName').subscribe((data: any) => {
-      this.projectnames = data.Data;
+      if(data.Success){
+        this.projectnames = data.Data;
+      }
     })
 
     // this.rest.getAll(this.Global.getapiendpoint() + '/UserDetails/GetAllAssign').subscribe((data: any) => {
@@ -298,9 +317,16 @@ console.log("Project",Project);
 
 
     this.rest.getAll(this.Global.getapiendpoint() + '/General/getAllTasks').subscribe((data: any) => {
-      this.tasks = data.Data;
+      if(data.Success){
+        this.tasks = data.Data;
+      }
     })
   }
 
+  GetAssigneeName(value: any) {
+    this.getAssigneName = value;
+    // console.log(`this.getAssigneName`, this.getAssigneName);
+
+  }
 }
 

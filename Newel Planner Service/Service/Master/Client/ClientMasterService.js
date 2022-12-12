@@ -17,18 +17,19 @@ var routes = function () {
             dataaccess.FindAll(ClientMst)
                 .then(function (result) {
                     if (result != null) {
-                        console.log('client' ,result)
+                        //console.log('client' ,result)
                         res.status(200).json({ Success: true, Message: 'Get all Client successfully', Data: result });
                     } else {
                         // dataconn.errorlogger('ClientMasterService', 'GetAllClients', { message: 'No object found', stack: '' });
                         res.status(200).json({ Success: false, Message: 'Error occurred while Getting record', Data: null });
                     }
                 }, function (err) {
-                    // dataconn.ARC_Errorlogger('ClientMasterService', 'GetAllClients', err);
+                    dataconn.errorlogger('ClientMasterService', 'GetAllClients', err);
                     res.status(200).json({ Success: false, Message: ' Client Master API Failed.', Data: null });
                 });
             }
             catch(err){
+                dataconn.errorlogger('ClientMasterService', 'GetAllClients', err);
                 res.status(200).json({ Success: false, Message: ' Client Master API Failed.', Data: null });
             }
 })
@@ -46,18 +47,19 @@ router.route('/GetSelectedClients')
             dataaccess.FindAll(ClientMst,param)
                 .then(function (result) {
                     if (result != null) {
-                        console.log('client' ,result)
+                        //console.log('client' ,result)
                         res.status(200).json({ Success: true, Message: 'Get all Client successfully', Data: result });
                     } else {
-                        // dataconn.errorlogger('ClientMasterService', 'GetAllClients', { message: 'No object found', stack: '' });
+                        // dataconn.errorlogger('ClientMasterService', 'GetSelectedClients', { message: 'No object found', stack: '' });
                         res.status(200).json({ Success: false, Message: 'Error occurred while Getting record', Data: null });
                     }
                 }, function (err) {
-                    // dataconn.ARC_Errorlogger('ClientMasterService', 'GetAllClients', err);
+                    dataconn.errorlogger('ClientMasterService', 'GetSelectedClients', err);
                     res.status(200).json({ Success: false, Message: ' Client Master API Failed.', Data: null });
                 });
             }
             catch(err){
+                dataconn.errorlogger('ClientMasterService', 'GetSelectedClients', err);
                 res.status(200).json({ Success: false, Message: ' Client Master API Failed.', Data: null });
             }
 })

@@ -20,7 +20,7 @@ var routes = function () {
                     parentid:req.params.id
                 }
             };
-            console.log(param)
+            //console.log(param)
             dataaccess.FindAll(GeneralMst, param)
                 .then(function (result) {
                     if (result != null) {
@@ -30,11 +30,12 @@ var routes = function () {
                         res.status(200).json({ Success: false, Message: 'Error occurred while Getting record', Data: null });
                     }
                 }, function (err) {
-                    // dataconn.ARC_Errorlogger('GenaralMasterService', 'getProjectStatus', err);
+                    dataconn.errorlogger('GenaralMasterService', 'getProjectStatus', err);
                     res.status(200).json({ Success: false, Message: ' Genaral Master table API failed.', Data: null });
                 });
             }
             catch(err)    {
+                dataconn.errorlogger('GenaralMasterService', 'getProjectStatus', err);
                 res.status(200).json({ Success: false, Message: ' General Master table API failed.', Data: null });
             } 
 })
@@ -49,7 +50,7 @@ router.route('/getAllTaskTypes')
             parentid:50
         }
     };
-    console.log(param)
+    //console.log(param)
     dataaccess.FindAll(GeneralMst, param)
         .then(function (result) {
             if (result != null) {
@@ -59,11 +60,12 @@ router.route('/getAllTaskTypes')
                 res.status(200).json({ Success: false, Message: 'Error occurred while Getting record', Data: null });
             }
         }, function (err) {
-            // dataconn.ARC_Errorlogger('GenaralMasterService', 'getProjectStatus', err);
+            dataconn.errorlogger('GenaralMasterService', 'getAllTaskTypes', err);
             res.status(200).json({ Success: false, Message: ' Genaral Master table API failed.', Data: null });
         });
     }
     catch(err)    {
+        dataconn.errorlogger('GenaralMasterService', 'getAllTaskTypes', err);
         res.status(200).json({ Success: false, Message: ' General Master table API failed.', Data: null });
     } 
 })
@@ -79,7 +81,7 @@ router.route('/getAllTasks')
             parentid:102
         }
     };
-    console.log(param)
+    //console.log(param)
     dataaccess.FindAll(GeneralMst, param)
         .then(function (result) {
             if (result != null) {
@@ -88,10 +90,12 @@ router.route('/getAllTasks')
                 res.status(200).json({ Success: false, Message: 'Error occurred while Getting record', Data: null });
             }
         }, function (err) {
+            dataconn.errorlogger('GenaralMasterService', 'getAllTasks', err);
             res.status(200).json({ Success: false, Message: ' Genaral Master table API failed.', Data: null });
         });
     }
     catch(err)    {
+        dataconn.errorlogger('GenaralMasterService', 'getAllTasks', err);
         res.status(200).json({ Success: false, Message: ' General Master table API failed.', Data: null });
     } 
 })

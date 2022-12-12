@@ -1,27 +1,24 @@
 <!--sidebar-->
 <c-sidebar #sidebar="cSidebar" class="d-print-none sidebar sidebar-fixed" id="sidebar" visible>
-  <c-sidebar-brand [brandFull]="{
-      src: 'assets/img/brand/logoNewel.png',
-      width: 100,
-      height: 50,
-      alt: 'CoreUI Logo'
-    }" [brandNarrow]="{
-      src: 'assets/img/brand/logoNewel.png',
-      width: 90,
-      height: 50,
-      alt: 'CoreUI Logo'
-    }" >
-    <!-- routerLink="https://www.neweltechnologies.com/" -->
-  </c-sidebar-brand>
-  
-  <perfect-scrollbar [config]="perfectScrollbarConfig">
-    <!--  [perfectScrollbar]="perfectScrollbarConfig"-->
-    <!-- <div *ngFor="let item of menuItems; let i=index"> -->
-    <c-sidebar-nav [navItems]="navItems">
-    </c-sidebar-nav>
-    <!-- </div> -->
-  </perfect-scrollbar>
-  <c-sidebar-toggler *ngIf="!sidebar.narrow" toggle="unfoldable" cSidebarToggle="sidebar"></c-sidebar-toggler>
+  <!-- Newel Logo -->
+    <c-sidebar-brand [brandFull]="{
+        src: 'assets/img/brand/logoNewel.png',
+        width: 100,
+        height: 50,
+        alt: 'CoreUI Logo'
+      }" [brandNarrow]="{
+        src: 'assets/img/brand/logoNewel.png',
+        width: 90,
+        height: 50,
+        alt: 'CoreUI Logo'
+      }" >
+      <!-- routerLink="https://www.neweltechnologies.com/" -->
+    </c-sidebar-brand>
+    
+    <perfect-scrollbar [config]="perfectScrollbarConfig">
+      <c-sidebar-nav [navItems]="navItems"></c-sidebar-nav>
+    </perfect-scrollbar>
+    <c-sidebar-toggler *ngIf="!sidebar.narrow" toggle="unfoldable" cSidebarToggle="sidebar"></c-sidebar-toggler>
 </c-sidebar>
 
 <!--main-->

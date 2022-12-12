@@ -12,7 +12,8 @@ const environmentConfig = {
     },
   
 }
-
+// 1350
+//// planner_prod
 
 const Domain_name ="https://uatretailwebsiteapi.edelweissarc.in/api"
 const environment = 'local';

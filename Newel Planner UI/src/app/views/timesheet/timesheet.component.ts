@@ -33,33 +33,33 @@ interface IUser {
   styleUrls: ['./timesheet.component.scss'],
   providers: [MessageService]
 })
-export class TimesheetComponent implements OnInit,AfterViewInit {
+export class TimesheetComponent implements OnInit, AfterViewInit {
 
   taskDate: Date = new Date;
   selectedProject: any;
   selectedTask: any;
-  selectedstatus:any
+  selectedstatus: any
   selectedactivity: any
   selectedActivity: any;
   selectedhours: number = 0;
-  selectedminutes: number = 0;
+  selectedminutes: number;
   selectedDescription: any
 
-  selectedTaskTypeName:any;
-  selectedtaskstatus:any;
-  selectedTaskAssignee:any
-  selectedEfforts:any
-  selectedEndate:any
-  selectedStartDate:any
-  selectedComment:any
-  selectedTaskName:any
-  selectedTaskProject:any
+  selectedTaskTypeName: any;
+  selectedtaskstatus: any;
+  selectedTaskAssignee: any
+  selectedEfforts: any
+  selectedEndate: any
+  selectedStartDate: any
+  selectedComment: any
+  selectedTaskName: any
+  selectedTaskProject: any
 
 
 
 
-  hours: number[];
-  minutes: number[];
+  hours: any[];
+  minutes: any[];
   createTaskDialog: boolean;
   uploadedFiles: any[] = [];
 
@@ -85,7 +85,8 @@ export class TimesheetComponent implements OnInit,AfterViewInit {
   tasks: any;
   AssigneeId: any;
 
-  @ViewChild(TaskAccordionComponent) child:TaskAccordionComponent;
+  @ViewChild(TaskAccordionComponent) child: TaskAccordionComponent;
+  getAssigneName: any;
 
   constructor(
     // private chartsData: DashboardChartsData,
@@ -192,7 +193,13 @@ export class TimesheetComponent implements OnInit,AfterViewInit {
 
 
   ngOnInit(): void {
-    this.hours = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24];
+
+    // this.ProjectNames = [{ projectname: 'Newel', projectid: 1 }]
+    // this.Tasknames = [{ taskname: 'Assignment' }]
+    // this.ProjectActivities = [{ name: 'coding' }]
+
+
+    this.hours = ['0', 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24];
     this.minutes = [15, 30, 45]
     // [...Array(60)].map((_, i) => i);
     this.userLoggedIn = JSON.parse(localStorage.getItem('userLoggedIn')!);
@@ -201,25 +208,56 @@ export class TimesheetComponent implements OnInit,AfterViewInit {
     this.userEmail = this.userLoggedIn.emailid;
     // this.showformdetails()
     // this.ShowAllformdetails();
-    
+
     this.getProjectActivity()
     this.getProjectName()
     this.GetProjectbyTask()
-    
+
     this.showallData()
 
   }
 
-  showCreateNewTaskDialog() {
-    this.createTaskDialog = true;
+  getMinutesList() {
+    // console.log("selectedhours", typeof (this.selectedhours));
+    // console.log("selectedhours", this.selectedhours);
 
+    if (this.selectedhours == 0) {
+      this.minutes = [15, 30, 45]
+    } else {      
+      this.selectedminutes = 0;
+      this.minutes = ['00', 15, 30, 45]
+      // console.log("selectedminutes", this.selectedminutes );
+
+    }
   }
 
+  getHoursList() {
+
+    // if (this.selectedminutes == 0) {
+    //   this.hours = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24];
+    // } else  {
+    //   this.hours = ['00', 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24];
+    // }
+  }
+
+
+  showCreateNewTaskDialog() {
+    this.createTaskDialog = true;
+  }
+
+  createTaskClose() {
+    this.taskDate = new Date;
+    // console.log(" this.taskdate", this.taskDate);
+    // this.selectedProject = '';
+  }
+
+
+
   submit(isvalid: boolean) {
-    console.log('isvalid', isvalid)
+    // console.log('isvalid', isvalid)
     if (isvalid) {
       this.saveTimesheet()
-    
+
     }
 
   }
@@ -288,10 +326,8 @@ export class TimesheetComponent implements OnInit,AfterViewInit {
   GetTaskNameByProject(Project: any) {
 
     this.projectName = Project.projectname;
-    // console.log(this.projectName)
-    this.selectedTaskProject =  this.projectName 
+    this.selectedTaskProject = this.projectName
     this.projectId = Project.projectid
-    // console.log(this.projectId)
 
     var model = {
       projectid: this.projectId,
@@ -339,13 +375,15 @@ export class TimesheetComponent implements OnInit,AfterViewInit {
       created_date: moment().format('YYYY-MM-DD'),
       created_by: this.userId
 
-    }
+    } 
 
-    console.log("save timesheet model",model);
+    // console.log("save timesheet model", model);
     this.rest.create(this.Global.getapiendpoint() + "/timesheet/CreateTimesheet", model).subscribe((data: any) => {
       if (data.Success) {
         this.messageService.add({ severity: 'success', summary: 'Service Message', detail: 'Timesheet Record added successfully' });
         this.child.ShowDetails();
+        // this.selectedhours = 0;
+        // this.selectedminutes = 0;
       }
       else {
         this.messageService.add({ severity: 'warn', summary: 'Success', detail: 'Record not saved' });
@@ -354,32 +392,33 @@ export class TimesheetComponent implements OnInit,AfterViewInit {
 
   }
 
-  tasksubmit(isvalid:boolean) {
+  tasksubmit(isvalid: boolean) {
     if (isvalid) {
-      // console.log('task isvalid',isvalid)
       this.SubmitNewTask()
     }
 
   }
-
- 
-
   showallData() {
     this.rest.getAll(this.Global.getapiendpoint() + '/General/getAllTaskTypes').subscribe((data: any) => {
-    this.tasktypes = data.Data;
+      if (data.Success) {
+        this.tasktypes = data.Data;
+      }
 
     })
     this.rest.getAll(this.Global.getapiendpoint() + '/Project/GetAllProjectName').subscribe((data: any) => {
-      this.projectnames = data.Data;
+      if (data.Success) {
+        this.projectnames = data.Data;
+      }
     })
 
     // this.rest.getAll(this.Global.getapiendpoint() + '/UserDetails/GetAllAssign').subscribe((data: any) => {
     // this.UserData = data.Data;
     // })
-   
 
     this.rest.getAll(this.Global.getapiendpoint() + '/General/getAllTasks').subscribe((data: any) => {
-    this.tasks = data.Data;
+      if (data.Success) {
+        this.tasks = data.Data;
+      }
     })
   }
 
@@ -388,18 +427,18 @@ export class TimesheetComponent implements OnInit,AfterViewInit {
     this.AssigneeId = value.id
   }
 
-  getUserByProjectId(){
-    if(this.selectedProject){
-      var model={
+  getUserByProjectId() {
+    if (this.selectedProject) {
+      var model = {
         projectid: this.selectedProject.projectid
       }
       // console.log('project id', model)
-      this.rest.postParams(this.Global.getapiendpoint() + '/NewTask/GetAllUsersByProjectID',model).subscribe((data: any) => {
-        if(data.Success){
+      this.rest.postParams(this.Global.getapiendpoint() + '/NewTask/GetAllUsersByProjectID', model).subscribe((data: any) => {
+        if (data.Success) {
           this.UserData = data.Data;
           // console.log('user',this.UserData)
         }
-        })
+      })
     }
   }
 
@@ -416,7 +455,7 @@ export class TimesheetComponent implements OnInit,AfterViewInit {
   }
 
   Cancel_form() {
-  
+
     this.ShowDetails()
     this.getProjectActivity()
     this.getProjectName()
@@ -438,36 +477,42 @@ export class TimesheetComponent implements OnInit,AfterViewInit {
   }
 
   SubmitNewTask() {
-    console.log("selectedTaskAssignee",this.selectedTaskAssignee);
-    
-        var model = {
-          projectid: this.selectedProject.projectid,
-          taskname: this.selectedTaskName,
-          tasktypeid: this.selectedTaskTypeName.typeid ,
-          status: this.selectedtaskstatus.typeid,
-          created_by: this.userId,
-          efforts: this.selectedEfforts,
-          startdate: moment(this.selectedStartDate).format('YYYY-MM-DD'),
-          enddate: moment(this.selectedEndate).format('YYYY-MM-DD'),
-          // attachment: this.ProjectForm.controls['attachment'].value,
-          comments: this.selectedComment,
-          userid:this.selectedTaskAssignee.userid
-        }
+    // console.log("selectedTaskAssignee",this.selectedTaskAssignee);
 
-        // console.log("save task model", model);
-        var apiUrl = '';
-        apiUrl = '/NewTask/CreateNewTask';
+    var model = {
+      projectid: this.selectedProject.projectid,
+      taskname: this.selectedTaskName,
+      tasktypeid: this.selectedTaskTypeName.typeid,
+      status: this.selectedtaskstatus,
+      created_by: this.userId,
+      efforts: this.selectedEfforts,
+      startdate: moment(this.selectedStartDate).format('YYYY-MM-DD'),
+      enddate: moment(this.selectedEndate).format('YYYY-MM-DD'),
+      // attachment: this.ProjectForm.controls['attachment'].value,
+      comments: this.selectedComment,
+      userid: this.getAssigneName
+    }
 
-        this.rest.postParams(this.Global.getapiendpoint() + apiUrl, model).subscribe((data: any) => {
-          if (data.Success) {
-            this.messageService.add({ severity: 'success', summary: 'Success', detail: 'New Task Created Successfully' });
-            this.Cancel_form()
-          }
-          else {
-            this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Record not saved' });
-          }
-        });
-    
+    // console.log("save task model", model);
+    var apiUrl = '';
+    apiUrl = '/NewTask/CreateNewTask';
+
+    this.rest.postParams(this.Global.getapiendpoint() + apiUrl, model).subscribe((data: any) => {
+      if (data.Success) {
+        this.messageService.add({ severity: 'success', summary: 'Success', detail: 'New Task Created Successfully' });
+        this.Cancel_form()
+      }
+      else {
+        this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Record not saved' });
+      }
+    });
+
+  }
+
+  GetAssigneeName(value: any) {
+    this.getAssigneName = value;
+    // console.log(`this.getAssigneName`, this.getAssigneName);
+
   }
 }
 

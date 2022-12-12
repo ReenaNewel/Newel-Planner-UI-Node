@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { HashLocationStrategy, LocationStrategy, PathLocationStrategy } from '@angular/common';
 import { BrowserModule, Title } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { FormsModule,ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http'
 // import {MessagesModule} from 'primeng/messages';
 // import {MessageModule} from 'primeng/message';
@@ -10,7 +10,13 @@ import { LoginLayoutComponent } from './layout/login-layout/login-layout.compone
 import { AdminLayoutComponent } from './layout/admin-layout/admin-layout.component';
 import { ToastModule } from 'primeng/toast';
 import { InputTextModule } from 'primeng/inputtext';
-
+import { FullCalendarModule } from '@fullcalendar/angular';
+import dayGridPlugin from '@fullcalendar/daygrid';
+import timeGridPlugin from '@fullcalendar/timegrid';
+import listPlugin from '@fullcalendar/list';
+import interactionPlugin from '@fullcalendar/interaction';
+import {LeaveRequestModule } from './views/leave-request/leave-request.module';
+import { MappingModule } from './views/mapping/mapping.module';
 
 import {
   PERFECT_SCROLLBAR_CONFIG,
@@ -67,13 +73,21 @@ const APP_CONTAINERS = [
   DefaultLayoutComponent,
 ];
 
+FullCalendarModule.registerPlugins([
+  dayGridPlugin,
+  timeGridPlugin,
+  listPlugin,
+  interactionPlugin
+])
+
 @NgModule({
-  declarations: [AppComponent,LoginLayoutComponent,AdminLayoutComponent,...APP_CONTAINERS],
+  declarations: [AppComponent, LoginLayoutComponent, AdminLayoutComponent, ...APP_CONTAINERS],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
     AvatarModule,
+    FullCalendarModule,
     BreadcrumbModule,
     FooterModule,
     DropdownModule,
@@ -103,7 +117,10 @@ const APP_CONTAINERS = [
     // MessagesModule,
     // MessageModule,
     ToastModule,
-    InputTextModule
+    InputTextModule,
+    LeaveRequestModule,
+    MappingModule
+
 
   ],
   providers: [
@@ -115,7 +132,7 @@ const APP_CONTAINERS = [
       provide: PERFECT_SCROLLBAR_CONFIG,
       useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG,
     },
-    IconSetService,ApiserviceService,
+    IconSetService, ApiserviceService,
     Title
   ],
   bootstrap: [AppComponent],

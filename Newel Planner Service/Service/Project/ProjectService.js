@@ -33,10 +33,11 @@ var routes = function () {
                     Data: result
                 });
             }, function (err) {
-                // dataconn.ARC_Errorlogger('homepageService', 'getConfirmDetails', err);
+                dataconn.errorlogger('projectService', 'GetAllProjects', err);
                 res.status(200).json({ Success: false, Message: ' Project Mastertable API failed.', Data: null });
             });
         }catch(err)    {
+            dataconn.errorlogger('projectService', 'GetAllProjects', err);
             res.status(200).json({ Success: false, Message: ' Project Master table API failed.', Data: null });
         } 
 });
@@ -62,7 +63,7 @@ router.route('/InsertProjects')
         projectstage:req.body.projectstage,
         projectstatus:req.body.projectstatus
     }
-    console.log(param)
+    //console.log(param)
     dataaccess.Create(ProjectMst, param)
     .then(function (result) {
 
@@ -74,7 +75,7 @@ router.route('/InsertProjects')
     })
 }
         catch (err) {
-            dataconn.ARC_Errorlogger('homepageService', 'InsertConfirmStatus', err);
+            dataconn.errorlogger('projectService', 'InsertProjects', err);
             res.status(200).json({ Success: false, Message: ' Confirmation table API failed.', Data: null });
         };
 
@@ -112,7 +113,7 @@ router.route('/UpdateProjects')
     }
     dataaccess.FindOne(ProjectMst, param1)
     .then(function (result) {
-        console.log(result)
+        // //console.log(result)
         if (result != null) {
 
         dataaccess.Update(ProjectMst, values,param)
@@ -127,7 +128,7 @@ router.route('/UpdateProjects')
     })
 }
         catch (err) {
-            // dataconn.ARC_Errorlogger('homepageService', 'InsertConfirmStatus', err);
+            dataconn.errorlogger('projectService', 'UpdateProjects', err);
             res.status(200).json({ Success: false, Message: ' Confirmation table API failed.', Data: null });
         };
 
@@ -136,17 +137,23 @@ router.route('/UpdateProjects')
 
 router.route('/GetAllProjectName')
         .get(function (req, res) {
+     try{
           const ProjectMST = datamodel.tbl_master_project();
             dataaccess.FindAll(ProjectMST)
             .then(function (result) {
-                console.log('project',result)
+                // //console.log('project',result)
             if (result != null) {
                 res.status(200).json({ Success: true, Message: 'Get all Project Task Type successfully', Data: result });
             } else {
-                // dataconn.errorlogger('GenaralMasterService', 'getProjectStatus', { message: 'No object found', stack: '' });
+                dataconn.errorlogger('ProjectService', 'GetAllProjectName', { message: 'No object found', stack: '' });
                 res.status(200).json({ Success: false, Message: 'Error occurred while Getting record', Data: null });
             }
         });
+     }
+     catch(err){
+        dataconn.errorlogger('ProjectService', 'GetAllProjectName', { message: 'No object found', stack: '' });
+        res.status(200).json({ Success: false, Message: 'Error occurred while Getting record', Data: null });
+     }
 });
 
     return router;

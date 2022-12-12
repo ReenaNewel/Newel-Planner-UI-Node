@@ -110,7 +110,7 @@
 
 
 <p-dialog header="Project Master" [(visible)]="projectDialog" [breakpoints]="{'960px': '75vw'}" (onHide)="Cancel_form()"
-    [style]="{width: '70vw'}" [draggable]="false" [resizable]="false" class="pb-2">
+    [style]="{width: '70vw'}" [draggable]="false" [resizable]="false" class="pb-2"  [modal]="true">
     <form [formGroup]="ProjectForm" (submit)="submit()">
         <c-row class="">
             <c-col sm="12" md="4" lg="4" class="mb-3">

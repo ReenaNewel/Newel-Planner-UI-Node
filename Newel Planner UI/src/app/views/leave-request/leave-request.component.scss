@@ -1,0 +1,195 @@
+.form-container {
+    height: 20cm;
+    width: 25m;
+
+    padding-top: 100px;
+    padding-left: 300px;
+    position: absolute;
+}
+
+.container {
+    position: relative;
+    display: flex;
+    padding-left: 0px;
+
+    margin: 0px;
+    height: 11.8cm;
+    width: 25cm;
+    background-color: #f9f9f9;
+
+}
+
+.table {
+    /*  width : 100%; */
+    margin-left: 10cm;
+}
+
+.mat-header-cell,
+mat-cell {
+    justify-content: center;
+}
+
+.mat-card {
+    background-color: rgb(96, 45, 224);
+    height: 15mm;
+    appearance: initial;
+    width: 25cm;
+    font-weight: 100;
+    color: rgb(232, 207, 18)
+}
+
+.form-container {
+    width: 100 px;
+    /* margin: 0 px auto;  */
+    margin-top: 200 px;
+}
+
+.natcard {
+    height: 15cm;
+    width: 10cm
+}
+
+.form-field {
+
+    width: 280px;
+    /* height:10px; */
+
+}
+
+
+
+.edit_icon {
+    color: deepskyblue;
+
+}
+
+.box {
+    /* display: flex; */
+    justify-content: center;
+    padding: 40px;
+    margin: 0px;
+    height: 10cm;
+    width: 25cm;
+    background-color: #f9f9f9;
+}
+
+.mat-card-title {
+    padding-left: 1px;
+}
+
+.Save {
+    background-color: rgb(96, 45, 224);
+    color: rgb(232, 207, 18);
+
+}
+
+.custom-btn {
+    align-self: flex-end;
+    /* margin-left:; */
+    /* padding-left: 1cm; */
+}
+
+.mat-radio-button~.mat-radio-button {
+    margin-left: 16px;
+
+    /* background-color: black; */
+
+}
+
+.mat-paginator {
+    width: 25cm;
+    margin-left: -6mm;
+
+}
+
+.btn-close {
+    margin-left: 700px;
+    float: right;
+    /* margin-block-end:auto */
+    /* padding-right: 15cm; */
+    /* background-color:  rgb(232, 207, 18); */
+}
+
+.mat-flat-button {
+    background-color: deepskyblue;
+    width: 4cm;
+    height: 10mm;
+    margin-left: 15.5cm;
+    /* margin-block-end: 10cm; */
+
+    /* end; */
+    /* flex-flow: column; */
+}
+
+.mat-option {
+    color: rgb(45, 137, 224);
+    z-index: index;
+}
+
+.mat-radio-group {
+    color: rgb(96, 45, 224);
+}
+
+.mat-radio-button.mat-accent .mat-radio-ripple .mat-ripple-element {
+    background-color: rgb(22, 92, 125) !important;
+}
+
+.mat-radio-button.mat-accent .mat-radio-inner-circle {
+    background-color: rgb(22, 92, 125) !important;
+    z-index: 3;
+}
+
+.mat-radio-button .mat-radio-outer-circle {
+    border-color: rgb(22, 92, 125) !important;
+    z-index: 3;
+}
+
+.invalid {
+    color: #eb36f4;
+}
+
+.mat-table {
+    /* padding :100px;   */
+    width: 25cm;
+    /* margin-block-start: 1cm; */
+    margin-left: -6mm;
+    /* background-color:  #f9f9f9; */
+}
+
+/* .table{
+    padding : 10cm
+} */
+.mat-header-cell {
+    /* padding: 1cm; */
+    background-color: rgb(96, 45, 224);
+    font-size: medium;
+    color: rgb(232, 207, 18);
+    ;
+}
+
+.sub-header {
+    font-family: "Titillium Web", sans-serif;
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 25px;
+    color: #485055;
+    /* margin-left: 20mm; */
+}
+
+
+::ng-deep .p-datatable .p-datatable-thead>tr>th {
+    font-weight: 100;
+    color: #000;
+}
+
+::ng-deep .p-datatable .p-sortable-column .p-sortable-column-icon {
+    color: #b8c0c8;
+}
+
+.borderColor {
+    border-color: #ced4da;
+}
+
+.borderColor :focus-visible {
+    border-color: #3B82F6 !important; 
+}

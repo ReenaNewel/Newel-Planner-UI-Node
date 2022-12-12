@@ -16,7 +16,7 @@ var routes = function () {
             try {
                 let user= req.body;
             var querytext = `SELECT "GetallTimesheet"('${user.userid}',:p_ref); FETCH ALL IN "abc"`;
-console.log("querytext",querytext);
+//console.log("querytext",querytext);
             var param = {
                 replacements: {
                     p_active: true,
@@ -27,7 +27,7 @@ console.log("querytext",querytext);
             connect.sequelize
             .query(querytext,param)
             .then(function (result) {
-                console.log("result",result);
+                //console.log("result",result);
                 result.shift();
                 res.status(200).json({
 
@@ -36,11 +36,12 @@ console.log("querytext",querytext);
                     Data: result
                 });
             }, function (err) {
-                console.log(err);
-                // dataconn.ARC_Errorlogger('homepageService', 'getConfirmDetails', err);
+                //console.log(err);
+                dataconn.errorlogger('TimeSheetService', 'GetAllTimeSheetDetails', err);
                 res.status(200).json({ Success: false, Message: ' timesheet Mastertable API failed.', Data: null });
             });
         }catch(err)    {
+            dataconn.errorlogger('TimeSheetService', 'GetAllTimeSheetDetails', err);
             res.status(200).json({ Success: false, Message: ' timesheet Master table API failed.', Data: null });
         } 
 });
@@ -53,7 +54,7 @@ router.route('/GetTimesheetProject')
         let user= req.body;
    
     var querytext = `SELECT "GetTimesheetProject"('${user.userid}',:p_ref); FETCH ALL IN "abc"`;
-console.log("querytext",querytext);
+//console.log("querytext",querytext);
     var param = {
         replacements: {
             p_active: true,
@@ -64,7 +65,7 @@ console.log("querytext",querytext);
     connect.sequelize
     .query(querytext,param)
     .then(function (result) {
-        console.log("result",result);
+        //console.log("result",result);
         result.shift();
         res.status(200).json({
 
@@ -73,11 +74,12 @@ console.log("querytext",querytext);
             Data: result
         });
     }, function (err) {
-        console.log(err);
-        // dataconn.ARC_Errorlogger('homepageService', 'getConfirmDetails', err);
+        // //console.log(err);
+        dataconn.errorlogger('TimeSheetService', 'GetTimesheetProject', err);
         res.status(200).json({ Success: false, Message: ' timesheet Master table API failed.', Data: null });
     });
 }catch(err)    {
+    dataconn.errorlogger('TimeSheetService', 'GetTimesheetProject', err);
     res.status(200).json({ Success: false, Message: ' timesheet Master table API failed.', Data: null });
 } 
 });
@@ -90,12 +92,12 @@ router.route("/GetTaskname")
     if((user.projectid && user.userid !=null)){
    
     var querytext = `SELECT "GetTaskNameByProject"('${user.projectid}','${user.userid}','abc'); FETCH ALL IN "abc"`;
-    console.log("querytext",querytext);
+    console.log("querytext project and userid",querytext);
     }
     else
     {
         var querytext = `SELECT "GetTaskProject"('true','${user.userid}','abc'); FETCH ALL IN "abc"`;
-        console.log("querytext",querytext);
+        console.log("querytext userid",querytext);
     }
 
     var param = {
@@ -108,7 +110,7 @@ router.route("/GetTaskname")
     connect.sequelize
     .query(querytext,param)
     .then(function (result) {
-        // console.log("result",result);
+        // //console.log("result",result);
         result.shift();
         res.status(200).json({
 
@@ -117,11 +119,12 @@ router.route("/GetTaskname")
             Data: result
         });
     }, function (err) {
-        console.log(err);
-        // dataconn.ARC_Errorlogger('homepageService', 'getConfirmDetails', err);
+        //console.log(err);
+        dataconn.errorlogger('TimeSheetService', 'GetTaskname', err);
         res.status(200).json({ Success: false, Message: 'API failed.', Data: null });
     });
 }catch(err)    {
+    dataconn.errorlogger('TimeSheetService', 'GetTaskname', err);
     res.status(200).json({ Success: false, Message: ' API failed.', Data: null });
 } 
   
@@ -145,7 +148,7 @@ router.route("/CreateTimesheet").post(function(req, res) {
         modified_date :req.body.modified_date ,
         modified_by : req.body.modified_by,
     };
-    console.log('values',values)
+    //console.log('timesheetsave values',values)
     dataaccess.Create(timesheet, values).then(
         function(result) {
             if (result != null) {
@@ -171,7 +174,7 @@ router.route("/CreateTimesheet").post(function(req, res) {
             }
         },
         function(err) {
-            // dataconn.errorlogger("timesheetService", "Createtimesheet", err);
+            dataconn.errorlogger('TimeSheetService', 'CreateTimesheet', err);
             res
                 .status(200)
                 .json({
@@ -205,24 +208,39 @@ router.route('/UpdateTimesheet')
             id : req.body.id
             }
         }
-     var values = {
-        projectid:req.body.projectid,
-        taskid:req.body.taskid,
-        description:req.body.description,
-        timeinhours:req.body.timeinhours,
-        timeinminutes:req.body.timeinminutes,
-        date:req.body.date,
-        isactive:req.body.isactive,
-        created_date:req.body.created_date,
-        created_by:req.body.created_by,
-        modified_date: req.body.modified_date,
-        modified_by:req.body.modified_by,
-        isactive:req.body.isactive,
-        activityid:req.body.activityid
+    if(req.body.flag==1)
+    {
+        var values = {
+            projectid:req.body.projectid,
+            taskid:req.body.taskid,
+            description:req.body.description,
+            timeinhours:req.body.timeinhours,
+            timeinminutes:req.body.timeinminutes,
+            date:req.body.date,
+            isactive:req.body.isactive,
+            // created_date:req.body.created_date,
+            // created_by:req.body.created_by,
+            modified_date: req.body.modified_date,
+            modified_by:req.body.modified_by,
+            // isactive:req.body.isactive,
+            activityid:req.body.activityid
+        }
     }
+
+    if(req.body.flag==0)
+    {
+        var values = {
+           
+            isactive:req.body.isactive,
+            modified_date: req.body.modified_date,
+            modified_by:req.body.modified_by,
+          
+        }
+    }
+
     dataaccess.FindOne(TimesheetDetails, param1)
     .then(function (result) {
-        console.log(result)
+        //console.log(result)
         if (result != null) {
 
         dataaccess.Update(TimesheetDetails, values,param)
@@ -230,6 +248,7 @@ router.route('/UpdateTimesheet')
         if (result != null) {
             return res.status(200).json({ Success: true, Message: 'Timesheet Record updated Successfully.' });
         } else {
+            dataconn.errorlogger('TimeSheetService', 'UpdateTimesheet', err);
             return res.status(200).json({ Success: false, Message: 'Updation failed.' });
         }
         })
@@ -237,7 +256,7 @@ router.route('/UpdateTimesheet')
     })
 }
         catch (err) {
-            dataconn.ARC_Errorlogger('homepageService', 'InsertConfirmStatus', err);
+            dataconn.errorlogger('TimeSheetService', 'UpdateTimesheet', err);
             res.status(200).json({ Success: false, Message: ' Confirmation table API failed.', Data: null });
         };
 
@@ -246,6 +265,7 @@ router.route('/UpdateTimesheet')
 
 
 router.route("/CreateApprovalTimesheet").post(function(req, res) {
+    
     const timesheetApproval = datamodel.tbl_timesheet_approval();
        var values = {      
       
@@ -261,7 +281,7 @@ router.route("/CreateApprovalTimesheet").post(function(req, res) {
         modified_date :req.body.modified_date ,
         modified_by : req.body.modified_by,
     };
-    console.log(`values`, values);
+    //console.log(`values`, values);
     dataaccess.Create(timesheetApproval, values).then(
         function(result) {
             if (result != null) {
@@ -306,7 +326,7 @@ router.route('/GetTimesheetDashboard')
         let user= req.body;
    
     var querytext = `SELECT "timesheetdashboard"('${user.day}','${user.userid}','abc'); FETCH ALL IN "abc"`;
-console.log("querytext",querytext);
+//console.log("querytext",querytext);
     var param = {
         replacements: {
             p_active: true,
@@ -317,7 +337,7 @@ console.log("querytext",querytext);
     connect.sequelize
     .query(querytext,param)
     .then(function (result) {
-        console.log("result",result);
+        //console.log("result",result);
         result.shift();
         res.status(200).json({
 
@@ -326,11 +346,12 @@ console.log("querytext",querytext);
             Data: result
         }); 
     }, function (err) {
-        console.log(err);
-        // dataconn.ARC_Errorlogger('homepageService', 'getConfirmDetails', err);
+        // //console.log(err);
+        dataconn.errorlogger('TimesheetService', 'GetTimesheetDashboard', err);
         res.status(200).json({ Success: false, Message: ' timesheet Master table API f ailed.', Data: null });
     });
 }catch(err)    {
+    dataconn.errorlogger('TimesheetService', 'GetTimesheetDashboard', err);
     res.status(200).json({ Success: false, Message: ' timesheet Master table API failed.', Data: null });
 }  
 }); 

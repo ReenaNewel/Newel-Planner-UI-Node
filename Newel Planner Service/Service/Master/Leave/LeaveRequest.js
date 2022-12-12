@@ -9,11 +9,11 @@ var commonfunc = require("../../../Common/CommonFunctions");
 var routes = function () {
 
     router.route("/GetLeaveRequestData").post(function (req, res) {
-        console.log(`req.body`, req.body);
+        //console.log(`req.body`, req.body);
         try {
          
             var querytext = `SELECT "GetLeaveDetails"(:p_userid,:p_ref); FETCH ALL IN "abc"`;
-            console.log("querytext", querytext);
+            //console.log("querytext", querytext);
             var param = {
                 replacements: {
                     p_userid: req.body.userid,
@@ -31,8 +31,8 @@ var routes = function () {
                     });
                 },
                 function (err) {
-                    console.log(err);
-                    // datacon.errorlogger('LeaveRequest', 'GetLeaveRequestData', err);
+                    // //console.log(err);
+                    datacon.errorlogger('LeaveRequest', 'GetLeaveRequestData', err);
                     res
                         .status(200)
                         .json({
@@ -43,6 +43,7 @@ var routes = function () {
                 }
             );
         } catch (err) {
+            datacon.errorlogger('LeaveRequest', 'GetLeaveRequestData', err);
             res
                 .status(200)
                 .json({
@@ -67,7 +68,7 @@ var routes = function () {
                         parentid: 6
                     }, order: [['typeid']]
                 };
-                console.log(param)
+                //console.log(param)
                 dataaccess.FindAll(GeneralMst, param)
                     .then(function (result) {
                         if (result != null) {
@@ -77,11 +78,12 @@ var routes = function () {
                             res.status(200).json({ Success: false, Message: 'Error occurred while Getting record', Data: null });
                         }
                     }, function (err) {
-                        // dataconn.ARC_Errorlogger('GenaralMasterService', 'getProjectStatus', err);
+                        datacon.errorlogger('LeaveRequest', 'getLeaveTypeDetails', err);
                         res.status(200).json({ Success: false, Message: 'Get all Leave Details types API failed.', Data: null });
                     });
             }
             catch (err) {
+                datacon.errorlogger('LeaveRequest', 'getLeaveTypeDetails', err);
                 res.status(200).json({ Success: false, Message: 'Get all Leave Details types API failed.', Data: null });
             }
         })
@@ -94,13 +96,14 @@ var routes = function () {
             try {
                 var param = {
                     where: {
-                        userid: req.body.userid
+                        userid: req.body.userid,
+                        isactive:true
                     }
                 };
                 const tbl_master_ra_mapping = datamodel.tbl_master_ra_mapping();
 
-                console.log(param)
-                dataaccess.FindAll(tbl_master_ra_mapping, param)
+                //console.log(param)
+                dataaccess.FindOne(tbl_master_ra_mapping, param)
                     .then(function (result) {
                         if (result != null) {
                             res.status(200).json({ Success: true, Message: 'Get all getRAID API successfully', Data: result });
@@ -109,11 +112,12 @@ var routes = function () {
                             res.status(200).json({ Success: false, Message: 'Error occurred while Getting record', Data: null });
                         }
                     }, function (err) {
-                        // dataconn.ARC_Errorlogger('GenaralMasterService', 'getProjectStatus', err);
+                        datacon.errorlogger('LeaveRequest', 'getRAIId', err);
                         res.status(200).json({ Success: false, Message: 'Get all getRAID API  failed.', Data: null });
                     });
             }
             catch (err) {
+                datacon.errorlogger('LeaveRequest', 'getRAIId', err);
                 res.status(200).json({ Success: false, Message: 'Get all getRAID API  failed.', Data: null });
             }
         })
@@ -151,8 +155,8 @@ var routes = function () {
                 }
             },
             function (err) {
-                // dataconn.errorlogger("timesheetService", "Createtimesheet", err);
-                console.log(`err`, err);
+                datacon.errorlogger('LeaveRequest', 'saveleaveRequest', err);
+                //console.log(`err`, err);
                 res.status(200).json({
                     Success: false,
                     Message: "Error occurred while saving record",

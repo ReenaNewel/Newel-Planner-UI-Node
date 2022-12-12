@@ -11,8 +11,8 @@ const routes: Routes = [
 
   {
     path: '',
-    redirectTo: 'login',
-    // redirectTo: 'masters/project',
+    // redirectTo:'login',
+    redirectTo: 'timesheet',
     pathMatch: 'full'
   },
   {
@@ -44,6 +44,23 @@ const routes: Routes = [
           import('./views/task-details/task-details.module').then((m) => m.TaskDetailsModule)
 
       },
+
+      {
+
+        path: 'leave-request',
+        loadChildren: () =>
+        import('./views/leave-request/leave-request.module').then((m) => m.LeaveRequestModule)
+
+      },
+      
+      {
+
+        path: 'mapping',
+        loadChildren: () =>
+          import('./views/mapping/mapping.module').then((m) => m.MappingModule)
+
+      },
+
       {
         path: 'theme',
         loadChildren: () =>

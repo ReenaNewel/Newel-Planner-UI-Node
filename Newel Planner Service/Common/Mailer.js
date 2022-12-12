@@ -57,12 +57,12 @@ let transporter = nodemailer.createTransport({
 //             await page.setContent(html)
 //             await page.pdf({ path: fileSavePath , format: 'A4' })
 //             await browser.close();
-//             console.log("PDF Generated")
+//             //console.log("PDF Generated")
 //             resolve({fileSavePath:path.join(fileSavePath),fileName:FileName + extend_pdf});
 //           })
 //           .catch((error)=>{
 //             reject(error);
-//             console.log(error)
+//             //console.log(error)
 //           });
 //     })
 //   }

@@ -1,11 +1,13 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NewTaskComponent } from './new-task.component';
+//import { NewTaskComponent } from './new-task.component';
 
-import { NewTaskRoutingModule } from './new-task-routing.module';
+import { LeaveRequestComponent } from './leave-request.component';
+import { LeaveRequestRoutingModule } from './leave-request.routing.module';
+//import { NewTaskRoutingModule } from './new-task-routing.module';
 import { CardModule, GridModule } from '@coreui/angular';
-import { WidgetsModule } from '../widgets/widgets.module';
+//import { WidgetsModule } from '../widgets/widgets.module';
 import { HttpClientModule } from '@angular/common/http';
 
 
@@ -17,15 +19,21 @@ import { CalendarModule } from 'primeng/calendar';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { InputNumberModule } from 'primeng/inputnumber';
+
+
+
+// prime-ng
+
+import { TableModule } from 'primeng/table';
+import { ButtonModule } from 'primeng/button';
+import { MessagesModule } from 'primeng/messages';
+import { MessageModule } from 'primeng/message';
 import { DialogModule } from 'primeng/dialog';
 import {ToolbarModule} from 'primeng/toolbar';
-import { TableModule } from 'primeng/table';
-import { MultiSelectModule } from 'primeng/multiselect';
+
 @NgModule({
-  declarations: [NewTaskComponent],
+  declarations: [LeaveRequestComponent],
   imports: [
-    CommonModule,
-    NewTaskRoutingModule,
     CommonModule,
     ToastModule,
     FormsModule,
@@ -33,16 +41,20 @@ import { MultiSelectModule } from 'primeng/multiselect';
     DropdownModule,
     CalendarModule,
     InputTextareaModule,
+    TableModule,
+    ButtonModule,
+    MessagesModule,
+    MessageModule,
+    DialogModule,
+    ToolbarModule,
     RadioButtonModule,
     GridModule,
-    WidgetsModule,
+  //  WidgetsModule,
     CardModule,
     HttpClientModule,
     InputNumberModule,
-    DialogModule,
-    ToolbarModule,
-    TableModule,
-    MultiSelectModule
+    LeaveRequestRoutingModule,
+    ReactiveFormsModule
   ]
 })
-export class NewTaskModule { }
+export class LeaveRequestModule { }

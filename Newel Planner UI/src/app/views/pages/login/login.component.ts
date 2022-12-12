@@ -83,27 +83,44 @@ export class LoginComponent {
 
     };
 
-    
+    console.log(this.global.getapiendpoint() + '/AuthenticateUser')
     this.rest.create(this.global.getapiendpoint() + '/AuthenticateUser', model).subscribe((data: any) => {
 
       console.log("data:", data);
+      // GetPrimeSubMenubyRoleId
 
       if (data.Success) {
-        this.rest.getById(this.global.getapiendpoint() + '/Menu/GetMenubyRoleId/', data.Data.rows[0].defaultroleid
+        this.rest.getById(this.global.getapiendpoint() + '/Menu/GetPrimeMenubyRoleId/', data.Data.rows[0].defaultroleid
         ).subscribe((menudata: any) => {
           if (menudata.Success) {
             localStorage.setItem('isLoggedIn', "true");
             localStorage.setItem('userLoggedIn', JSON.stringify(data.Data.rows[0]));
             localStorage.setItem('menuItems', JSON.stringify(menudata.Data));
             
-            this.router.navigate(['timesheet']);
-
-            // this.router.navigate(['/Planner/PlannerDashboard']);
+           
+            var model1 = {
+              defaultroleid:  data.Data.rows[0].defaultroleid,
+              parentid:1
+            }
+    
+            this.rest.postParams(this.global.getapiendpoint() + '/Menu/GetPrimeSubMenubyRoleId/', model1).subscribe((Submenudata: any) => {
+              if (Submenudata.Success) {
+                localStorage.setItem('SubmenuItems', JSON.stringify(Submenudata.Data));
+                
+              }
+    
+            })
+            setTimeout(() => {
+              console.log('sleep'); 
+              this.router.navigate(['timesheet']);
+            }, 2000)
           }
+          // this.router.navigate(['timesheet']);
         });
+       
       }
       else {
-        this.openSnackBarError();
+        // this.openSnackBarError();
       }
     });
   }

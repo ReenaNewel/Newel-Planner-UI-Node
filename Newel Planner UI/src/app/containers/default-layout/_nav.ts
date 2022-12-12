@@ -14,10 +14,39 @@ export const navItems: INavData[] = [
     iconComponent: { name: 'cil-puzzle' },
   },
   {
+
+    name: 'Leave',
+    url: '/leave-request',
+    iconComponent: { name: 'cil-puzzle' },
+
+  },
+  {
+    name: 'Mapping',
+    url: '/mapping',
+    iconComponent: { name: 'cil-notes' },
+    children: [
+      {
+
+        name: 'Project Mapping',
+        url: '/mapping/project-mapping'
+
+      },
+
+      {
+        name: 'RA Mapping',
+        url: '/mapping/ra-mapping'
+
+      },
+
+    ]
+
+},
+  {
     name: 'Dashboard',
     url: '/dashboard',
     iconComponent: { name: 'cil-speedometer' },
   },
+
 
   // {
   //   title: true,

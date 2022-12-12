@@ -12,13 +12,13 @@ connection.connect(function (err) {
     return console.error('error: ' + err.message);
   }
 
-  console.log('Connected to the MySQL server.');
+  //console.log('Connected to the MySQL server.');
 });
 
 connection.query('select * from user_master', (err, result, fields) => {
   if (err) {
-    return console.log('Error', err);
+    return //console.log('Error', err);
   }
-  return console.log('result', result);
+  return //console.log('result', result);
 
 })

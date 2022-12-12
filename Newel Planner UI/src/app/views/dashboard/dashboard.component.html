@@ -5,119 +5,148 @@
       <!-- <h5>Programmatic</h5> -->
 
       <p-tabView [(activeIndex)]="activeIndex1">
-        <!-- <p-tabPanel header="Timesheet">
+        <p-tabPanel header="Timesheet">
 
           <app-timesheet-dashboard></app-timesheet-dashboard>
 
-        </p-tabPanel> -->
+        </p-tabPanel>
 
         <p-tabPanel header="Task">
           <div class="flex justify-content-center flex-wrap">
             <form [formGroup]="ProjectForm" (submit)="submit()">
-            <p-dropdown class="dropdown" [options]="projectnames" optionLabel="projectname"
-            optionValue="projectid" [filter]="true"
-            filterBy="name" [showClear]="true" placeholder="Select a Project"
-            formControlName="projectname"
-            (onChange)="ShowDetails($event.value)">
-            </p-dropdown>
+              <p-dropdown class="dropdown" [options]="projectnames" optionLabel="projectname" optionValue="projectid"
+                [filter]="true" filterBy="name" [showClear]="true" placeholder="Select a Project"
+                formControlName="projectname" (onChange)="ShowDetails($event.value)">
+              </p-dropdown>
             </form>
-            </div>
+          </div>
 
 
           <c-row class="grid mt-4">
-            <c-col sm="12" md="3">
+            <c-col sm="12" xl="6" xxl="3">
               <div class="bg-green-400 font-bold text-gray-900 py-2 text-center mb-2 text-white">Completed
                 {{totalcompleted}}
               </div>
               <p-scrollPanel [style]="{width: '100%', height: '420px'}" styleClass="custombar1">
                 <div class="mb-1">
-                  <p-table [value]="completedTask" styleClass="p-datatable-sm" [tableStyle]="{'min-width': '50rem'}">
-                            
-                    <ng-template pTemplate="body" let-completedTask>
-                      
-                        <tr>
-                          <td>{{completedTask.taskname}}</td>
-                          <td>{{completedTask.assignee_name}}</td>
-                          <td>{{completedTask.enddate | date:'dd-MMM-yyyy'}}</td>
-                        </tr>
-                          
-                    </ng-template>
-                    </p-table>
+
+                  <c-row *ngFor="let item of completedTask" class="mb-2 px-2 border-bottom">
+                    <span class="">{{item.taskname}}</span>
+                    <div class="flex justify-content-between">
+                      <span class="">{{item.assignee_name}}</span>
+                      <span class="">{{item.enddate | date:'dd-MMM-yyyy'}}</span>
                     </div>
-                  </p-scrollPanel>
+                  </c-row>
+
+                  <!-- <p-table [value]="completedTask" styleClass="p-datatable-sm" [tableStyle]="{'min-width': '50rem'}">
+
+                    <ng-template pTemplate="body" let-completedTask>
+
+                      <tr>
+                        <td>{{completedTask.taskname}}</td>
+                        <td>{{completedTask.assignee_name}}</td>
+                        <td>{{completedTask.enddate | date:'dd-MMM-yyyy'}}</td>
+                      </tr>
+
+                    </ng-template>
+                  </p-table> -->
+                </div>
+              </p-scrollPanel>
             </c-col>
-            <c-col sm="12" md="3">
+            <c-col sm="12" xl="6" xxl="3">
               <div class="bg-yellow-400 font-bold text-gray-900 py-2 text-center mb-2 text-white">In Progress
                 {{totalProgess}}
               </div>
               <p-scrollPanel [style]="{width: '100%', height: '420px'}" styleClass="custombar1">
                 <div class="mb-1">
-                  <p-table [value]="progressTask" dataKey="id" editMode="row" [tableStyle]="{'min-width': '50rem'}">
-                      
+                  <c-row *ngFor="let item of progressTask" class="mb-2 px-2 border-bottom">
+                    <span class="">{{item.taskname}}</span>
+                    <div class="flex justify-content-between">
+                      <span class="">{{item.assignee_name}}</span>
+                      <span class="">{{item.enddate | date:'dd-MMM-yyyy'}}</span>
+                    </div>
+                  </c-row>
+
+                  <!-- <p-table [value]="progressTask" dataKey="id" editMode="row" [tableStyle]="{'min-width': '50rem'}">
+
                     <ng-template pTemplate="body" let-progressTask>
                       <tr>
-                              
+
                         <td>{{progressTask.taskname}}</td>
                         <td>{{progressTask.assignee_name}}</td>
-                        <td>{{progressTask.enddate  | date:'dd-MMM-yyyy'}}</td>
-                              
+                        <td>{{progressTask.enddate | date:'dd-MMM-yyyy'}}</td>
+
                       </tr>
                     </ng-template>
-                    </p-table>
-                    </div>
+                  </p-table> -->
+                </div>
 
               </p-scrollPanel>
             </c-col>
-            <c-col sm="12" md="3">
+            <c-col sm="12" xl="6" xxl="3">
               <div class="bg-red-400 font-bold text-gray-900 py-2 text-center mb-2 text-white"> Not Started
                 {{totalNotstarted}}
               </div>
               <p-scrollPanel [style]="{width: '100%', height: '420px'}" styleClass="custombar1">
                 <div class="mb-1">
-                  <p-table [value]="notstartedTask" dataKey="id" editMode="row" [tableStyle]="{'min-width': '50rem'}">
-                      
+                  <c-row *ngFor="let item of notstartedTask" class="mb-2 px-2 border-bottom">
+                    <span class="">{{item.taskname}}</span>
+                    <div class="flex justify-content-between">
+                      <span class="">{{item.assignee_name}}</span>
+                      <span class="">{{item.enddate | date:'dd-MMM-yyyy'}}</span>
+                    </div>
+                  </c-row>
+                  <!-- <p-table [value]="notstartedTask" dataKey="id" editMode="row" [tableStyle]="{'min-width': '50rem'}">
+
                     <ng-template pTemplate="body" let-notstartedTask>
                       <tr>
-                             
+
                         <td>{{notstartedTask.taskname}}</td>
                         <td>{{notstartedTask.assignee_name}}</td>
                         <ng-template>
-                        <td>{{notstartedTask.enddate|date:'DD-MM-YYYY'}}</td>
+                          <td>{{notstartedTask.enddate|date:'DD-MM-YYYY'}}</td>
                         </ng-template>
-                              
+
                       </tr>
                     </ng-template>
-                    </p-table>
-                    </div>
+                  </p-table> -->
+                </div>
 
               </p-scrollPanel>
             </c-col>
-            <c-col sm="12" md="3">
+            <c-col sm="12" xl="6" xxl="3">
               <div class="bg-blue-400 font-bold text-gray-900 py-2 text-center mb-2 text-white">Total
                 {{totalTask}}
               </div>
               <p-scrollPanel [style]="{width: '100%', height: '420px'}" styleClass="custombar1">
                 <div class="mb-1">
-                  <p-table [value]="allTask" dataKey="id" editMode="row" [tableStyle]="{'min-width': '50rem'}">
-                      
+                  <c-row *ngFor="let item of allTask" class="mb-2 px-2 border-bottom">
+                    <span class="">{{item.taskname}}</span>
+                    <div class="flex justify-content-between">
+                      <span class="">{{item.assignee_name}}</span>
+                      <span class="">{{item.enddate | date:'dd-MMM-yyyy'}}</span>
+                    </div>
+                  </c-row>
+                  <!-- <p-table [value]="allTask" dataKey="id" editMode="row" [tableStyle]="{'min-width': '50rem'}">
+
                     <ng-template pTemplate="body" let-allTask>
                       <tr>
-                              
+
                         <td>{{allTask.taskname}}</td>
                         <td>{{allTask.assignee_name}}</td>
-                        <td>{{allTask.enddate  | date:'dd-MMM-yyyy'}}</td>
-                              
+                        <td>{{allTask.enddate | date:'dd-MMM-yyyy'}}</td>
+
                       </tr>
                     </ng-template>
-                    </p-table>
-                    </div>
+                  </p-table> -->
+                </div>
               </p-scrollPanel>
             </c-col>
           </c-row>
 
 
         </p-tabPanel>
-      
+
       </p-tabView>
 
     </c-col>

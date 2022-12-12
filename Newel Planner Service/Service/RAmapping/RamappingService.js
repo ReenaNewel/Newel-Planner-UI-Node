@@ -15,7 +15,7 @@ router.route('/GetRADetails')
     try {
         
     var querytext = `SELECT "getUserNameRAName"(:p_active,:p_ref); FETCH ALL IN "abc"`;
-console.log("querytext",querytext);
+//console.log("querytext",querytext);
     var param = {
         replacements: {
             p_active: true,
@@ -26,7 +26,7 @@ console.log("querytext",querytext);
     connect.sequelize
     .query(querytext,param)
     .then(function (result) {
-        console.log("result",result);
+        //console.log("result",result);
         result.shift();
         res.status(200).json({
 
@@ -35,11 +35,12 @@ console.log("querytext",querytext);
             Data: result
         });
     }, function (err) {
-        console.log(err);
-        
+        // //console.log(err);
+        dataconn.errorlogger('RAMappingService', 'GetRADetails', err);
         res.status(200).json({ Success: false, Message: 'API failed.', Data: null });
     });
 }catch(err)    {
+    dataconn.errorlogger('RAMappingService', 'GetRADetails', err);
     res.status(200).json({ Success: false, Message: ' API failed.', Data: null });
 } 
 });
@@ -53,7 +54,7 @@ router.route('/GetAllRaUser')
             // const UserMST = datamodel.tbl_master_userdetails();
             // dataaccess.FindAll(UserMST)
     var querytext = `SELECT "getallRAMapUser"(:p_active,:p_ref); FETCH ALL IN "abc"`;
-    console.log("querytext",querytext);
+    //console.log("querytext",querytext);
     var param = {
         replacements: {
             p_active: true,
@@ -72,11 +73,12 @@ router.route('/GetAllRaUser')
                 res.status(200).json({ Success: false, Message: 'Error occurred while Getting record', Data: null });
             }
         }, function (err) {
-            // dataconn.ARC_Errorlogger('GenaralMasterService', 'getProjectStatus', err);
+            dataconn.errorlogger('RAMappingService', 'GetAllRADetails', err);
             res.status(200).json({ Success: false, Message: ' API failed.', Data: null });
         });
     }
     catch(err)    {
+        dataconn.errorlogger('RAMappingService', 'GetAllRADetails', err);
         res.status(200).json({ Success: false, Message: ' API failed.', Data: null });
     } 
 })
@@ -84,12 +86,10 @@ router.route('/GetAllRaUser')
 
 router.route('/GetAllRa')
         .get(function (req, res) {
-            try {
-
-            // const UserMST = datamodel.tbl_master_userdetails();
-            // dataaccess.FindAll(UserMST)
-    var querytext = `SELECT * from public.tbl_master_userdetails`;
-    console.log("querytext",querytext);
+     try {
+    var querytext = `SELECT CONCAT(first_name , ' ' ,last_name) as name ,id from public.tbl_master_userdetails
+     where tbl_master_userdetails.isactive=true`;
+ 
     var param = {
         replacements: {
             p_active: true,
@@ -108,11 +108,12 @@ router.route('/GetAllRa')
                 res.status(200).json({ Success: false, Message: 'Error occurred while Getting record', Data: null });
             }
         }, function (err) {
-            // dataconn.ARC_Errorlogger('GenaralMasterService', 'getProjectStatus', err);
+            dataconn.errorlogger('RAMappingService', 'GetAllRa', err);
             res.status(200).json({ Success: false, Message: ' API failed.', Data: null });
         });
     }
     catch(err)    {
+        dataconn.errorlogger('RAMappingService', 'GetAllRa', err);
         res.status(200).json({ Success: false, Message: ' API failed.', Data: null });
     } 
 })
@@ -132,7 +133,7 @@ router.route('/CreateRAandUserdetails')
                 isactive:req.body.isactive
                 
             };
-            console.log("values",values)
+            //console.log("values",values)
 
             dataaccess.Create(RAUserMst, values)
                 .then(function (result) {
@@ -164,17 +165,17 @@ router.route("/UpdateRAUser").post(function (req, res) {
         isactive : false
     }
   var param = { where: {userid: req.body.userid}};
-  console.log(param);
+  //console.log(param);
   var param1 ={userid: req.body.userid}
   dataaccess.FindOne(RAMst,param).then(
     function (result){
         if (result != null) {
-            console.log(result);
+            //console.log(result);
            
             dataaccess.Update(RAMst,values1,param1).then(
                 function(result){
                     if (result != null) {
-                        console.log(result);
+                        //console.log(result);
                     //   res.status(200).json({ Success: true, Message: "RAMst updated successfully", Data: null });
                     }
                     // else {

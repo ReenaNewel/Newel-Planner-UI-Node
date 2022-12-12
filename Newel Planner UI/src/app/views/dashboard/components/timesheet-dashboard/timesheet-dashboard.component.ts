@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-// import { CalendarOptions, DateSelectArg, EventClickArg, EventApi } from '@fullcalendar/angular';
+import { CalendarOptions, DateSelectArg, EventClickArg, EventApi } from '@fullcalendar/angular';
 // import { INITIAL_EVENTS, createEventId } from './event-utils';
 import { RestService } from 'src/app/services/rest.service';
 import { Global } from 'src/app/common/global';
@@ -21,6 +21,7 @@ export class TimesheetDashboardComponent implements OnInit {
 
   member: any[];
   selectedCountry: string;
+  currentEvents: EventApi[];
 
   constructor(
     private rest: RestService,
@@ -38,29 +39,39 @@ export class TimesheetDashboardComponent implements OnInit {
     this.member = ['Only Me', 'Team'];
   }
 
-  // calendarOptions: CalendarOptions = {
-  //   initialView: 'dayGridMonth',
-  //   dateClick: this.handleDateClick.bind(this), // bind is important!
-  //   events: [
-  //     { title: '5 hrs', date: '2022-11-01' },
-  //     { title: '9 hrs', date: '2022-11-02' }
-  //   ],
-  //   //   headerToolbar: {
-  //   //     left: 'prev,next today',
-  //   //     center: 'title',
-  //   //     right: 'dayGridMonth,timeGridWeek,timeGridDay'
-  //   // },
-  //   // editable: true,
-  //   selectable: true,
-  //   // selectMirror: true,
-  //   // dayMaxEvents: true
-  //   //  weekends: false 
-  // };
+ arr = [
+    { title: '5 hrs', date: '2022-12-01' },
+    { title: '9 hrs', date: '2022-12-02' },
+    { title: '9 hrs', date: '2022-12-22' },
+    { title: '9 hrs', date: '2023-02-15' },
+  ];
+
+  calendarOptions: CalendarOptions = {
+    initialView: 'dayGridMonth',
+    dateClick: this.handleDateClick.bind(this), // bind is important!
+    events: this.arr,
+    //   headerToolbar: {
+    //     left: 'prev,next today',
+    //     center: 'title',
+    //     right: 'dayGridMonth,timeGridWeek,timeGridDay'
+    // },
+    // editable: true,
+    selectable: true,
+    eventsSet: this.handleEvents.bind(this)
+    // selectMirror: true,
+    // dayMaxEvents: true,
+    //  weekends: false 
+  };
+  handleEvents(events: EventApi[]) {
+    this.currentEvents = events;
+    // alert('2 eventsSet' + this.currentEvents)
+    console.log("this.currentEvents", this.currentEvents);
+  }
 
   handleDateClick(arg) {
     console.log("arg", arg);
 
-    // alert('date click! ' + arg)
+    // alert('date click! ' + arg + arg.dateStr)
   }
 
   GetProjectbyTask() {

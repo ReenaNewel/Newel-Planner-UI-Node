@@ -15,6 +15,7 @@ import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { MessagesModule } from 'primeng/messages';
 import { MessageModule } from 'primeng/message';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
 
 @NgModule({
@@ -39,7 +40,8 @@ import { MessageModule } from 'primeng/message';
     InputTextareaModule,
     TableModule,
     MessageModule,
-    MessagesModule
+    MessagesModule,
+    ConfirmDialogModule,
   ],
   exports: [
     TaskAccordionComponent

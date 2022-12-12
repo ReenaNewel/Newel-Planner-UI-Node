@@ -4,13 +4,15 @@ import { ApiserviceService } from 'src/app/Service/apiservice.service';
 import { RestService } from 'src/app/services/rest.service';
 import { Global } from 'src/app/common/global'
 import * as moment from 'moment';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService, PrimeNGConfig } from 'primeng/api';
+import {Message} from 'primeng/api'
+
 
 @Component({
   selector: 'app-task-accordion',
   templateUrl: './task-accordion.component.html',
   styleUrls: ['./task-accordion.component.scss'],
-  providers: [MessageService],
+  providers: [MessageService,ConfirmationService],
   styles: [`
         :host ::ng-deep .p-cell-editing {
             padding-top: 0 !important;
@@ -26,11 +28,14 @@ export class TaskAccordionComponent implements OnInit {
   dataSource4: any;
   dataSource5: any;
   dataSource3: any;
-  TimesheetDate1: any;
-  TimesheetDate2: any;
-  TimesheetDate3: any;
-  TimesheetDate4: any;
-  TimesheetDate5: any;
+  // taskDate: Date = new Date
+  msgs: Message[] = [];
+
+  TimesheetDate1: Date = new Date;
+  TimesheetDate2: Date = new Date
+  TimesheetDate3: Date = new Date
+  TimesheetDate4: Date = new Date
+  TimesheetDate5: Date = new Date
   Totalhrs = 0;
   Totalmin = 0;
   totaltime: any;
@@ -74,8 +79,12 @@ export class TaskAccordionComponent implements OnInit {
   selectedMinutes:any
   selectedDiscription :any
   disabledEdit: boolean = false;
-  constructor(private router: Router, private messageService: MessageService,
+  // msgs: { severity: string; summary: string; detail: string; }[];
+  constructor(private router: Router, 
+    private messageService: MessageService,
+    private confirmationService: ConfirmationService,
     private rest: RestService,
+    private primengConfig: PrimeNGConfig,
     private Global: Global, private ApiService: ApiserviceService) { }
 
   ngOnInit(): void {
@@ -231,7 +240,7 @@ export class TaskAccordionComponent implements OnInit {
         this.dataSource = data.Data
 
         if (this.dataSource.length > 0) {
-          this.TimesheetDate1 = moment(data.Data[0].date).format("DD-MM-YYYY")
+          this.TimesheetDate1 = data.Data[0].date
           for (var i = 0; i < this.dataSource.length; i++) {
             this.Totalmin = (this.Totalmin + data.Data[i].timeinminutes)
             this.Totalhrs = this.Totalhrs + data.Data[i].timeinhours
@@ -260,7 +269,7 @@ export class TaskAccordionComponent implements OnInit {
         this.projectId = this.dataSource2.projectid
 
         if (this.dataSource2.length > 0) {
-          this.TimesheetDate2 = moment(data.Data[0].date).format("DD-MM-YYYY")
+          this.TimesheetDate2 =data.Data[0].date
           for (var i = 0; i < this.dataSource2.length; i++) {
             this.Totalmin1 = (this.Totalmin1 + data.Data[i].timeinminutes)
             this.Totalhrs1 = this.Totalhrs1 + data.Data[i].timeinhours
@@ -286,7 +295,7 @@ export class TaskAccordionComponent implements OnInit {
       this.dataSource3 = data.Data
       if (this.dataSource3.length > 0) {
 
-        this.TimesheetDate3 = moment(data.Data[0].date).format("DD-MM-YYYY")
+        this.TimesheetDate3 = data.Data[0].date
         for (var i = 0; i < this.dataSource3.length; i++) {
           this.Totalmin2 = (this.Totalmin2 + data.Data[i].timeinminutes)
           this.Totalhrs2 = this.Totalhrs2 + data.Data[i].timeinhours
@@ -312,7 +321,7 @@ export class TaskAccordionComponent implements OnInit {
         this.dataSource4 = data.Data
         // console.log('datasource4', this.dataSource4)
         if (this.dataSource4.length > 0) {
-          this.TimesheetDate4 = moment(data.Data[0].date).format("DD-MM-YYYY")
+          this.TimesheetDate4 = data.Data[0].date
           for (var i = 0; i < this.dataSource4.length; i++) {
             this.Totalmin3 = (this.Totalmin3 + data.Data[i].timeinminutes)
             this.Totalhrs3 = this.Totalhrs3 + data.Data[i].timeinhours
@@ -337,7 +346,7 @@ export class TaskAccordionComponent implements OnInit {
       if (data.Success) {
         this.dataSource5 = data.Data
         if (this.dataSource5.length > 0) {
-          this.TimesheetDate5 = moment(data.Data[0].date).format("DD-MM-YYYY")
+          this.TimesheetDate5 = data.Data[0].date
           for (var i = 0; i < this.dataSource5.length; i++) { 
             this.Totalmin4 = (this.Totalmin4 + data.Data[i].timeinminutes)
             this.Totalhrs4 = this.Totalhrs4 + data.Data[i].timeinhours
@@ -384,6 +393,7 @@ export class TaskAccordionComponent implements OnInit {
 
   UpdateTimesheet(TimeSheetSavedData:any,TimeSheetSavedDate:any){
     console.log('data to  be updates' , TimeSheetSavedData)
+    // TimeSheetSavedDate = new Date()
    
     this.disabledEdit = false
     
@@ -395,28 +405,66 @@ export class TaskAccordionComponent implements OnInit {
       description:TimeSheetSavedData.description,
       timeinhours: TimeSheetSavedData.timeinhours,
       timeinminutes : TimeSheetSavedData.timeinminutes,
-      date: moment(new Date(TimeSheetSavedDate)).format('YYYY-MM_DD'),
+      // moment(new Date(this.taskDate)).format('YYYY-MM-DD')
+      date: moment(TimeSheetSavedDate).format('YYYY-MM-DD'),
       isactive:true ,
       activityid: TimeSheetSavedData.typeid,
       modified_date:moment().format('YYYY-MM-DD'),
-      modified_by: this.userId
-    
+      modified_by: this.userId,
+      flag:1
+
     
     }
     console.log("Update model",model);
   
-    // this.rest.create(this.Global.getapiendpoint() + "/timesheet/UpdateTimesheet", model).subscribe((data: any) => {
-    //         console.log("data", data);
-    //         if (data.Success) {
-    //           this.messageService.add({ severity: 'success', summary: 'Service Message', detail: 'Timesheet Record Updated successfully' });
+    this.rest.create(this.Global.getapiendpoint() + "/timesheet/UpdateTimesheet", model).subscribe((data: any) => {
+            console.log("data", data);
+            if (data.Success) {
+              this.messageService.add({ severity: 'success', summary: 'Service Message', detail: 'Timesheet Record Updated successfully' });
             
-    //         }
-    //         else {
-    //           this.messageService.add({ severity: 'warn', summary: 'Success', detail: 'Record not Updated' });
-    //         }
-    //         this.ShowDetails()
-    //       });
+            }
+            else {
+              this.messageService.add({ severity: 'warn', summary: 'Success', detail: 'Record not Updated' });
+            }
+            this.ShowDetails()
+          });
      
        }
+
+
+    Showconfirm(TimeSheetDeleteData) {
+      // console.log('Hiiii')
+      // this.messageService.clear();
+      // this.messageService.add
+      // ({key: 'c', sticky: true, severity:'warn', summary:'Are you sure?', detail:'Confirm to proceed'});
+        this.confirmationService.confirm({
+            message: 'Do you want to delete this record?',
+            header: 'Delete Confirmation',
+            icon: 'pi pi-info-circle',
+            accept: () => {
+             var model={
+                id : TimeSheetDeleteData.id,
+                modified_date:moment().format('YYYY-MM-DD'),
+                modified_by: this.userId,
+                isactive:false,
+                flag:0
+              }
+              console.log('deleted model' , model)
+                this.rest.create(this.Global.getapiendpoint() + "/timesheet/UpdateTimesheet", model).subscribe((data: any) => {
+                  if (data.Success) {
+                    this.messageService.add({ severity: 'info', summary: 'Confirmed', detail: 'Timesheet Record deleted successfully' });
+                    // this.confirmationService.close({severity:'info', summary:'Confirmed', detail:'Record deleted successfully!!'});
+                  }
+                  this.ShowDetails()
+                })
+              
+            },
+            reject: () => {
+              this.disabledEdit=false
+                // this.msgs = [{severity:'info', summary:'Rejected', detail:'You have rejected'}];
+            }
+        });
+        this.disabledEdit=false
+    }
 
 }

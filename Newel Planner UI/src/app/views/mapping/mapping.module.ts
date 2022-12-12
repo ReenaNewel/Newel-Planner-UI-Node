@@ -1,48 +1,54 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NewTaskComponent } from './new-task.component';
 
-import { NewTaskRoutingModule } from './new-task-routing.module';
+import { MappingRoutingModule } from './mapping-routing.module';
+import { ProjectRoleMappingComponent } from './project-role-mapping/project-role-mapping.component';
+import { ToastModule } from 'primeng/toast';
+import { DialogModule } from 'primeng/dialog';
+import {ToolbarModule} from 'primeng/toolbar';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CardModule, GridModule } from '@coreui/angular';
 import { WidgetsModule } from '../widgets/widgets.module';
 import { HttpClientModule } from '@angular/common/http';
+import { MultiSelectModule } from 'primeng/multiselect';
 
 
 // prime-ng
-import { ToastModule } from 'primeng/toast';
+
 import { InputTextModule } from 'primeng/inputtext';
 import { DropdownModule } from 'primeng/dropdown';
 import { CalendarModule } from 'primeng/calendar';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { InputNumberModule } from 'primeng/inputnumber';
-import { DialogModule } from 'primeng/dialog';
-import {ToolbarModule} from 'primeng/toolbar';
 import { TableModule } from 'primeng/table';
-import { MultiSelectModule } from 'primeng/multiselect';
+import { RaMappingMasterComponent } from './ra-mapping-master/ra-mapping-master.component';
+
 @NgModule({
-  declarations: [NewTaskComponent],
+  declarations: [
+    ProjectRoleMappingComponent,
+    RaMappingMasterComponent
+  ],
   imports: [
     CommonModule,
-    NewTaskRoutingModule,
-    CommonModule,
-    ToastModule,
     FormsModule,
+    MappingRoutingModule,
+    ToastModule,
+    ReactiveFormsModule,
+    ToolbarModule,
+    CardModule,
+    GridModule,
+    WidgetsModule,
+    HttpClientModule,
+    DialogModule,
     InputTextModule,
     DropdownModule,
     CalendarModule,
     InputTextareaModule,
     RadioButtonModule,
-    GridModule,
-    WidgetsModule,
-    CardModule,
-    HttpClientModule,
     InputNumberModule,
-    DialogModule,
-    ToolbarModule,
     TableModule,
     MultiSelectModule
   ]
 })
-export class NewTaskModule { }
+export class MappingModule { }

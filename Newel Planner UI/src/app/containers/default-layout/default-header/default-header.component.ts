@@ -20,6 +20,7 @@ export class DefaultHeaderComponent extends HeaderComponent {
   userid: any;
   userEmail:any
   names:any
+  UserFullName: any;
 
   constructor(private classToggler: ClassToggleService ,private router:Router,private route: ActivatedRoute) {
     super();
@@ -27,11 +28,12 @@ export class DefaultHeaderComponent extends HeaderComponent {
     this.userid = this.userLoggedIn.id;
     this.userEmail = this.userLoggedIn.emailid;
     this.names =this.userLoggedIn.name;
+    this.UserFullName = this.userLoggedIn.userfullname
   }
 
   logout(){
     localStorage.clear()
-    // debugger
-    this.router.navigate(['/login'], {relativeTo:this.route})
+    // debugger;
+    this.router.navigateByUrl('login')
   }
 }

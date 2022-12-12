@@ -31,7 +31,7 @@ var routes = function () {
                         res.status(200).json({ Success: false, Message: 'Error occurred while Getting record', Data: null });
                     }
                 }, function (err) {
-                    dataconn.ARC_Errorlogger('holidayService', 'NewHoliday', err);
+                    dataconn.errorlogger('holidayService', 'NewHoliday', err);
                     res.status(200).json({ Success: false, Message: ' Holiday Master table API failed.', Data: null });
                 });
 })

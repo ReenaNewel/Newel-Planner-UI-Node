@@ -1,6 +1,5 @@
 <c-row>
-
-    <div class="flex justify-content-center flex-wrap">
+    <div class="flex justify-content-center flex-wrap mb-3">
 
         <p-dropdown [options]="ProjectNames" [(ngModel)]="selectedProject" value="projectid" optionLabel="projectname"
             [filter]="true" required name="projectname" (onChange)="GetTaskNameByProject(selectedProject)"
@@ -35,19 +34,29 @@
                 </div>
             </ng-template>
         </p-dropdown>
-
     </div>
+</c-row>
 
-    <c-col sm="12" class="mb-3">
-        <!-- <full-calendar deepChangeDetection="true" class="max-w-30rem" [options]="calendarOptions"></full-calendar> -->
+<c-row class="mt-4">
+    <c-col sm="12" md="12" lg="12" xl="5" class="py-2">
+        <full-calendar deepChangeDetection="true" class="max-w-30rem" [options]="calendarOptions">
+        </full-calendar>
+    </c-col>
 
-        <!-- <ul>
-            <li *ngFor='let event of calendarOptions.events'>
-                <b>{{event.startStr}}</b>
-                <i>{{event.title}}</i>
-            </li>
-        </ul> -->
-        <app-task-accordion></app-task-accordion>
+    <c-col sm="12" md="12" lg="12" xl="7" class="mb-3 py-2">
+        <div class="mt-4">
+            <h5 class="text-right">22-12-2222</h5>
+            <c-row class="border pt-2">
+                <div class="flex justify-content-between">
+                    <span class="font-bold">Newel Planner</span>
+                    <span class="font-bold">6</span>
+                </div>
+
+                <p class="mb-0">Dashboaard Menu by roleid and timesheet edit in primng UI</p>
+                <p class="">New Laeve rquest make it completed from bhushan..validation needed to be done</p>
+            </c-row>
+
+        </div>
     </c-col>
 
     <c-col sm="12" class="my-3">

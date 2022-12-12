@@ -8,11 +8,12 @@ var dataconn = require('./Data/DataConnection');
 
 
 // app.listen(8686, ()=>{
-//     console.log("Sever is now listening at port 8686");
+//     //console.log("Sever is now listening at port 8686");
 // })
 
 // client.connect();
 var bodyParser = require('body-parser');
+const { clearCache } = require('ejs');
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 app.use(bodyParser.json({ limit: '50mb' }));
 
@@ -32,7 +33,7 @@ var server = app.listen(config.service_port, function() {
     var port = server.address().port;
     var datetime = new Date();
     var message = "Server :- " + host + " running on Port : - " + port + " Started at :- " + datetime;
-    console.log(message);
+    //console.log(message);
 });
 const staticImageRootLocal = path.join(__dirname);
 app.use(express.static(staticImageRootLocal));
@@ -74,11 +75,13 @@ app.use("/Menu", MenuService);
 var LeaveRequest = require('./Service/Master/Leave/LeaveRequest')();
 app.use("/Leave", LeaveRequest);
 
-
+var RoleMaster = require('./Service/RoleMaster/RoleMasterService')();
+app.use("/RoleMaster", RoleMaster);
 
 // ******************************************************************************************************************
 // Ashlesha
 app.get('/users', (req, res)=>{
+    try{
     client.query(`Select tbl_master_userdetails.id, tbl_master_userdetails.name as uname,  tbl_master_userdetails.emailid,
     tbl_master_userdetails.password, tbl_master_userdetails.defaultroleid,tbl_general_master.parentid
     ,tbl_general_master.name,tbl_general_master.typeid,
@@ -90,46 +93,77 @@ app.get('/users', (req, res)=>{
        tbl_general_master.parentid=1`, (err, result)=>{
         if(!err){
             res.send(result.rows);
+
+        }
+        else{
+            dataconn.errorlogger('index', 'users', err);
+            res.status(200).json({ Success: false, Message: 'USER Master table API failed.', Data: null });
         }
     });
-    client.end;
+    
+}
+catch(err){
+    dataconn.errorlogger('index', 'users', err);
+    res.status(200).json({ Success: false, Message: ' USER Master table API failed.', Data: null });
+}
+client.end;
 })
 
 app.get('/usersByRole', (req, res)=>{
+try{
     client.query(`select *
     from tbl_general_master 
     where tbl_general_master.parentid=1`, (err, result)=>{
     if(!err){
         res.send(result.rows);
     }
+    else{
+        dataconn.errorlogger('index', 'usersByRole', err);
+        res.status(200).json({ Success: false, Message: " Api failed to  get  the data", Data: null});
+    }
 });
+
+}
+catch(err){
+    dataconn.errorlogger('index', 'usersByRole', err);
+    res.status(200).json({ Success: false, Message: " Api failed to  get  the data", Data: null});
+}
 client.end;
 })
 
 app.post('/users', (req, res)=> {
+    try{
     const user = req.body;
 
-    console.log(user);
+    //console.log(user);
     let insertQuery = `insert into tbl_master_userdetails( name, emailid, password,defaultroleid,isactive) 
                        values('${user.name}', '${user.emailid}', '${user.password}',
                        '${user.defaultroleid}','${user.isactive}')`
                        
     client.query(insertQuery, (err, result)=>{
-        console.log(insertQuery);
+        //console.log(insertQuery);
         if(!err){
             //res.send('Insertion was successful')
             res.status(200).json({ Success: true, Message: "User details saved successfully", Data: result});
         }
         else{ 
+            dataconn.errorlogger('index', 'users', err);
              res.status(200).json({ Success: false, Message: "failed to  saved the data", Data: null}); 
             }
     })
-    client.end;
+
+   
+}
+catch(err){
+    dataconn.errorlogger('index', 'users', err);
+}
+client.end;
 })
 
 app.post('/updateusers', (req, res)=> {
+    try{
     let user = req.body;
-    console.log(user);
+    //console.log(user);
     let updateQuery = `update tbl_master_userdetails
                        set name  = '${user.name}',
                        emailid = '${user.emailid}',
@@ -140,100 +174,166 @@ app.post('/updateusers', (req, res)=> {
                        where id = ${user.id}`
 
     client.query(updateQuery, (err, result)=>{
-        console.log('update details',updateQuery);
+        //console.log('update details',updateQuery);
         if(!err){
             // res.send(message'update was successful')
             res.status(200).json({ Success: true, Message: 'record updated successfully'})
         }
-        else{ console.log(err.message) }
+        else{ 
+            dataconn.errorlogger('index', 'updateusers', err);
+            res.status(200).json({ Success: false, Message: 'Master table API failed to update.', Data: null });
+        }
     })
-    client.end;
+   
+}
+catch(err){
+    dataconn.errorlogger('index', 'updateusers', err);
+    res.status(200).json({ Success: false, Message: 'Master table API failed to update.', Data: null });
+}
+client.end;
 })
 // Ashlesha
+
+
 app.get('/leave', (req, res)=>{
+    try{
     client.query(`Select * from tbl_master_leave`, (err, result)=>{
         if(!err){
             res.send(result.rows);
         }
+        else
+        {
+            dataconn.errorlogger('index', 'leave', err);
+            res.status(200).json({ Success: false, Message: 'leave table API failed to update.', Data: null });
+        }
     });
-    client.end;
+
+    }
+
+catch(err){
+    dataconn.errorlogger('index', 'leave', err);
+    res.status(200).json({ Success: false, Message: 'leave table API failed to update.', Data: null });
+}
+client.end;
 })
 
 app.get('/leave/:id', (req, res)=>{
-    client.query(`Select *  from  tbl_master_leave where  id=${req.params.id}`, (err, result)=>{
-        if(!err){
-            res.send(result.rows);
-        }
-    });
+    try{
+        client.query(`Select *  from  tbl_master_leave where  id=${req.params.id}`, (err, result)=>{
+            if(!err){
+                res.send(result.rows);
+            }
+            else{
+                dataconn.errorlogger('index', 'leave/:id', err);
+                res.status(200).json({ Success: false, Message: 'Leave Master table API failed.', Data: null });
+            }
+        });
+       
+    }
+    catch(err){
+        dataconn.errorlogger('index', 'leave/:id', err);
+        res.status(200).json({ Success: false, Message: 'Leave Master table API failed.', Data: null });
+    }
     client.end;
 })
 app.post('/AuthenticateUser', function(req, res) {
-	let name = req.body.UserName;
-	let password = req.body.Password;
-    console.log("name",name);
-    console.log("password",password);
-	if (name && password) {
-     console.log("in if codition");
-        // let insertQuery =`SELECT * FROM tbl_master_userdetails WHERE name = '${name}' AND password ='${password}' `       
-        let insertQuery =`SELECT * FROM tbl_master_userdetails WHERE 
-        (name = LOWER('${name}') OR lower(EmailId) =LOWER('${name}')) AND password =LOWER('${password}') `      
-		client.query(insertQuery,function(error, results, fields) {
-            // if (error) throw error;
-    
-			if (results.rowCount > 0) {
-				
-				res.status(200).json({ Success: true, Message: 'Authenticated', Data: results });
-			} else {
-               
-				res.status(200).json({ Success: false, Message: 'You have entered an invalid username and password', Data: null });
-			}			
-		
-		});
-	} else {
-		res.send('Please enter Username and Password!');
-		
-	}
+    try{
+        let name = req.body.UserName;
+        let password = req.body.Password;
+        //console.log("name",name);
+        //console.log("password",password);
+        if (name && password) {
+        //console.log("in if codition");
+            // let insertQuery =`SELECT * FROM tbl_master_userdetails WHERE name = '${name}' AND password ='${password}' `       
+            let insertQuery =`SELECT CONCAT(first_name , ' ' ,last_name) as userfullname ,* FROM tbl_master_userdetails WHERE 
+            (name = LOWER('${name}') OR lower(EmailId) =LOWER('${name}')) AND password =LOWER('${password}') `      
+            client.query(insertQuery,function(error, results, fields) {
+                // if (error) throw error;
+        
+                if (results.rowCount > 0) {
+                    
+                    res.status(200).json({ Success: true, Message: 'Authenticated', Data: results });
+                } else {
+                
+                    res.status(200).json({ Success: false, Message: 'You have entered an invalid username and password', Data: null });
+                }			
+            
+            });
+        } else {
+            dataconn.errorlogger('index', 'AuthenticateUser', err);
+            res.send('Please enter Username and Password!');
+            
+        }
+}
+catch(err){
+    dataconn.errorlogger('index', 'AuthenticateUser', err);
+    res.status(200).json({ Success: false, Message: 'Table Master table API failed.', Data: null });
+}
 });
 //  const bodyParser = require("body-parser");
 //  app.use(bodyParser.json());
 
 app.post('/leave', (req, res)=> {
-    const leave_col = req.body; 
+    try{
 
-    console.log(leave_col);
-    let insertQuery = `insert into tbl_master_leave( name, isactive) 
-                       values('${leave_col.name}', '${leave_col.isactive}')`
-                       
-    client.query(insertQuery, (err, result)=>{
-        console.log(insertQuery);
-        if(!err){
-            res.send('Insertion was successful')
-        }
-        else{ console.log("error",err.message) }
-    })
+    
+        const leave_col = req.body; 
+
+        //console.log(leave_col);
+        let insertQuery = `insert into tbl_master_leave( name, isactive) 
+                        values('${leave_col.name}', '${leave_col.isactive}')`
+                        
+        client.query(insertQuery, (err, result)=>{
+            //console.log(insertQuery);
+            if(!err){
+                res.send('Insertion was successful')
+            }
+            else{
+                
+            dataconn.errorlogger('index', 'leave', err);
+            res.status(200).json({ Success: false, Message: 'leave table API failed to update.', Data: null });
+                }
+        })
+        
+    }
+    catch(err){
+            
+        dataconn.errorlogger('index', 'leave', err);
+        res.status(200).json({ Success: false, Message: 'leave table API failed to update.', Data: null });
+    }
     client.end;
 })
 
 app.put('/leave/:id', (req, res)=> {
-    let leave_col = req.body;
-    console.log(leave_col);
-    let updateQuery = `update tbl_master_leave
-                       set name = '${leave_col.name}',
-                       isactive = '${leave_col.isactive}'
-                       where id = ${req.params.id}`
+    try{
+        let leave_col = req.body;
 
-    client.query(updateQuery, (err, result)=>{
-        console.log('update details',updateQuery);
-        if(!err){
-            res.send('Update was successful')
-        }
-        else{ console.log(err.message) }
-    })
-    client.end;
+        //console.log(leave_col);
+        let updateQuery = `update tbl_master_leave
+                        set name = '${leave_col.name}',
+                        isactive = '${leave_col.isactive}'
+                        where id = ${req.params.id}`
+
+        client.query(updateQuery, (err, result)=>{
+            //console.log('update details',updateQuery);
+            if(!err){
+                res.send('Update was successful')
+            }
+            else{  dataconn.errorlogger('index', 'leave/:id', err);
+            res.status(200).json({ Success: false, Message: 'Leave Master table API failed.', Data: null });}
+        })
+       
+}
+catch(err){
+    dataconn.errorlogger('index', 'leave/:id', err);
+    res.status(200).json({ Success: false, Message: 'Leave Master table API failed.', Data: null });
+}
+client.end;
 })
 
 
 app.delete('/leave/:id', (req, res)=> {
+    
     let insertQuery = `delete from tbl_master_leave where id=${req.params.id}`
 
     client.query(insertQuery, (err, result)=>{
@@ -248,6 +348,7 @@ app.delete('/leave/:id', (req, res)=> {
 //Leave Details
 //Leave Details: Start
 app.get('/leavedetails', (req, res)=>{
+    try{
     client.query(`Select tbl_leave_details.id, tbl_leave_details.leave_name,tbl_leave_details.description, 
     tbl_leave_details.fromdate,tbl_leave_details.todate, tbl_leave_details.leave_type, tbl_leave_details.balanceleave, 
     tbl_leave_details.created_by, tbl_leave_details.created_date,tbl_leave_details.modified_by, 
@@ -256,12 +357,24 @@ app.get('/leavedetails', (req, res)=>{
     (err, result)=>{
         if(!err){
             res.send(result.rows);
+        }else{
+            dataconn.errorlogger('index', 'leavedetails', err);
+            res.status(200).json({ Success: false, Message: 'table API failed.', Data: null });
         }
+
     });
-    client.end;
+    
+}
+catch(err){
+    dataconn.errorlogger('index', 'leavedetails', err);
+    res.status(200).json({ Success: false, Message: 'table API failed.', Data: null });
+}
+client.end;
 })
+
 app.get('/leavedetails/:id', (req, res)=>{
-    console.log("from date",req.params.id);
+    try{
+    //console.log("from date",req.params.id);
      client.query(`Select tbl_leave_details.id, tbl_leave_details.leave_name,tbl_leave_details.description, 
      tbl_leave_details.fromdate,tbl_leave_details.todate, tbl_leave_details.leave_type, tbl_leave_details.balanceleave, 
      tbl_leave_details.created_by, tbl_leave_details.created_date,tbl_leave_details.modified_by, 
@@ -270,10 +383,22 @@ app.get('/leavedetails/:id', (req, res)=>{
          if(!err){
              res.send(result.rows);
          }
+         else{
+            dataconn.errorlogger('index', 'leavedetails/:ID', err);
+            res.status(200).json({ Success: false, Message: 'table API failed.', Data: null });
+         }
      });
-     client.end;
+    //  client.end;
+    }
+    catch(err){
+        dataconn.errorlogger('index', 'leavedetails/:Id', err);
+        res.status(200).json({ Success: false, Message: 'table API failed.', Data: null });
+    }
+    client.end;
  })
+
  app.post('/getAllUserTimesheetData',function(req,res){
+    try{
     var model =
     {
         fromdate : req.body.fromdate,
@@ -285,45 +410,54 @@ app.get('/leavedetails/:id', (req, res)=>{
 	tbl_master_userdetails.name as username from tbl_master_project
 	inner join tbl_task_details on tbl_master_project.id=tbl_task_details.projectid 
 	inner Join tbl_master_userdetails on tbl_master_userdetails.id=tbl_task_details.created_by WHERE cast(tbl_task_details.startdate as date) >= '${req.body.fromdate}' AND cast(tbl_task_details.enddate as date) <='${req.body.todate}' `       
-console.log("insertQuery",insertQuery);
+//console.log("insertQuery",insertQuery);
 client.query(insertQuery,function(error, results, fields) {
     if (error) throw error;
     if (results != null )  {
-        console.log("results",results.rows);
+        //console.log("results",results.rows);
         res.status(200).json({ Success: true, Message: 'From Date & To Date Data', Data: results.rows});
     } else {
+        dataconn.errorlogger('index', 'getAllUserTimesheetData', err);
         res.status(200).json({ Success: false, Message: 'You have entered an invalid From date & To date', Data: null });
     }			
-    client.end;
+    // client.end;
 })
+}
+catch(err){
+    dataconn.errorlogger('index', 'getAllUserTimesheetData', err);
+    res.status(200).json({ Success: false, Message: 'You have entered an invalid From date & To date', Data: null });
+}
+client.end;
  })
+
  app.post('/getleaveDate', function(req, res) {
 	// Capture the input fields
-    // console.log("req.................",req.body);
+    // //console.log("req.................",req.body);
 	// let fromdate = req.body.fromdate;
 	// let todate = req.body.todate;
+    try{
     var model =
     {
         fromdate : req.body.fromdate,
         todate :  req.body.todate
     }
 	
-    // console.log("From Date",fromdate);
-    // console.log("todate",todate);
+    // //console.log("From Date",fromdate);
+    // //console.log("todate",todate);
 	if (req.body.fromdate && req.body.todate) {
-     console.log("in if codition");
+     //console.log("in if codition");
             let insertQuery = `SELECT tbl_leave_details.id,tbl_master_userdetails.name, tbl_leave_details.leave_name,tbl_leave_details.description, 
             tbl_leave_details.fromdate,tbl_leave_details.todate, tbl_leave_details.leave_type, tbl_leave_details.balanceleave, 
             tbl_leave_details.created_by, tbl_leave_details.created_date,tbl_leave_details.modified_by, 
             tbl_leave_details.modified_date from tbl_leave_details 
             inner join tbl_master_userdetails on tbl_leave_details.created_by= tbl_master_userdetails.id WHERE cast(tbl_leave_details.fromdate as date) >= '${req.body.fromdate}' AND cast(tbl_leave_details.todate as date) <='${req.body.todate}' `       
         // let insertQuery =`SELECT * FROM tbl_leave_details WHERE cast(fromdate as date) >= '${req.body.fromdate}' AND cast(todate as date) <='${req.body.todate}' `       
-        console.log("insertQuery",insertQuery);
+        //console.log("insertQuery",insertQuery);
 		client.query(insertQuery,function(error, results, fields) {
             if (error) throw error;
-            // console.log("results",results);		
+            // //console.log("results",results);		
 			if (results != null )  {
-				console.log("results",results.rows);
+				//console.log("results",results.rows);
 				res.status(200).json({ Success: true, Message: 'From Date & To Date Data', Data: results.rows});
 			} else {
 				res.status(200).json({ Success: false, Message: 'You have entered an invalid From date & To date', Data: null });
@@ -331,12 +465,20 @@ client.query(insertQuery,function(error, results, fields) {
 		});
 	} 
     else {
-		res.send('Please enter From Date & To Date!');
+        
+		dataconn.errorlogger('index', 'getleaveDate', err);
+        res.status(200).json({ Success: false, Message: 'please enter from date and To Date...', Data: null });
 		
 	}
+}
+catch(err){
+    dataconn.errorlogger('index', 'getleaveDate', err);
+    res.status(200).json({ Success: false, Message: 'Master table API failed.', Data: null });
+}
 });
 
 app.get('/getAllProjectData',function(req, res) {
+    try{
             let insertQuery = `select tbl_master_clientmaster.name as ClientName,
             tbl_master_project.name as ProjectName,
             tbl_general_master.name as ProjectPlatform, tbl_master_project.activity as Activity ,
@@ -352,164 +494,244 @@ app.get('/getAllProjectData',function(req, res) {
             inner Join tbl_master_userdetails on tbl_master_userdetails.id=tbl_master_project.created_by
             where tbl_general_master.parentid=77`      
 
-        console.log("insertQuery",insertQuery);
+        //console.log("insertQuery",insertQuery);
 		client.query(insertQuery,function(error, results, fields) {
             if (error) throw error;
 			if (results != null )  {
-				console.log("results",results.rows);
+				//console.log("results",results.rows);
 				res.status(200).json({ Success: true, Message: 'Data Export Successfully', Data: results.rows});
 			} else {
-				res.status(200).json({ Success: false, Message: 'You have entered wrong Data', Data: null });
-			}			
+				dataconn.errorlogger('index', 'getAllProjectData', err);
+                res.status(200).json({ Success: false, Message: 'You have entered wrong Data', Data: null });
+			}
+        		
 		});
 	} 
+    catch(err){
+        dataconn.errorlogger('index', 'getAllProjectData', err);
+        res.status(200).json({ Success: false, Message: 'You have entered wrong Data', Data: null });
+    }
+}
 );
 
 
 
 app.post('/leavedetails', (req, res)=> {
+    try{
     const leavedet_col = req.body;
 
-    console.log(leavedet_col);
+    //console.log(leavedet_col);
     let insertQuery = `insert into tbl_leave_details( leave_name, description,fromdate,todate, leave_type, balanceleave) 
                        values('${leavedet_col.leave_name}', '${leavedet_col.description}', '${leavedet_col.fromdate}','${leavedet_col.todate}', '${leavedet_col.leave_type}', '${leavedet_col.balanceleave}')`
                        
     client.query(insertQuery, (err, result)=>{
-        console.log(insertQuery);
+        //console.log(insertQuery);
         if(!err){
             res.send('Insertion was successful')
         }
-        else{ console.log("error",err.message) }
+        else{ 
+         dataconn.errorlogger('index', 'leavedetails', err);
+        res.status(200).json({ Success: false, Message: 'Master table API failed.', Data: null });
+        }
     })
+    }
+    catch(err){
+        dataconn.errorlogger('index', 'leavedetails', err);
+        res.status(200).json({ Success: false, Message: 'Master table API failed.', Data: null });
+
+        }
+    
     client.end;
 })
 
 app.put('/leavedetails/:id', (req, res)=> {
-    let leavedet_col = req.body;
-    console.log(leavedet_col);
-    let updateQuery = `update tbl_leave_details
-                       set leave_name = '${leavedet_col.leave_name}',
-                       description = '${leavedet_col.description}',
-                       fromdate = '${leavedet_col.fromdate}',
-                       todate = '${leavedet_col.todate}',
-                       leave_type = '${leavedet_col.leave_type}',
-                       balanceleave = '${leavedet_col.balanceleave}'
-                       where id = ${req.params.id}`
+    try{
+        let leavedet_col = req.body;
+        //console.log(leavedet_col);
+        let updateQuery = `update tbl_leave_details
+                        set leave_name = '${leavedet_col.leave_name}',
+                        description = '${leavedet_col.description}',
+                        fromdate = '${leavedet_col.fromdate}',
+                        todate = '${leavedet_col.todate}',
+                        leave_type = '${leavedet_col.leave_type}',
+                        balanceleave = '${leavedet_col.balanceleave}'
+                        where id = ${req.params.id}`
 
-    client.query(updateQuery, (err, result)=>{
-        console.log('update details',updateQuery);
-        if(!err){
-            res.send('Update was successful')
-        }
-        else{ console.log(err.message) }
-    })
+        client.query(updateQuery, (err, result)=>{
+            //console.log('update details',updateQuery);
+            if(!err){
+                res.send('Update was successful')
+            }
+            else{ 
+                dataconn.errorlogger('index', 'leavedetails', err);
+                res.status(200).json({ Success: false, Message: 'leavedetails table API failed.', Data: null });
+             }
+        })
+    }
+    catch(err){
+        dataconn.errorlogger('index', 'leavedetails', err);
+        res.status(200).json({ Success: false, Message: 'leavedetails table API failed.', Data: null });
+    }
     client.end;
 })
 
 app.delete('/leavedetails/:id', (req, res)=> {
-    let insertQuery = `delete from tbl_leave_details where id=${req.params.id}`
+    try{
+        let insertQuery = `delete from tbl_leave_details where id=${req.params.id}`
 
-    client.query(insertQuery, (err, result)=>{
-        if(!err){
-            res.send('Deletion was successful')
-        }
-        else{ console.log(err.message) }
-    })
+        client.query(insertQuery, (err, result)=>{
+            if(!err){
+                res.send('Deletion was successful')
+            }
+            else{ 
+            dataconn.errorlogger('index', 'leavedetails/:id', err);
+            res.status(200).json({ Success: false, Message: 'leavedetails table API failed.', Data: null }); }
+        })
+    }
+    catch(err){
+        dataconn.errorlogger('index', 'leavedetails/:id', err);
+        res.status(200).json({ Success: false, Message: 'leavedetails table API failed.', Data: null });
+    }
     client.end;
  })
 // General Master KOmal
 
 app.get('/general', (req, res)=>{
-    client.query(`Select * from tbl_general_master ORDER BY id`, (err, result)=>{
-        if(!err){
-            // res.send(result.rows);
-            res.status(200).json({ Success: true, Message: 'tbl_general_master Table Details', Data: result.rows });
-        }
-    });
+    try{
+        client.query(`Select * from tbl_general_master ORDER BY id`, (err, result)=>{
+            if(!err){
+                // res.send(result.rows);
+                res.status(200).json({ Success: true, Message: 'tbl_general_master Table Details', Data: result.rows });
+            }
+            else{
+                dataconn.errorlogger('index', 'general', err);
+                res.status(200).json({ Success: false, Message: 'General Master table API failed.', Data: null });
+            }
+        });
+      
+    }
+    catch(err){
+        dataconn.errorlogger('index', 'general', err);
+        res.status(200).json({ Success: false, Message: 'General Master table API failed.', Data: null });
+    }
     client.end;
 })
 
 
 app.get('/getGroupName', (req, res)=>{
+    try{
     client.query(`Select * from tbl_general_master where parentid= 0`, (err, result)=>{
         if(!err){
             // res.send(result.rows);
             res.status(200).json({ Success: true, Message: 'tbl_general_master Table Details', Data: result.rows });
         }
+        else{
+            dataconn.errorlogger('index', 'getGroupName', err);
+            res.status(200).json({ Success: false, Message: 'Genaral Master table API failed.', Data: null });
+        }
     });
+}
+catch(err){
+    dataconn.errorlogger('index', 'getGroupName', err);
+    res.status(200).json({ Success: false, Message: 'General Master table API failed.', Data: null });
+}
     client.end;
 })
 
 app.get('/GeneralTableGetId/:id', (req, res)=>{
+    try{
     client.query(`Select *  from  tbl_general_master where  id=${req.params.id}`, (err, result)=>{
         if(!err){
             res.status(200).json({ Success: true, Message: 'tbl_general_master Table Details', Data: result});
-            console.log("result.rows",result.rows);
+            //console.log("result.rows",result.rows);
+        }
+        else{
+            dataconn.errorlogger('index', 'GeneralTableGetId/id', err);
+            res.status(200).json({ Success: false, Message: 'General Master table API failed.', Data: null });
         }
     });
+}
+catch(err){
+    dataconn.errorlogger('index', 'GeneralTableGetId/id', err);
+    res.status(200).json({ Success: false, Message: 'General Master table API failed.', Data: null });
+}
     client.end;
 })
 
 
 app.get('/GeneralTableGetGroupName/:groupname', (req, res)=>{
-    console.log("req.param",req.params.groupname)
+    try{
+    // //console.log("req.param",req.params.groupname)
     client.query(` Select  distinct parentid, *  from  tbl_general_master where  groupname='${req.params.groupname}' AND ( parentid IS NOT NULL OR parentid <> 0 ) ORDER BY parentid desc `, (err, result)=>{
         if(!err){
-            console.log("err",err);
-            console.log("result",result);
+            //console.log("err",err);
+            //console.log("result",result);
             res.status(200).json({ Success: true, Message: 'tbl_general_master Table Details', Data: result});
-            console.log("result.rows",result.rows);
+            //console.log("result.rows",result.rows);
+        }
+        else{
+            dataconn.errorlogger('index', 'GeneralTableGetGroupName/groupname', err);
+            res.status(200).json({ Success: false, Message: 'General Master table API failed.', Data: null });
         }
     });
+}
+catch(err){
+    dataconn.errorlogger('index', 'GeneralTableGetGroupName/groupname', err);
+    res.status(200).json({ Success: false, Message: 'General Master table API failed.', Data: null });
+}
     client.end;
 })
 
 app.post('/CreategeneralMaster', (req, res)=> {
+    try{
 
-    let typeid;
-    let seqorder;
-    client.query(` select max(typeid)+1 as typeid ,max(seqorder)+1 as seqorder from tbl_general_master  `, (err, result)=>{
+        let typeid;
+        let seqorder;
+        client.query(` select max(typeid)+1 as typeid ,max(seqorder)+1 as seqorder from tbl_general_master  `, (err, result)=>{
         if(!err){
-            console.log("err",err);
-            console.log("result",result.rows[0]);
-            typeid=result.rows[0].typeid;
-            seqorder=result.rows[0].seqorder;
-            console.log(typeid,"...........");
-console.log(seqorder,".......");
+        // //console.log("err",err);
+        // //console.log("result",result.rows[0]);
+        typeid=result.rows[0].typeid;
+        seqorder=result.rows[0].seqorder;
+        // //console.log(typeid,"...........");
+        // //console.log(seqorder,".......");
 
-const general_col = req.body;  
-console.log(general_col);
+        const general_col = req.body;  
+        // //console.log(general_col);
 
 
-                   let insertQuery = `insert into tbl_general_master( groupname, name, typeid, seqorder, parentid, isactive) 
-                   values('${general_col.groupname}','${general_col.name}', '${typeid }',
-                   '${seqorder}','${general_col.parentid}','${general_col.isactive}')`
-                   
-client.query(insertQuery, (err, result)=>{
-    console.log(insertQuery);
+        let insertQuery = `insert into tbl_general_master( groupname, name, typeid, seqorder, parentid, isactive) 
+        values('${general_col.groupname}','${general_col.name}', '${typeid }',
+        '${seqorder}','${general_col.parentid}','${general_col.isactive}')`
 
-    if(result != null){
-        console.log("result",result);
+        client.query(insertQuery, (err, result)=>{
+        // //console.log(insertQuery);
+
+        if(result != null){
+        // //console.log("result",result);
         // res.send('Insertion was successful')
         res.status(200).json({ Success: true, Message: 'tbl_general_master Table Details', Data: result});
-    }
-    else{ console.log("error",err.message) }
-})
-client.end;
-
-            // res.status(200).json({ Success: true, Message: 'tbl_general_master Table Details', Data: result});
-            //console.log("result.rows",result.rows);
         }
-    });
-// let typeid = result.Result.rows.typeid;
-// let seqorder = result.Result.rows.seqorder;
+        else{ 
+            dataconn.errorlogger('index', 'CreategeneralMaster', err);
+            res.status(200).json({ Success: false, Message: 'General Master table API failed.', Data: null });
+        }
+        })
+        client.end;
+     }
+    })
+}   
+catch(err){
 
-  
+    dataconn.errorlogger('index', 'CreategeneralMaster', err);
+    res.status(200).json({ Success: false, Message: 'General Master table API failed.', Data: null });
+}
 })
 
 app.post('/Updategeneraltable', (req, res)=> {
+    try{
     let general_col = req.body;
-    console.log(general_col);
+    //console.log(general_col);
     // let updateQuery = `update tbl_general_master
     //                    set groupname = '${general_col.groupname}',
     //                    name = '${general_col.name}',
@@ -524,19 +746,27 @@ app.post('/Updategeneraltable', (req, res)=> {
                        
 
     client.query(updateQuery, (err, result)=>{
-        console.log('update details',updateQuery);
+        //console.log('update details',updateQuery);
         if(!err){
-            console.log(result);
+            //console.log(result);
             res.status(200).json({ Success: true, Message: 'Record updated successfully', Data: result});
 
         }
         else{ 
+          
+            dataconn.errorlogger('index', 'Updategeneraltable', err);
             res.status(200).json({ Success: false, Message: 'Error occurred while updating record', Data: result});
  
         }
     })
+}
+catch(err){
+    dataconn.errorlogger('index', 'Updategeneraltable', err);
+    res.status(200).json({ Success: false, Message: 'Error occurred while updating record', Data: result});
+}
     client.end;
 })
+
 
 app.delete('/general/:id', (req, res)=> {
     let insertQuery = `delete from tbl_general_master where id=${req.params.id}`
@@ -570,23 +800,23 @@ app.get('/taskdetails/:id', (req, res)=>{
 app.post('/taskdetails', (req, res)=> {
     const taskdetails_col = req.body;
 
-    console.log(taskdetails_col);
+    //console.log(taskdetails_col);
     let insertQuery = `insert into tbl_task_details( projectid, taskdescription, tasktypeid, efforts, startdate, enddate, attachment, comments, created_date, created_by, modified_date, modified_by, status, isactive) 
                        values('${taskdetails_col.projectid}','${taskdetails_col.taskdescription}', '${taskdetails_col.tasktypeid}','${taskdetails_col.efforts}','${taskdetails_col.startdate}','${taskdetails_col.enddate},'${taskdetails_col.enddate},'${taskdetails_col.attachment},'${taskdetails_col.comments},'${taskdetails_col.created_date},'${taskdetails_col.created_by},'${taskdetails_col.modified_date},'${taskdetails_col.modified_by},'${taskdetails_col.status}','${taskdetails_col.isactive}')`
                        
     client.query(insertQuery, (err, result)=>{
-        console.log(insertQuery);
+        //console.log(insertQuery);
         if(!err){
             res.send('Insertion was successful')
         }
-        else{ console.log("error",err.message) }
+        else{ }
     })
     client.end;
 })
 
 app.put('/general/:id', (req, res)=> {
     let general_col = req.body;
-    console.log(general_col);
+    //console.log(general_col);
     let updateQuery = `update tbl_task_details
                        set projectid = '${general_col.projectid}',
                        taskdescription = '${general_col.taskdescription}',
@@ -601,99 +831,142 @@ app.put('/general/:id', (req, res)=> {
                        where id = ${req.params.id}`
 
     client.query(updateQuery, (err, result)=>{
-        console.log('update details',updateQuery);
+        //console.log('update details',updateQuery);
         if(!err){
             res.send('Update was successful')
         }
-        else{ console.log(err.message) }
+        else{  }
     })
     client.end;
 })
 
 app.post('/generalTypeid', (req, res)=>{
+    try{
     
     client.query(`Select name from  tbl_general_master where  parentid =16 and typeid=${req.body.typeid}`, (err, results)=>{
         if(!err){
            
             if (results != null )  {
-				console.log("results",results.rows);
+				//console.log("results",results.rows);
 				res.status(200).json({ Success: true, Data: results.rows});
 			} else {
-				res.status(200).json({ Success: false, Data: null });
+				dataconn.errorlogger('index', 'generalTypeid', err);
+                res.status(200).json({ Success: false, Data: null });
 			}			
         }
     });
+}
+catch(err){
+            dataconn.errorlogger('index', 'generalTypeid', err);
+            res.status(200).json({ Success: false, Data: null });
+}
     client.end;
 })
+
 
 app.post('/holiday', (req, res)=> {
-    let holiday_col = req.body;
-    console.log('holiday data : ', holiday_col);
-    let updateQuery = `update tbl_master_holiday
-                       set 
-                       description = '${holiday_col.description}',
-                       holiday_date = '${holiday_col.holiday_date}',
-                       isactive = '${holiday_col.isactive}'
-                       where holiday_id = '${holiday_col.holiday_id}'`
-    console.log('query' , updateQuery)
+    try{
+    
+            let holiday_col = req.body;
+            //console.log('holiday data : ', holiday_col);
+            let updateQuery = `update tbl_master_holiday
+                            set 
+                            description = '${holiday_col.description}',
+                            holiday_date = '${holiday_col.holiday_date}',
+                            isactive = '${holiday_col.isactive}'
+                            where holiday_id = '${holiday_col.holiday_id}'`
+            //console.log('query' , updateQuery)
 
-    client.query(updateQuery, (err, result)=>{
-        console.log('update details',updateQuery);
-        if(!err){
-           
-            res.status(200).json({ Success: true, Message: 'Data Updated Successfully'});
-        } else {
-            res.status(200).json({ Success: false, Message: 'Error While Updating'});
-        }			
-    })
+            client.query(updateQuery, (err, result)=>{
+                //console.log('update details',updateQuery);
+                if(!err){
+                
+                    res.status(200).json({ Success: true, Message: 'Data Updated Successfully'});
+                } else {
+                    dataconn.errorlogger('index', '/holiday', err);
+                    res.status(200).json({ Success: false, Message: 'Error While Updating'});
+            }
+        })
+    }
+    catch(err){
+        dataconn.errorlogger('index', '/holiday', err);
+        res.status(200).json({ Success: false, Message: 'Error While Updating'});
+    }
+    
     client.end;
 })
+
 app.get('/holiday', (req, res)=>{
-    var flag = req.body.flag
-     
-    client.query(`Select tbl_general_master.*,tbl_master_holiday.* from tbl_master_holiday 
-    inner join tbl_general_master on tbl_master_holiday.holiday_id = tbl_general_master.typeid
-    where tbl_general_master.parentid=16`, (err, results)=>{
-        if(!err){
-            if (results != null )  {
-				console.log("results",results.rows);
-				res.status(200).json({ Success: true, Message: 'From Date & To Date Data', Data: results.rows});
-			} else {
-				res.status(200).json({ Success: false, Message: 'You have entered an invalid From date & To date', Data: null });
-			}			
-        }
-    });
+    try{
+        var flag = req.body.flag
+        
+        client.query(`Select tbl_general_master.*,tbl_master_holiday.* from tbl_master_holiday 
+        inner join tbl_general_master on tbl_master_holiday.holiday_id = tbl_general_master.typeid
+        where tbl_general_master.parentid=16`, (err, results)=>{
+            if(!err){
+                if (results != null )  {
+                    //console.log("results",results.rows);
+                    res.status(200).json({ Success: true, Message: 'From Date & To Date Data', Data: results.rows});
+                } else {
+                    dataconn.errorlogger('index', '/holiday', err);
+                   
+                    res.status(200).json({ Success: false, Message: 'You have entered an invalid From date & To date', Data: null });
+                }			
+            }
+        });
+    }
+    catch(err){
+        dataconn.errorlogger('index', '/holiday', err);
+        res.status(200).json({ Success: false, Message: 'You have entered an invalid From date & To date', Data: null });
+    }
+
     client.end;
 })
 app.get('/allholiday', (req, res)=>{
-    var flag = req.body.flag
-     
-    client.query(`select typeid,name from tbl_general_master where typeid not in(select holiday_id from tbl_master_holiday)
-    and parentid=16`, (err, results)=>{
-        if(!err){
-            if (results != null )  {
-				console.log("results",results.rows);
-				res.status(200).json({ Success: true, Message: 'From Date & To Date Data', Data: results.rows});
-			} else {
-				res.status(200).json({ Success: false, Message: 'You have entered an invalid From date & To date', Data: null });
-			}			
-        }
-    }); 
+    try{
+        var flag = req.body.flag
+        
+        client.query(`select typeid,name from tbl_general_master where typeid not in(select holiday_id from tbl_master_holiday)
+        and parentid=16`, (err, results)=>{
+            if(!err){
+                if (results != null )  {
+                    //console.log("results",results.rows);
+                    res.status(200).json({ Success: true, Message: 'From Date & To Date Data', Data: results.rows});
+                } else {
+                    dataconn.errorlogger('index', '/allholiday', err);
+                    res.status(200).json({ Success: false, Message: 'You have entered an invalid From date & To date', Data: null });
+                }			
+            }
+        }); 
+    }
+    catch(err){
+        dataconn.errorlogger('index', '/allholiday', err);
+        res.status(200).json({ Success: false, Message: 'You have entered an invalid From date & To date', Data: null });
+    }
     client.end;
 })
 app.post('/newholiday', (req, res)=> {
-    const holiday_col = req.body;
-    console.log(holiday_col);
+    try{
+
     
-    let insertQuery = `insert into tbl_master_holiday(holiday_id, description, holiday_date, isactive) values('${holiday_col.holiday_id}','${holiday_col.description}','${holiday_col.holiday_date}', '${holiday_col.isactive}')`
-    client.query(insertQuery, (err, result)=>{
-        console.log(insertQuery);
-        if(!err){
-            res.status(200).json({ Success: true, Message: 'Holiday Inserted Successfully'});
-        } else {
-            res.status(200).json({ Success: false, Message: 'Error while Inserting the Record'});
-        }
-    })
+        const holiday_col = req.body;
+        //console.log(holiday_col);
+        
+        let insertQuery = `insert into tbl_master_holiday(holiday_id, description, holiday_date, isactive) values('${holiday_col.holiday_id}','${holiday_col.description}','${holiday_col.holiday_date}', '${holiday_col.isactive}')`
+        client.query(insertQuery, (err, result)=>{
+            //console.log(insertQuery);
+            if(!err){
+                res.status(200).json({ Success: true, Message: 'Holiday Inserted Successfully'});
+            } else {
+                dataconn.errorlogger('index', '/newholiday', err);
+                res.status(200).json({ Success: false, Message: 'Error while Inserting the Record'});
+            }
+        })
+    }
+    catch(err){
+        dataconn.errorlogger('index', '/newholiday', err);
+        res.status(200).json({ Success: false, Message: 'Error while Inserting the Record'});
+    }
     client.end;
 })
 
@@ -705,7 +978,7 @@ app.delete('/general/:id', (req, res)=> {
         if(!err){
             res.send('Deletion was successful')
         }
-        else{ console.log(err.message) }
+        else{  }
     })
     client.end;
  })
