@@ -136,6 +136,7 @@ router.route('/CreateNewTask')
             try{
             const NewTaskMst = datamodel.tbl_task_details();
             const NewAssignDetails = datamodel.tbl_task_assignee_details();
+            const NewTaskStatus = datamodel.tbl_task_status()
            
             var values = {
 
@@ -159,13 +160,13 @@ router.route('/CreateNewTask')
                     var requserid =req.body.userid
                    for(let i = 0; i < requserid.length; i++) {
                      {
-                        console.log('result',result.id)
+                        // console.log('result',result.id)
                         var values = {
                             taskid:result.id,
                             userid:req.body.userid[i],
                             isactive:true
                         }
-                        console.log(`value in NewAssignDetails`, values );
+                        // console.log(`value in NewAssignDetails`, values );
                         dataaccess.Create(NewAssignDetails, values)
                         .then(function(result){
                             if (result != null) {
@@ -179,6 +180,24 @@ router.route('/CreateNewTask')
                         })
                     }
                 }
+                console.log('requserid',requserid)
+
+                // Reena Task status update
+                model={
+                  
+                        taskId:result.id,
+                        statusId:req.body.status,
+                        createdDate: new Date,
+                        created_by:req.body.created_by,
+                        active:true
+                   
+                }
+                console.log('task status update', model)
+                dataaccess.Create(NewTaskStatus, model)
+                .then(function (result) {
+                    
+                })
+                // Reena Task status 
                 res.status(200).json({ Success: true, Message: 'New Task saved successfully', Data: result });
                 
                 }, function (err) {
@@ -389,6 +408,57 @@ router.route('/GetTaskDetailsByuser')
     }
 });
 
+router.route("/UpdateStatusTaskDetails").post(function (req, res) {
+    try {
+      var reqbody = req.body;    
+     console.log('update requestbody',reqbody);
+        userid = reqbody.userid;
+        projectid = reqbody.projectid;    
+     
+        var querytext = ` SELECT "UpdateTaskStatus"(:p_taskid,:p_statusid,:p_created_by)`;
+        var param = {
+          replacements: {
+            p_taskid :reqbody.taskid,
+	          p_statusid :reqbody.statusid,
+	          p_created_by: reqbody.userid,
+           
+          },
+          type: connect.sequelize.QueryTypes.SELECT,
+        };
+        console.log(`param`, param);
+        connect.sequelize.query(querytext, param).then(
+          function (result) {
+            res.status(200).json({
+
+              Success: true,
+              Message: "Update Task Status successfully",
+              Data:null,
+          });
+            
+          },
+          function (err) {
+            res
+              .status(200)
+              .json({
+                Success: false,
+                Message: "tbl_task_status table API failed.",
+                Data: null,
+              });
+          }
+        );  
+
+     
+    } catch (err) {
+      res
+        .status(200)
+        .json({
+          Success: false,
+          Message: "tbl_task_status table API failed.",
+          Data: null,
+        });
+    }
+     
+  });
 
     return router;
 };

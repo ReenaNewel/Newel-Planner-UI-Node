@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 
 import {
   AvatarModule,
@@ -11,9 +12,9 @@ import {
   GridModule,
   NavModule,
   ProgressModule,
-
   TabsModule
 } from '@coreui/angular';
+
 import { IconModule } from '@coreui/icons-angular';
 import { ChartjsModule } from '@coreui/angular-chartjs';
 
@@ -32,10 +33,18 @@ import { DropdownModule } from 'primeng/dropdown';
 import { TimesheetDashboardComponent } from './components/timesheet-dashboard/timesheet-dashboard.component';
 import { TableModule } from 'primeng/table';
 import { FullCalendarModule } from '@fullcalendar/angular';
+
+import {ButtonModule} from 'primeng/button';
+import {PrimeIcons,MenuItem} from 'primeng/api';
+import {CalendarModule} from 'primeng/calendar';
+import {DialogModule} from 'primeng/dialog';
+
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import listPlugin from '@fullcalendar/list';
 import interactionPlugin from '@fullcalendar/interaction';
+import { MessagesModule } from 'primeng/messages';
+import { MessageModule } from 'primeng/message';
 // import { BrowserModule } from '@angular/platform-browser';
 
 FullCalendarModule.registerPlugins([
@@ -69,7 +78,13 @@ FullCalendarModule.registerPlugins([
     DropdownModule,
     TabViewModule,
     ScrollPanelModule,
-    TableModule
+    TableModule,
+    HttpClientModule,
+    ButtonModule,
+    CalendarModule,
+    DialogModule,
+    MessageModule,
+    MessagesModule,
     // FullCalendarModule,
     // BrowserModule
 

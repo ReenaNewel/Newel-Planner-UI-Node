@@ -245,11 +245,14 @@ app.post('/AuthenticateUser', function(req, res) {
         if (name && password) {
         //console.log("in if codition");
             // let insertQuery =`SELECT * FROM tbl_master_userdetails WHERE name = '${name}' AND password ='${password}' `       
-            let insertQuery =`SELECT CONCAT(first_name , ' ' ,last_name) as userfullname ,* FROM tbl_master_userdetails WHERE 
-            (name = LOWER('${name}') OR lower(EmailId) =LOWER('${name}')) AND password =LOWER('${password}') `      
+            let insertQuery =`SELECT CONCAT(first_name, ' ' ,last_name) as userfullname ,* FROM tbl_master_userdetails WHERE 
+            (name = LOWER('${name}') OR lower(EmailId) =LOWER('${name}')) AND password =LOWER('${password}') `  
+
+            console.log('query',insertQuery)    
+
             client.query(insertQuery,function(error, results, fields) {
                 // if (error) throw error;
-        
+                // console.log('authentiaction user' ,)
                 if (results.rowCount > 0) {
                     
                     res.status(200).json({ Success: true, Message: 'Authenticated', Data: results });
@@ -687,29 +690,23 @@ app.post('/CreategeneralMaster', (req, res)=> {
 
         let typeid;
         let seqorder;
-        client.query(` select max(typeid)+1 as typeid ,max(seqorder)+1 as seqorder from tbl_general_master  `, (err, result)=>{
+        const general_col = req.body; 
+        console.log('general_col',general_col) 
+        client.query(` select max(typeid)+1 as typeid ,max(seqorder)+1 as seqorder from tbl_general_master where parentid =${general_col.parentid}`, (err, result)=>{
         if(!err){
-        // //console.log("err",err);
-        // //console.log("result",result.rows[0]);
+        
         typeid=result.rows[0].typeid;
         seqorder=result.rows[0].seqorder;
-        // //console.log(typeid,"...........");
-        // //console.log(seqorder,".......");
-
-        const general_col = req.body;  
-        // //console.log(general_col);
-
 
         let insertQuery = `insert into tbl_general_master( groupname, name, typeid, seqorder, parentid, isactive) 
         values('${general_col.groupname}','${general_col.name}', '${typeid }',
         '${seqorder}','${general_col.parentid}','${general_col.isactive}')`
 
         client.query(insertQuery, (err, result)=>{
-        // //console.log(insertQuery);
+        
 
         if(result != null){
-        // //console.log("result",result);
-        // res.send('Insertion was successful')
+        
         res.status(200).json({ Success: true, Message: 'tbl_general_master Table Details', Data: result});
         }
         else{ 

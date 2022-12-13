@@ -12,6 +12,8 @@ import { Global } from 'src/app/common/global';
 // import { MatSnackBar } from '@angular/material/snack-bar';
 import { ApiserviceService } from 'src/app/Service/apiservice.service';
 import { ScrollPanelModule } from 'primeng/scrollpanel';
+import { MessageService } from 'primeng/api';
+import * as moment from 'moment';
 
 
 interface IUser {
@@ -30,17 +32,20 @@ interface IUser {
 
 @Component({
   templateUrl: 'dashboard.component.html',
-  styleUrls: ['dashboard.component.scss']
+  styleUrls: ['dashboard.component.scss'],
+  providers: [MessageService],
+
 })
 export class DashboardComponent implements OnInit {
 
-   activeIndex1: number = 0;
+  activeIndex1: number = 0;
   countries: any[];
   member: any[];
   selectedCountry: string;
   selectedMem: string;
-
+  showSaveBtn:boolean
   ProjectForm !: FormGroup
+  NewTaskDialog:boolean
 
    displayedColumns: string[] = [  'taskname','assignee_name','enddate' ];
    TaskName:any;
@@ -52,6 +57,7 @@ export class DashboardComponent implements OnInit {
    taskstatus:any;
     projectnames: any;
     data: any;
+    ProjectStates:any
     projectNmaes:any;
     completedTask: any;
     progressTask: any;
@@ -71,13 +77,17 @@ totalProgess:any;
 totalNotstarted:any;
 totalTask:any;
 TotalData:any;
+  PrjStatus_id: any;
+  colId: any;
+  editTaskid: any;
     
 
 
   constructor(
     private fb: FormBuilder, private router: Router,
     private rest :RestService , private Global : Global ,
-    private ApiService: ApiserviceService
+    private ApiService: ApiserviceService,
+    private messageService: MessageService,
     ) 
     { }
 
@@ -85,7 +95,7 @@ TotalData:any;
   ngOnInit(): void {
 
     this.ShowProjectNmaes();
-    this.ShowAllfromDetails();
+    this.ShowAllformDetails();
 
     this.member = [
       {name: 'Only Me', code: 'AU'},
@@ -106,12 +116,31 @@ TotalData:any;
   
   }
 
-  ShowAllfromDetails(){
+  ShowAllformDetails(){
+
     this.ProjectForm = this.fb.group({
       projectname :[''],
+      pname :[''],
+      taskname:[''],
+      efforts:[''],
+      startDate:[''],
+      endDate:[''],
+      Comments:[''],
+      taskType:[''],
+      taskStatus:[''],
+      assigneeName:[''],
+      PrjStatus:['']
+
   })
 
+}
   
+GetAllProjectStatus(value: any) {
+  this.PrjStatus_id = value
+  console.log("project",this.PrjStatus_id);
+
+ 
+
 }
 
 ShowDetails(projectid:any){
@@ -156,17 +185,19 @@ ShowDetails(projectid:any){
     
        this.totalTask=0;
        this.allTask = this.data;
-       
-      
-       
        this.TotalData = this.filterdata;
-       
-       
        this.allTask = this.TotalData;
        this. totalTask= this.allTask.length;
-      
-  
-            })
+    })
+    // ashlesha
+    var id = 45
+    this.rest.getAll(this.Global.getapiendpoint() + '/General/getProjectStatus/' + id).subscribe((data: any) => {
+        if (data.Success) {
+          this.ProjectStates = data.Data
+          // console.log('projectNames',this.ProjectStates);
+        }
+      })
+
   }
 
 ShowProjectNmaes()
@@ -175,7 +206,7 @@ ShowProjectNmaes()
     p_userid:3
   }
   this.rest.postParams(this.Global.getapiendpoint() + '/NewTask/GetProjectNameByuser',model).subscribe((data: any) => {
-    console.log('projectNames',data.Data);
+    // console.log('projectNames',data.Data);
     this.projectnames=data.Data;
    })
 }
@@ -183,7 +214,6 @@ ShowProjectNmaes()
 applyFilter(event: Event) {
 
   const filterValue = (event.target as HTMLInputElement).value;
-
   this.dataSource.filter = filterValue.trim().toLowerCase();
 
 }
@@ -200,7 +230,66 @@ leaveuser()
 console.warn(this.ProjectForm.value)
 }
 
+UpdateTask(){
+  var model ={
+    userid:this.colId,
+    statusid:this.PrjStatus_id,
+    taskid:this.editTaskid,
 
+}
 
+  console.log("UpdateTask model",model)
+  this.rest.postParams(this.Global.getapiendpoint() +'/NewTask/UpdateStatusTaskDetails',model).subscribe((data: any) => {
+    console.log('data',data.Data)
+    if (data.Success) {
+      this.messageService.add({ severity: 'success', summary: 'Service Message', detail: 'Task details updated successfully' });
+      this.Cancel_form()
+    }
+    else{
+      this.messageService.add({ severity: 'warn', summary: 'Success', detail: 'Record not updated..!!' });
+    }
+  })
+}
+Cancel_form() {
+  this.NewTaskDialog=false;
+}
+
+EditTaskDetails(row: any) {
+
+  console.log('project rows :',row)
+
+  this.NewTaskDialog = true;
+
+  this.showSaveBtn = false;
+
+  this.colId = row.id;
+
+  this.editTaskid = row.taskid;
+
+  this.ProjectForm = this.fb.group({
+
+  pname :[row.projectid],
+
+  taskType:[row.tasktypeid],
+
+  taskname:[row.taskname],
+
+  efforts:[row.efforts],
+
+  endDate:[(new Date (row.enddate))],
+
+  startDate:[(new Date(moment (row.startdate).format('YYYY-MM-DD')))],
+
+  Comments:[row.comments],
+
+  taskStatus:[row.taskstatus],
+
+  //PrjStatus: [row.projectstatusid],
+
+  assigneeName:[row.assignee_id]
+
+})
+
+}
 
 }

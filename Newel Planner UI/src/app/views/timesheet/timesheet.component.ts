@@ -476,9 +476,12 @@ export class TimesheetComponent implements OnInit, AfterViewInit {
     })
   }
 
+  setdate(){
+    this.taskDate = new Date
+  }
+
   SubmitNewTask() {
     // console.log("selectedTaskAssignee",this.selectedTaskAssignee);
-
     var model = {
       projectid: this.selectedProject.projectid,
       taskname: this.selectedTaskName,

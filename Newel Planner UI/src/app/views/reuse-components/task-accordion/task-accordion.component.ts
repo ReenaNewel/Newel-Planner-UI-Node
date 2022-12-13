@@ -107,23 +107,31 @@ export class TaskAccordionComponent implements OnInit {
 
   showallData() {
     this.rest.getAll(this.Global.getapiendpoint() + '/General/getAllTaskTypes').subscribe((data: any) => {
-      this.tasktypes = data.Data;
+      if(data.Success){
+        this.tasktypes = data.Data;
+      }
 
     })
     this.rest.getAll(this.Global.getapiendpoint() + '/Project/GetAllProjectName').subscribe((data: any) => {
-      this.projectnames = data.Data;
+      if(data.Success){
+        this.projectnames = data.Data;
+      }
     })
 
 
 
     this.rest.getAll(this.Global.getapiendpoint() + '/General/getAllTasks').subscribe((data: any) => {
-      this.tasks = data.Data;
+      if(data.Success){
+        this.tasks = data.Data;
+      }
     })
   }
   getProjectActivity() {
     this.rest.getAll(this.Global.getapiendpoint() + '/General/getProjectStatus/' + 60).subscribe((data: any) => {
-      this.ProjectActivities = data.Data;
-      console.log("ProjectActivities",this.ProjectActivities);
+      if(data.Success){
+        this.ProjectActivities = data.Data;
+        // console.log("ProjectActivities",this.ProjectActivities);
+      }
       
     })
   }
@@ -135,8 +143,9 @@ export class TaskAccordionComponent implements OnInit {
     }
     // console.log(`model`, model);
     this.rest.postParams(this.Global.getapiendpoint() + '/timesheet/GetTimesheetProject', model).subscribe((data: any) => {
-
-      this.ProjectTypes = data.Data;
+      if(data.Success){
+        this.ProjectTypes = data.Data;
+      }
     })
   }
 
@@ -260,9 +269,9 @@ export class TaskAccordionComponent implements OnInit {
       userid: this.userId,
       day: 2
     }
-    // console.log(`model`, model);
+    console.log(`model`, model);
     this.rest.postParams(this.Global.getapiendpoint() + '/timesheet/GetTimesheetDashboard', model).subscribe((data: any) => {
-      // console.log('data.Data', data.Data)
+      console.log('data.Data day 2', data.Data)
       if (data.Success) {
         this.dataSource2 = data.Data
         // console.log('datasouce2 :::', this.dataSource2)
@@ -392,7 +401,7 @@ export class TaskAccordionComponent implements OnInit {
   // }
 
   UpdateTimesheet(TimeSheetSavedData:any,TimeSheetSavedDate:any){
-    console.log('data to  be updates' , TimeSheetSavedData)
+    // console.log('data to  be updates' , TimeSheetSavedData)
     // TimeSheetSavedDate = new Date()
    
     this.disabledEdit = false
@@ -418,7 +427,7 @@ export class TaskAccordionComponent implements OnInit {
     console.log("Update model",model);
   
     this.rest.create(this.Global.getapiendpoint() + "/timesheet/UpdateTimesheet", model).subscribe((data: any) => {
-            console.log("data", data);
+            // console.log("data", data);
             if (data.Success) {
               this.messageService.add({ severity: 'success', summary: 'Service Message', detail: 'Timesheet Record Updated successfully' });
             
@@ -449,7 +458,7 @@ export class TaskAccordionComponent implements OnInit {
                 isactive:false,
                 flag:0
               }
-              console.log('deleted model' , model)
+              // console.log('deleted model' , model)
                 this.rest.create(this.Global.getapiendpoint() + "/timesheet/UpdateTimesheet", model).subscribe((data: any) => {
                   if (data.Success) {
                     this.messageService.add({ severity: 'info', summary: 'Confirmed', detail: 'Timesheet Record deleted successfully' });

@@ -16,6 +16,7 @@ class tbl_project_stage_details extends Model{}
 class tbl_master_project extends Model{}
 class tbl_master_userdetails extends Model{}
 class tbl_task_details extends Model{}
+class tbl_task_status extends Model{}
 class tbl_task_assignee_details extends Model{}
 class tbl_timesheet_details extends Model{}
 class tbl_timesheet_approval extends Model{}
@@ -210,7 +211,7 @@ module.exports.tbl_master_userdetails = function () {
     return tbl_master_userdetails;
 }
 
-// Ashlesha 
+// Ashleshas
 module.exports.tbl_task_details = function () {
     tbl_task_details.init({
     id:{type: Sequelize.BIGINT, primaryKey: true, autoIncrement: true,allowNull: false },
@@ -240,6 +241,25 @@ module.exports.tbl_task_details = function () {
     return tbl_task_details;
 }
 // Ashlesha 
+module.exports.tbl_task_status = function () {
+    tbl_task_status.init({
+    id:{type: Sequelize.BIGINT, primaryKey: true, autoIncrement: true,allowNull: false },
+    taskId:{ type: Sequelize.INTEGER, allowNull: true},
+    statusId:{ type: Sequelize.INTEGER, allowNull: true},
+    createdDate:{ type: Sequelize.DATE, allowNull: true, defaultValue: Sequelize.NOW},
+    created_by:{ type: Sequelize.INTEGER, allowNull: true},
+    active:{  type: Sequelize.BOOLEAN, defaultValue: true}
+
+    }, {
+        sequelize,
+        modelName: 'tbl_task_status',
+        tableName: 'tbl_task_status'
+    });
+
+    return tbl_task_status;
+}
+
+
 module.exports.tbl_task_assignee_details = function () {
     tbl_task_assignee_details.init({
     id:{type: Sequelize.BIGINT, primaryKey: true, autoIncrement: true,allowNull: false },
