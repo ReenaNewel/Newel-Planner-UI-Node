@@ -14,8 +14,9 @@
         <p-tabPanel header="Task">
           <div class="flex justify-content-center flex-wrap">
             <form [formGroup]="ProjectForm" (submit)="submit()">
-              <p-dropdown class="dropdown" [options]="projectnames" optionLabel="projectname" optionValue="projectid"
-                [filter]="true" filterBy="name" [showClear]="true" placeholder="Select a Project"
+              <p-dropdown class="dropdown" [options]="projectnames"
+               optionLabel="projectname" optionValue="projectid"
+                [filter]="true" filterBy="projectname" [showClear]="true" placeholder="Select a Project"
                 formControlName="projectname" (onChange)="ShowDetails($event.value)">
               </p-dropdown>
             </form>
@@ -27,28 +28,26 @@
           <!-- <form  #ProjectForm="ngForm" (ngSubmit)="tasksubmit(ProjectForm.valid) ;ProjectForm.resetForm(); "> -->
 
 
-            <c-row class="">
+             <c-row class="">
                 <c-col sm="12" md="4" lg="4" class="mb-3">
                   <p-dropdown  [options]="projectnames" [style]="{'minWidth':'100%'}" optionLabel="projectname"
                   optionValue="projectid" [filter]="true" name="projectname"
                   filterBy="projectname" [showClear]="true" placeholder="Select a Project"
-                  formControlName="pname" [readonly]="true" [disabled]="true" >
+                  formControlName="pname" [readonly]="true" >
                   </p-dropdown>
                 </c-col>
-
-                
 
                 <c-col sm="12" md="4" lg="4" class="mb-3">
                   <input type="text" class="w-full" placeholder="Task Name*" pInputText name="taskname"
                   [style]="{'minWidth':'100%'}"
-                  formControlName="taskname" [readonly]="true" [disabled]="true">
+                  formControlName="taskname" [readonly]="true" >
                 </c-col>
 
                 <c-col sm="12" md="4" lg="4" class="mb-3">
                     <p-dropdown [options]="filterdata" [style]="{'minWidth':'100%'}" optionLabel="tasktype_name" [filter]="true"
                         filterBy="tasktype_name" [showClear]="true" value="tasktypeid" placeholder="Task Type*" class="" 
                         name="tasktype_name"  formControlName="taskType" [readonly]="true"
-                          optionValue="tasktypeid" [disabled]="true">
+                          optionValue="tasktypeid">
                     </p-dropdown>
                 </c-col>
 
@@ -57,7 +56,7 @@
                       filterBy="assignee_name" [showClear]="true" value="assignee_id" 
                       formControlName="assigneeName"  placeholder="Assignee Name*" class=""
                         optionValue="assignee_id" name="assignee_name" [readonly]="true"
-                        [disabled]="true">
+                       >
                         
                   </p-dropdown>
               </c-col>
@@ -66,7 +65,7 @@
             <c-col sm="12" md="4" lg="4" class="mb-3">
               <input type="text" class="w-full" placeholder="Task Status*" pInputText name="taskStatus"
               [style]="{'minWidth':'100%','minHeight':'10%'}"
-              formControlName="taskStatus" [readonly]="true" [disabled]="true">
+              formControlName="taskStatus" [readonly]="true">
             </c-col>
 
 
@@ -83,19 +82,19 @@
                 <c-col sm="12" md="4" lg="4" class="mb-3">
                     <input type="number" class="w-full" placeholder="Efforts In Hrs*" pInputText name="efforts"
                     [style]="{'minWidth':'100%'}"
-                    formControlName="efforts" [readonly]="true" [disabled]="true">
+                    formControlName="efforts" [readonly]="true">
                 </c-col>
 
                 <c-col sm="12" md="4" lg="4" class="mb-3">
                     <p-calendar [style]="{'minWidth':'100%'}" [showIcon]="true" appendTo="body" placeholder="Start Date"
                         inputId="icon"  name="startdate" formControlName="startDate" [readonlyInput]="true"
-                        [readonlyInput]="true" [disabled]="true"></p-calendar>
+                        [readonlyInput]="true" ></p-calendar>
                 </c-col>
 
                 <c-col sm="12" md="4" lg="4" class="mb-3">
                     <p-calendar [style]="{'minWidth':'100%'}" [showIcon]="true" appendTo="body" placeholder="End Date"
                         inputId="icon" name="enddate" formControlName="endDate" [readonlyInput]="true"
-                          [readonlyInput]="true" [disabled]="true">
+                          [readonlyInput]="true">
                       </p-calendar>
                 </c-col>
 

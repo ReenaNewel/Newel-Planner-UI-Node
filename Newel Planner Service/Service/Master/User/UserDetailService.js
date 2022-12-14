@@ -45,6 +45,41 @@ var routes = function () {
 }  
 }); 
 
+router.route('/GetAllUserNameDetails')
+.post(function (req, res) {
+    try {
+        let user= req.body;
+        var querytext = `SELECT "GetallUserNameDetails"('${user.projectid}','abc'); FETCH ALL IN "abc"`;
+        //console.log("querytext",querytext);
+          var param = {
+          replacements: {
+            // p_active: true,
+            p_ref: 'abc'
+          },
+          type: connect.sequelize.QueryTypes.SELECT
+          }
+        connect.sequelize
+      .query(querytext,param)
+      .then(function (result) {
+          //console.log("result",result);
+          result.shift();
+          res.status(200).json({
+
+              Success: true,
+              Message: "Get all Assignee successfully",
+              Data: result
+        }); 
+    }, function (err) {
+        // //console.log(err);
+        dataconn.errorlogger('UserDetailService', 'GetAllUserNameDetails', err);
+        res.status(200).json({ Success: false, Message: '  table API f ailed.', Data: null });
+    });
+}catch(err)    {
+    dataconn.errorlogger('UserDetailService', 'GetAllUserNameDetails', err);
+    res.status(200).json({ Success: false, Message: '  table API failed.', Data: null });
+}  
+}); 
+
     router.route('/GetAllAssign-old')
         .get(function (req, res) {
             try {

@@ -33,6 +33,8 @@ export class TimesheetDashboardComponent implements OnInit {
   totalCalculatedMinutes: number;
   totalCalculatedhrs: number;
   TaskDt: any;
+  projectId: any;
+  projectFlag: number;
   constructor(
     private rest: RestService,
     private Global: Global,
@@ -92,7 +94,7 @@ export class TimesheetDashboardComponent implements OnInit {
       userid: this.userId,
       date: arg.dateStr
     }
-    // console.log('date model',model);
+    console.log('date model',model);
     this.rest.postParams(this.Global.getapiendpoint() + '/timesheet/GetMonthlyhoursData', model).subscribe((data: any) => {
       if (data.Success) {
         this.taskDate = data.Data;
@@ -113,34 +115,58 @@ export class TimesheetDashboardComponent implements OnInit {
       userid: this.userId
 
     }
+  console.log('time sheet date model' , model)
+    // this.rest.postParams(this.Global.getapiendpoint() + '/timesheet/GetTaskname', model).subscribe((data: any) => {
+    //   if (data.Success) {
+    //     this.ProjectNames = data.Data;
+    //   }
+     
+    // })
 
-    this.rest.postParams(this.Global.getapiendpoint() + '/timesheet/GetTaskname', model).subscribe((data: any) => {
+    var model1 = {
+      userid: this.userId,
+      // roleid: this.userRole
+
+    }
+    // this.projectFlag=0
+    this.rest.postParams(this.Global.getapiendpoint() + '/timesheet/GetProjectNamesByRole', model1).subscribe((data: any) => {
+      
       if (data.Success) {
+        this.projectFlag = 1
         this.ProjectNames = data.Data;
+        console.log(this.ProjectNames)
+      }
+      else{
+        this.projectFlag = 0
       }
      
     })
+
   }
 
   GetTaskNameByProject(Project: any) {
     // this.projectName = Project.projectname;
     // // console.log(this.projectName)
     // this.selectedTaskProject = this.projectName
-    // this.projectId = Project.projectid
-    // console.log(this.projectId)
+    this.projectId = Project.projectid
+    console.log('selected project', this.projectId)
 
   }
 
   hours =0
   minutes=0
+  params:any
   GetTimesheetData(event: any) {
     this.hoursArray = []
     this.datedata=[]
     // this.Montharray=[]
-    var model = {
-      userid: this.userId
-    }
-    this.rest.postParams(this.Global.getapiendpoint() + '/timesheet/GetTimesheetProject', model).subscribe((data: any) => {
+        this.params = {
+          userid: this.userId
+        }
+  
+    console.log('GetTimesheetData' ,  this.params)
+
+    this.rest.postParams(this.Global.getapiendpoint() + '/timesheet/GetTimesheetProject',this.params).subscribe((data: any) => {
       console.log("Timesheet hours minute data", data);
       if(data.Success){
           this.datedata = data.Data;

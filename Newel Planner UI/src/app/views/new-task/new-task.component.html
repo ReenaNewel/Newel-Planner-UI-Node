@@ -30,8 +30,9 @@
                         [value]="selectedTaskProject" [(ngModel)]="selectedTaskProject" required
                         [readOnly]="true" />
                 </span> -->
-                <p-dropdown [options]="ProjectNames"  [style]="{'minWidth':'100%'}" optionValue="projectid" [(ngModel)]="selectedProject" value="projectid" optionLabel="projectname"
-                [filter]="true" required name="projectname" (onChange)=" getUserByProjectId(selectedProject)"
+                <p-dropdown [options]="ProjectNames"  [style]="{'minWidth':'100%'}" optionValue="projectid"
+                 [(ngModel)]="selectedProject" value="projectid" optionLabel="projectname"
+                [filter]="true" required name="projectname" (onChange)="getUserByProjectId(selectedProject)"
                 filterBy="projectname" [showClear]="true" placeholder="Project Name" class="borderNone">
               </p-dropdown>
             </c-col>

@@ -36,6 +36,8 @@ export class ProjectRoleMappingComponent implements OnInit {
   RoleDetails: any;
   projectid: any;
 
+  usernameDropdown:boolean
+
   constructor(
     private rest: RestService,
     private Global: Global,
@@ -58,6 +60,7 @@ export class ProjectRoleMappingComponent implements OnInit {
     this.ProjectRoleDialog = true;
     this.showSaveBtn = true;
     this.ProjectRoleMappingForm.reset();
+    this.usernameDropdown =false
   }
 
  
@@ -109,16 +112,18 @@ export class ProjectRoleMappingComponent implements OnInit {
 
  
   EditProjectRoleDetails(row: any) {
+
+    this.usernameDropdown =true
     this.flag = 1;
     this.ProjectRoleDialog = true;
     this.showSaveBtn = false;
-    this.username = row.userid;
+    // this.username = row.userid;
     this.selectedUserid = row.userid;
     this.roledata = row.rolename;   
     var arrayrolename = this.roledata.split(',');
     this.selected3 = arrayrolename;   
     this.ProjectRoleMappingForm = this.fb.group({
-      userName: [row.username],
+      userName: [this.selectedUserid],
       role: [this.selected3],
     });
     this.oldroleid = this.selected3;
@@ -217,6 +222,7 @@ export class ProjectRoleMappingComponent implements OnInit {
           this.messageService.add({severity: 'success',summary: 'Service Message',detail: 'Project Role updated successfully',
           });
           this.Cancel_form();
+          this.flag = 0
         } else {
           this.messageService.add({severity: 'warn',summary: 'Success',detail: 'Record not updated..!!',
           });

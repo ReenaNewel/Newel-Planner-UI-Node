@@ -30,11 +30,16 @@
             <c-row class="mb-4">
                 <c-col sm="12" md="6" lg="6" class="mb-3">
                     <label class="pb-2">User Name</label>
-                    <p-dropdown [options]="userDetails" [style]="{'width':'100%'}"
+                <p-dropdown [options]="userDetails" [style]="{'width':'100%'}"
+                        (onChange)="GetSelectedUserName($event.value)" optionLabel="name" [filter]="true"
+                        filterBy="name" formControlName="userName" [showClear]="true" [(ngModel)]="selectedUserid" value="id"
+                        placeholder="User Name*" class="" required name="name" optionValue="id" [disabled]="usernameDropdown" appendTo="body">
+                </p-dropdown>
+                    <!-- <p-dropdown [options]="userDetails" [style]="{'width':'100%'}"
                         (onChange)="GetSelectedUserName($event.value)" optionLabel="name" [filter]="true"
                         filterBy="name" formControlName="userName" [showClear]="true" [(ngModel)]="username" value="id"
                         placeholder="User Name*" class="" required name="name" optionValue="id" appendTo="body">
-                    </p-dropdown>
+                    </p-dropdown> -->
                 </c-col>
 
                 <c-col sm="12" md="6" lg="6" class="mb-3">

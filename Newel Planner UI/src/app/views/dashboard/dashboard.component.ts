@@ -80,6 +80,10 @@ TotalData:any;
   PrjStatus_id: any;
   colId: any;
   editTaskid: any;
+  userLoggedIn: any;
+  userRole: any;
+  userId: any;
+  userEmail: any;
     
 
 
@@ -94,6 +98,11 @@ TotalData:any;
 
   ngOnInit(): void {
 
+    this.userLoggedIn = JSON.parse(localStorage.getItem('userLoggedIn')!);
+    this.userRole = this.userLoggedIn.defaultroleid;
+    this.userId = this.userLoggedIn.id;
+    this.userEmail = this.userLoggedIn.emailid;
+    
     this.ShowProjectNmaes();
     this.ShowAllformDetails();
 
@@ -137,16 +146,14 @@ TotalData:any;
   
 GetAllProjectStatus(value: any) {
   this.PrjStatus_id = value
-  console.log("project",this.PrjStatus_id);
-
- 
+  // console.log("project",this.PrjStatus_id);
 
 }
 
 ShowDetails(projectid:any){
    
   var model={
-    p_userid:3,
+    p_userid:this.userId,
     p_projectid:projectid
   }
   console.log('showdetails',model)
@@ -154,8 +161,8 @@ ShowDetails(projectid:any){
           this.rest.postParams(this.Global.getapiendpoint() + '/NewTask/GetTaskDetailsByuser',model).subscribe((data: any) => {
            
              this.filterdata = data.Data;
-             console.log("total acount",data.Data);
-             console.log("this.compelete",this.completed);
+            //  console.log("total acount",data.Data);
+            //  console.log("this.compelete",this.completed);
         
              
           // for Completed
@@ -203,12 +210,22 @@ ShowDetails(projectid:any){
 ShowProjectNmaes()
 {
   var model={
-    p_userid:3
+    userid:this.userId
   }
-  this.rest.postParams(this.Global.getapiendpoint() + '/NewTask/GetProjectNameByuser',model).subscribe((data: any) => {
-    // console.log('projectNames',data.Data);
-    this.projectnames=data.Data;
-   })
+  // this.rest.postParams(this.Global.getapiendpoint() + '/NewTask/GetProjectNameByuser',model).subscribe((data: any) => {
+  //   // console.log('projectNames',data.Data);
+  //   this.projectnames=data.Data;
+  //  }
+  console.log('hi')
+  this.rest.postParams(this.Global.getapiendpoint() + '/timesheet/GetProjectNamesByRole', model).subscribe((data: any) => {
+      
+    if (data.Success) {
+     
+      this.projectnames = data.Data;
+      console.log('task projects  ',this.projectnames)
+    }
+ 
+  })
 }
 
 applyFilter(event: Event) {
@@ -256,37 +273,23 @@ Cancel_form() {
 
 EditTaskDetails(row: any) {
 
-  console.log('project rows :',row)
+      console.log('project rows :',row)
+      this.NewTaskDialog = true;
+      this.showSaveBtn = false;
+      this.colId = row.id;
+      this.editTaskid = row.taskid;
 
-  this.NewTaskDialog = true;
-
-  this.showSaveBtn = false;
-
-  this.colId = row.id;
-
-  this.editTaskid = row.taskid;
-
-  this.ProjectForm = this.fb.group({
-
-  pname :[row.projectid],
-
-  taskType:[row.tasktypeid],
-
-  taskname:[row.taskname],
-
-  efforts:[row.efforts],
-
-  endDate:[(new Date (row.enddate))],
-
-  startDate:[(new Date(moment (row.startdate).format('YYYY-MM-DD')))],
-
-  Comments:[row.comments],
-
-  taskStatus:[row.taskstatus],
-
-  //PrjStatus: [row.projectstatusid],
-
-  assigneeName:[row.assignee_id]
+      this.ProjectForm = this.fb.group({
+      pname :[row.projectid],
+      taskType:[row.tasktypeid],
+      taskname:[row.taskname],
+      efforts:[Math.round(row.efforts)],
+      endDate:[moment (row.enddate).format('YYYY-MM-DD')],
+      startDate:[moment (row.startdate).format('YYYY-MM-DD')],
+      Comments:[row.comments],
+      taskStatus:[row.taskstatus],
+      // PrjStatus: [row.projectstatusid],
+      assigneeName:[row.assignee_id]
 
 })
 

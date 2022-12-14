@@ -180,7 +180,7 @@ router.route('/CreateNewTask')
                         })
                     }
                 }
-                console.log('requserid',requserid)
+                // console.log('requserid',requserid)
 
                 // Reena Task status update
                 model={
@@ -195,7 +195,6 @@ router.route('/CreateNewTask')
                 console.log('task status update', model)
                 dataaccess.Create(NewTaskStatus, model)
                 .then(function (result) {
-                    
                 })
                 // Reena Task status 
                 res.status(200).json({ Success: true, Message: 'New Task saved successfully', Data: result });

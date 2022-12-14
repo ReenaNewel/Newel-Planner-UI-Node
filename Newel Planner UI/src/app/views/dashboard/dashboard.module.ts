@@ -38,7 +38,7 @@ import {ButtonModule} from 'primeng/button';
 import {PrimeIcons,MenuItem} from 'primeng/api';
 import {CalendarModule} from 'primeng/calendar';
 import {DialogModule} from 'primeng/dialog';
-
+import { InputTextModule } from 'primeng/inputtext';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import listPlugin from '@fullcalendar/list';
@@ -85,6 +85,7 @@ FullCalendarModule.registerPlugins([
     DialogModule,
     MessageModule,
     MessagesModule,
+    InputTextModule
     // FullCalendarModule,
     // BrowserModule
 

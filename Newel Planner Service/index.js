@@ -13,7 +13,7 @@ var dataconn = require('./Data/DataConnection');
 
 // client.connect();
 var bodyParser = require('body-parser');
-const { clearCache } = require('ejs');
+// const { clearCache } = require('ejs');
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 app.use(bodyParser.json({ limit: '50mb' }));
 

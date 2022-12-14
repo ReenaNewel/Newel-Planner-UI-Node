@@ -1,17 +1,18 @@
-<c-row>
+    <c-row>
     <div class="flex justify-content-center flex-wrap mb-3">
-
-        <!-- <p-dropdown [options]="ProjectNames" [(ngModel)]="selectedProject" value="projectid" optionLabel="projectname"
-            [filter]="true" required name="projectname" (onChange)="GetTaskNameByProject(selectedProject)"
-            filterBy="projectname" [showClear]="true" placeholder="Project Name" class="borderNone">
-            <ng-template pTemplate="selectedItem">
-                <div class="country-item country-item-value" *ngIf="selectedProject">
-                    <div pTooltip="Project Name" tooltipPosition="top">{{selectedProject?.projectname | slice:0:12}}
-                    </div>
-                </div>
-            </ng-template>
-            
-        </p-dropdown> -->
+        <div *ngIf="this.projectFlag == 1">
+            <p-dropdown [options]="ProjectNames" [(ngModel)]="selectedProject" value="projectid" optionLabel="projectname"
+                [filter]="true" required name="projectname" (onChange)="GetTaskNameByProject(selectedProject)"
+                filterBy="projectname" [showClear]="true" placeholder="Project Name" class="borderNone">
+                <ng-template pTemplate="selectedItem">
+                    <div class="country-item country-item-value" *ngIf="selectedProject">
+                        <div pTooltip="Project Name" tooltipPosition="top">{{selectedProject?.projectname | slice:0:12}}
+                        </div>
+                    </div>  
+                </ng-template>
+                
+            </p-dropdown>
+        </div>
 
         <p-dropdown [options]="member" [(ngModel)]="selectedMem" placeholder="Select" class="mx-3"
             (onChange)="GetTimesheetData($event.value)">
@@ -55,7 +56,7 @@
                     <p-scrollPanel [style]="{width: '100%', height: '100px'}">
                         <div class="flex justify-content-between">
                             <span class="font-bold">{{item.projname}}</span>
-                            <span class="font-bold">{{item.timeinhours}}</span>
+                            <span class="font-bold">{{item.timeinhours}}:{{item.timeinminutes}}</span>
                         </div>
                         <p class="mb-0">TaskName : {{item.taskname}}</p>
                         <p class="">Description  : {{item.description}}</p>

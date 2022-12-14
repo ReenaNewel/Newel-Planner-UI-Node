@@ -34,7 +34,7 @@ export class NewTaskComponent implements OnInit {
   ProjectActivities: any[];
   ProjectNames: any[];
   ProjectTypes: any[];
-  projectnames: any;
+  projectnames1: any;
   Tasknames: any;
   projectId: any;
   projectName: string;
@@ -91,7 +91,7 @@ SelectedProjectNames: any[];
       var model = {
         projectid: prjID
       }
-      console.log('project id', model)
+      // console.log('project id', model)
       this.rest.postParams(this.Global.getapiendpoint() + '/NewTask/GetAllUsersByProjectID', model).subscribe((data: any) => {
       //  console.log("...........",data);
        
@@ -163,7 +163,6 @@ SelectedProjectNames: any[];
     this.flag = 1
 
     console.log('project rows :', row)
-    debugger;
     this.getUserByProjectId(row.projectid)
 
 
@@ -201,7 +200,7 @@ SelectedProjectNames: any[];
       userid:this.selectedTaskAssignee,
      
     }
-    console.log("UpdateTask model",model)
+    // console.log("UpdateTask model",model)
     this.rest.postParams(this.Global.getapiendpoint() +'/NewTask/UpdateTask',model).subscribe((data: any) => {
       if (data.Success) {
         this.messageService.add({ severity: 'success', summary: 'Service Message', detail: 'Task details updated successfully' });
@@ -292,6 +291,7 @@ SelectedProjectNames: any[];
 
       if (data.Success) {
         this.ProjectNames = data.Data;
+        // console.log(this.ProjectNames)
       }
       else {
       }
@@ -307,7 +307,7 @@ SelectedProjectNames: any[];
     })
     this.rest.getAll(this.Global.getapiendpoint() + '/Project/GetAllProjectName').subscribe((data: any) => {
       if(data.Success){
-        this.projectnames = data.Data;
+        this.projectnames1 = data.Data;
       }
     })
 
