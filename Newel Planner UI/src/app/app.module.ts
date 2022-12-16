@@ -17,6 +17,7 @@ import listPlugin from '@fullcalendar/list';
 import interactionPlugin from '@fullcalendar/interaction';
 import {LeaveRequestModule } from './views/leave-request/leave-request.module';
 import { MappingModule } from './views/mapping/mapping.module';
+import {WeekelyEffortsModule} from './views/weekely-efforts/weekely-efforts.module'
 
 import {
   PERFECT_SCROLLBAR_CONFIG,
@@ -119,7 +120,8 @@ FullCalendarModule.registerPlugins([
     ToastModule,
     InputTextModule,
     LeaveRequestModule,
-    MappingModule
+    MappingModule,
+    WeekelyEffortsModule
 
 
   ],

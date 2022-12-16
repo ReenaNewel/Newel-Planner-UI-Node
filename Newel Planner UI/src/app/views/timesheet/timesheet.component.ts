@@ -247,6 +247,7 @@ export class TimesheetComponent implements OnInit, AfterViewInit {
 
   createTaskClose() {
     this.taskDate = new Date;
+    this.Cancel_form()
     // console.log(" this.taskdate", this.taskDate);
     // this.selectedProject = '';
   }
@@ -436,7 +437,7 @@ export class TimesheetComponent implements OnInit, AfterViewInit {
       this.rest.postParams(this.Global.getapiendpoint() + '/NewTask/GetAllUsersByProjectID', model).subscribe((data: any) => {
         if (data.Success) {
           this.UserData = data.Data;
-          // console.log('user',this.UserData)
+          console.log('user data',this.UserData)
         }
       })
     }

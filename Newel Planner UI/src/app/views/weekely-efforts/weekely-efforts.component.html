@@ -1,0 +1,188 @@
+<p-toast></p-toast>
+<!-- <div class="card"> -->
+<p-toolbar styleClass="mb-4 gap-2">
+    <ng-template pTemplate="left">
+        <span class="p-input-icon-left">
+            <i class="pi pi-search"></i>
+            <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
+                placeholder="Search..." />
+        </span>
+
+    </ng-template>
+
+    <ng-template pTemplate="right">
+        <p-button (click)="showCreateNewProjectDialog()" icon="pi pi-plus" label="Add Weekely Efforts"
+            styleClass="p-button-warning px-3 py-2 mb-md-1">
+        </p-button>
+    </ng-template>
+</p-toolbar>
+
+<p-dialog [modal]="true" [(visible)]="WeekelyEffortsDialog" header="Weekely Efforts"
+    [breakpoints]="{'960px': '75vw', '640px': '100vw'}" [style]="{width: '65vw'}" [draggable]="false"
+    [resizable]="false" class="pb-2" (onHide)="Cancel_form()">
+
+    <form [formGroup]="WeekelyEffortForm" (submit)="submit()">
+
+        <c-row class="mb-4">
+            <c-col sm="12" md="6" lg="6" class="mb-3">
+                <label class="pb-2">RA Name</label>
+                <p-dropdown [options]="RAName" [style]="{'width':'100%'}" optionLabel="raname" [filter]="true"
+                    filterBy="raname" [showClear]="true" value="ra_id" formControlName="RAName" placeholder="RA Name*"
+                    class="" required name="name" optionValue="ra_id" appendTo="body" (onChange)="RAUsers($event)">
+                </p-dropdown>
+            </c-col>
+
+            <c-col sm="12" md="6" lg="6" class="mb-3">
+                <label class="pb-2">Resource Name</label>
+                <p-dropdown [options]="RAFilterData" [style]="{'width':'100%'}" optionLabel="username" [filter]="true"
+                    formControlName="ResourceName" filterBy="username" [showClear]="true" value="userid"
+                    placeholder="User Name*" class="" required name="username" optionValue="userid"
+                    (onChange)="useridDetails($event)" appendTo="body">
+                </p-dropdown>
+            </c-col>
+
+            <c-col sm="12" md="6" lg="6" class="mb-3">
+                <label class="pb-2">Week</label>
+                <p-dropdown [options]="monthwek" [style]="{'width':'100%'}" [filter]="true" filterBy="id"
+                    [showClear]="true" value="id" formControlName="MonthWeeks" placeholder="Month Week*" class=""
+                    required name="monthweekedata" optionValue="id" appendTo="body" optionLabel="weeklydate"
+                    (onChange)="HoursDetails($event.value)">
+
+                    <ng-template let-monthwek pTemplate="item">
+                        <div class="flex align-items-center monthwek-item">
+                            <div>{{monthwek.weeklydate}}</div>
+
+                        </div>
+                    </ng-template>
+                </p-dropdown>
+
+
+            </c-col>
+
+
+            <!-- <c-col sm="12" md="6" lg="6" class="mb-3">
+                <label class="pb-2">Project Names</label>
+                <p-multiSelect [options]="projectDetails" [style]="{'width':'100%'}" optionLabel="projectname"
+                    [filter]="true" filterBy="projectname" name="name" formControlName="ProjectName" [showClear]="true"
+                     placeholder="Project Names *" class="" required
+                    optionValue="projectname" appendTo="body">
+                </p-multiSelect>
+            </c-col> -->
+
+
+            <c-col sm="12" md="6" lg="6" class="mb-3">
+                <label class="pb-2">Project Name</label>
+                <p-dropdown [options]="projectDetails" [style]="{'width':'100%'}" optionLabel="projectname"
+                    [filter]="true" formControlName="ProjectName" filterBy="projectname" [showClear]="true"
+                    placeholder="Project Name*" class="" required name="name" optionValue="projectid" appendTo="body">
+                </p-dropdown>
+            </c-col>
+
+            <c-col sm="12" md="6" lg="6" class="mb-3">
+                <label class="pb-2">Activity Name</label>
+                <p-dropdown [options]="projectActivityDetails" [style]="{'width':'100%'}" optionLabel="name"
+                    [filter]="true" formControlName="ActivityName" filterBy="name" [showClear]="true"
+                    placeholder="Activity Name*" class="" required name="typeid" optionValue="typeid" appendTo="body">
+                </p-dropdown>
+            </c-col>
+
+
+            <c-col sm="12" md="6" lg="6" class="mb-3">
+                <label class="pb-2">Hours</label>
+                <p-dropdown [options]="hours" [style]="{'width':'100%'}" formControlName="Hours" [showClear]="true"
+                    placeholder="Hours*" class="" required name="Hours"  appendTo="body">
+                </p-dropdown>
+            </c-col>
+            <!-- <c-col sm="12" md="6" lg="6" class="mb-3">
+                <label class="pb-2">Hours</label>
+                <p-dropdown pTooltip="Hours" tooltipPosition="top" [options]="hours" name="Hours"
+                    formControlName="Hours" class="" required>
+
+                </p-dropdown>
+
+            </c-col> -->
+        </c-row>
+    </form>
+
+    <p-button *ngIf="showSaveBtn" type="submit" (click)="SaveResource()" label="Save"
+        styleClass="p-button-warning px-3 py-2" [disabled]="!WeekelyEffortForm.valid"></p-button>
+    <p-button *ngIf="!showSaveBtn" type="submit" (click)="UpdateWeekelyEfforts()" label="Update"
+        styleClass="p-button-warning px-3 py-2"></p-button>
+    <p-button (click)="WeekelyEffortsDialog=false" (click)="Cancel_form()" label="Back" styleClass="p-button-text pb-2">
+    </p-button>
+
+
+</p-dialog>
+
+
+
+<c-card class="mb-4">
+    <c-card-header>Weekely Efforts</c-card-header>
+    <c-card-body class="px-3">
+
+        <div class="card">
+            <p-table #dt [value]="WeekelyEffortsData" [rows]="5" [paginator]="true"
+                [globalFilterFields]="['raname','username','selectedweek','projectname','activityname','hours','plannedby']"
+                dataKey="id" editMode="row" [tableStyle]="{'min-width': '50rem'}" [rowHover]="true"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                [showCurrentPageReport]="true">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="width:2rem !important">RAName
+                        </th>
+                        <th>ResourceName
+                        </th>
+                        <th>Week
+                        </th>
+                        <th>Project Name
+                        </th>
+                        <th>Activity
+                        </th>
+                        <th>Hours
+                        </th>
+                        <th>Efforts PlannedBy
+                        </th>
+                        <th style="width:2rem !important">Action</th>
+                    </tr>
+
+                </ng-template>
+                <ng-template pTemplate="body" let-Selected let-editing="editing" let-ri="rowIndex">
+                    <tr [pEditableRow]="Selected">
+                        <td>
+                            {{Selected.raname }}
+                        </td>
+                        <td>
+                            {{Selected.username }}
+                        </td>
+                        <td>
+                            {{Selected.selectedweek}}
+                        </td>
+                        <td>
+                            {{Selected.projectname}}
+                        </td>
+                        <td>
+                            {{Selected.activityname}}
+                        </td>
+                        <td>
+                            {{Selected.hours}}
+
+                        </td>
+                        <td>
+                            {{Selected.plannedby}}
+                        </td>
+                        <td>
+                            <div class="flex align-items-center justify-content-center gap-2">
+                                <button pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil"
+                                    (click)="editWeekelyEfforts(Selected)"
+                                    class="p-button-rounded p-button-text"></button>
+                            </div>
+                        </td>
+
+
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+
+    </c-card-body>
+</c-card>

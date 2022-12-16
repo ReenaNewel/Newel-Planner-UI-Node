@@ -163,7 +163,7 @@
       <c-col sm="12" md="4" lg="4" class="mb-3">
         <p-multiSelect [options]="UserData" [maxSelectedLabels]="1" [style]="{'width':'100%'}" optionLabel="name"
           [filter]="true" filterBy="name" optionValue="userid" [showClear]="true" value="userid"
-          (onChange)="GetAssigneeName($event.value)" (click)="getUserByProjectId()" defaultLabel="Assignee Name*"
+          (click)="getUserByProjectId()" defaultLabel="Assignee Name*"
           class="" required [(ngModel)]="selectedTaskAssignee" name="assignee_name" appendTo="body">
         </p-multiSelect>
       </c-col>

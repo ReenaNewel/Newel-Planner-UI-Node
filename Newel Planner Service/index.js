@@ -78,6 +78,11 @@ app.use("/Leave", LeaveRequest);
 var RoleMaster = require('./Service/RoleMaster/RoleMasterService')();
 app.use("/RoleMaster", RoleMaster);
 
+var WeekelyEffortsService = require('./Service/Weekely-Efforts/weekely-efforts')();
+app.use("/WeekelyEfforts", WeekelyEffortsService);
+
+
+
 // ******************************************************************************************************************
 // Ashlesha
 app.get('/users', (req, res)=>{

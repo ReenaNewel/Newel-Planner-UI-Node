@@ -84,6 +84,11 @@ TotalData:any;
   userRole: any;
   userId: any;
   userEmail: any;
+  editassignee: any; 
+  editcreated_by: any;
+  EditUnqID: any;
+  EditTaskid: any;
+  projectid: any;
     
 
 
@@ -128,7 +133,7 @@ TotalData:any;
   ShowAllformDetails(){
 
     this.ProjectForm = this.fb.group({
-      projectname :[''],
+      // projectname :[''],
       pname :[''],
       taskname:[''],
       efforts:[''],
@@ -141,7 +146,13 @@ TotalData:any;
       PrjStatus:['']
 
   })
-
+  this.ProjectForm.get('pname')?.disable()
+  this.ProjectForm.get('taskname')?.disable()
+  this.ProjectForm.get('efforts')?.disable()
+  this.ProjectForm.get('startDate')?.disable()
+  this.ProjectForm.get('Comments')?.disable()
+  this.ProjectForm.get('assigneeName')?.disable()
+  this.ProjectForm.get('taskStatus')?.disable()
 }
   
 GetAllProjectStatus(value: any) {
@@ -152,6 +163,7 @@ GetAllProjectStatus(value: any) {
 
 ShowDetails(projectid:any){
    
+  this.projectid =projectid
   var model={
     p_userid:this.userId,
     p_projectid:projectid
@@ -161,16 +173,16 @@ ShowDetails(projectid:any){
           this.rest.postParams(this.Global.getapiendpoint() + '/NewTask/GetTaskDetailsByuser',model).subscribe((data: any) => {
            
              this.filterdata = data.Data;
-            //  console.log("total acount",data.Data);
+           console.log("total acount",data.Data);
             //  console.log("this.compelete",this.completed);
         
              
           // for Completed
             this.totalcompleted=0;
-            this.completed = this.filterdata.filter(task => task.status === 1);
+            this.completed = this.filterdata.filter(task => task.status === 3);
         
             this.completedTask=this.completed;
-            //console.log('tasks',this.completedTask);
+            // console.log('tasks',this.completedTask);
             //console.log("this.compelete",this.completed.length);
             this.totalcompleted= this.completed.length;
              
@@ -180,14 +192,17 @@ ShowDetails(projectid:any){
                this.totalProgess=0;
                 this.inprogress = this.filterdata.filter(task => task.status === 2);
                 this.progressTask = this.inprogress;
+                console.log("this.progressTask",this.progressTask);
+                
               
   
   //for Not started
                this.totalNotstarted=0;
   
-               this.notstarted = this.filterdata.filter(task => task.status === 3);
+               this.notstarted = this.filterdata.filter(task => task.status === 1);
                this.notstartedTask = this.notstarted;
-  
+               this.totalNotstarted = this.notstarted.length;
+               console.log("this.notstartedTask",this.notstartedTask);
       //for total
     
        this.totalTask=0;
@@ -197,11 +212,11 @@ ShowDetails(projectid:any){
        this. totalTask= this.allTask.length;
     })
     // ashlesha
-    var id = 45
+    var id = 102
     this.rest.getAll(this.Global.getapiendpoint() + '/General/getProjectStatus/' + id).subscribe((data: any) => {
         if (data.Success) {
           this.ProjectStates = data.Data
-          // console.log('projectNames',this.ProjectStates);
+          //  console.log('projectNames',this.ProjectStates);
         }
       })
 
@@ -216,7 +231,7 @@ ShowProjectNmaes()
   //   // console.log('projectNames',data.Data);
   //   this.projectnames=data.Data;
   //  }
-  console.log('hi')
+  console.log('project names')
   this.rest.postParams(this.Global.getapiendpoint() + '/timesheet/GetProjectNamesByRole', model).subscribe((data: any) => {
       
     if (data.Success) {
@@ -247,20 +262,62 @@ leaveuser()
 console.warn(this.ProjectForm.value)
 }
 
+getrowdetails(event:any){
+  console.log("getrowdetails",event);
+  
+}
+editprojectName:any
+EditTaskDetails(taskDetails) {
+ 
+  console.log('taskDetails  :',taskDetails)
+  this.NewTaskDialog = true;
+  this.showSaveBtn = false;
+  this.colId = taskDetails.id;
+  console.log("this.colId",this.colId);
+  
+ 
+ this.editcreated_by =taskDetails.created_by;
+// komal
+this.editprojectName= taskDetails.projectid;
+console.log("taskDetails.enddate",taskDetails.enddate);
+
+  this.ProjectForm = this.fb.group({
+  pname :[this.editprojectName],
+  taskType:[taskDetails.tasktypeid],
+  taskname:[taskDetails.taskname],
+  efforts:[Math.round(taskDetails.efforts)],
+  // endDate:[taskDetails.enddate],
+  endDate:[moment(taskDetails.enddate).format('MM/DD/YYYY')],
+  // startDate:[taskDetails.startdate],
+  startDate:[moment(taskDetails.startdate).format('MM/DD/YYYY')],
+  Comments:[taskDetails.comments],
+  taskStatus:[taskDetails.taskstatus],
+  PrjStatus: [],
+  assigneeName:[taskDetails.assignee_id]
+
+})
+
+this.EditUnqID=taskDetails.unqid;
+this.EditTaskid = taskDetails.taskid;
+}
+
 UpdateTask(){
   var model ={
-    userid:this.colId,
-    statusid:this.PrjStatus_id,
-    taskid:this.editTaskid,
-
+    taskId:this.EditTaskid,
+    statusId:this.PrjStatus_id ,
+    created_by:this.userId,
+    unqid: this.EditUnqID
 }
 
   console.log("UpdateTask model",model)
   this.rest.postParams(this.Global.getapiendpoint() +'/NewTask/UpdateStatusTaskDetails',model).subscribe((data: any) => {
-    console.log('data',data.Data)
+    // console.log('data',data.Data)
     if (data.Success) {
+      // alert('saved')
       this.messageService.add({ severity: 'success', summary: 'Service Message', detail: 'Task details updated successfully' });
       this.Cancel_form()
+      this.ShowDetails(this.projectid)
+
     }
     else{
       this.messageService.add({ severity: 'warn', summary: 'Success', detail: 'Record not updated..!!' });
@@ -269,30 +326,8 @@ UpdateTask(){
 }
 Cancel_form() {
   this.NewTaskDialog=false;
-}
-
-EditTaskDetails(row: any) {
-
-      console.log('project rows :',row)
-      this.NewTaskDialog = true;
-      this.showSaveBtn = false;
-      this.colId = row.id;
-      this.editTaskid = row.taskid;
-
-      this.ProjectForm = this.fb.group({
-      pname :[row.projectid],
-      taskType:[row.tasktypeid],
-      taskname:[row.taskname],
-      efforts:[Math.round(row.efforts)],
-      endDate:[moment (row.enddate).format('YYYY-MM-DD')],
-      startDate:[moment (row.startdate).format('YYYY-MM-DD')],
-      Comments:[row.comments],
-      taskStatus:[row.taskstatus],
-      // PrjStatus: [row.projectstatusid],
-      assigneeName:[row.assignee_id]
-
-})
-
+   this.ProjectForm.reset();
+ 
 }
 
 }

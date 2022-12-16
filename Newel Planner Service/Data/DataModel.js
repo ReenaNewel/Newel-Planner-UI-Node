@@ -30,6 +30,10 @@ class tbl_userproject_mapping extends Model{}
 class tbl_menu_ui_mst extends Model{}
 class Error_Log extends Model{}
 class tbl_leave_details extends Model{}
+class tbl_weekly_efforts extends Model{}
+class tbl_month_week extends Model{}
+
+
 
 
 
@@ -241,6 +245,52 @@ module.exports.tbl_task_details = function () {
     return tbl_task_details;
 }
 // Ashlesha 
+
+module.exports.tbl_month_week = function () {
+
+    tbl_month_week.init({
+
+        id:{type: Sequelize.BIGINT, primaryKey: true, autoIncrement: true,allowNull: false },
+        startdate:{ type: Sequelize.DATE, allowNull: true},
+        enddate:{ type: Sequelize.DATE, allowNull: true},
+
+    }, {
+
+        sequelize,
+
+        modelName: 'tbl_month_week',
+        tableName: 'tbl_month_week'
+
+    });
+    return tbl_month_week;
+}
+
+module.exports.tbl_weekly_efforts = function () {
+
+    tbl_weekly_efforts.init({
+
+        id: { type: Sequelize.BIGINT, primaryKey: true, allowNull: false, autoIncrement: true },
+        id_ra: { type: Sequelize.INTEGER, allowNull: true },
+        id_user: { type: Sequelize.INTEGER, allowNull: true },
+        id_week: { type: Sequelize.INTEGER, allowNull: true },
+        id_project: { type: Sequelize.INTEGER, allowNull: true },
+        hours: { type: Sequelize.INTEGER, allowNull: true },
+        id_activity: { type: Sequelize.INTEGER, allowNull: true },
+        efforts_planned_by: { type: Sequelize.INTEGER, allowNull: true },
+
+
+    }, {
+
+        sequelize,
+        modelName: 'tbl_weekly_efforts',
+
+        tableName: 'tbl_weekly_efforts'
+
+    });
+
+    return tbl_weekly_efforts;
+
+}
 module.exports.tbl_task_status = function () {
     tbl_task_status.init({
     id:{type: Sequelize.BIGINT, primaryKey: true, autoIncrement: true,allowNull: false },
@@ -248,7 +298,10 @@ module.exports.tbl_task_status = function () {
     statusId:{ type: Sequelize.INTEGER, allowNull: true},
     createdDate:{ type: Sequelize.DATE, allowNull: true, defaultValue: Sequelize.NOW},
     created_by:{ type: Sequelize.INTEGER, allowNull: true},
-    active:{  type: Sequelize.BOOLEAN, defaultValue: true}
+    active:{  type: Sequelize.BOOLEAN, defaultValue: true},
+    assigneeId:{ type: Sequelize.INTEGER, allowNull: true},
+
+ 
 
     }, {
         sequelize,

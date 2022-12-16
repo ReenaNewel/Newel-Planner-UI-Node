@@ -1,7 +1,7 @@
+<p-toast></p-toast>
 <div class="card">
   <c-row>
     <c-col sm="12" class="mb-3">
-
       <!-- <h5>Programmatic</h5> -->
 
       <p-tabView [(activeIndex)]="activeIndex1">
@@ -12,116 +12,119 @@
         </p-tabPanel>
 
         <p-tabPanel header="Task">
+          <!-- formControlName="projectname" -->
           <div class="flex justify-content-center flex-wrap">
             <form [formGroup]="ProjectForm" (submit)="submit()">
-              <p-dropdown class="dropdown" [options]="projectnames"
-               optionLabel="projectname" optionValue="projectid"
+              <p-dropdown class="dropdown" [options]="projectnames" optionLabel="projectname" optionValue="projectid"
                 [filter]="true" filterBy="projectname" [showClear]="true" placeholder="Select a Project"
-                formControlName="projectname" (onChange)="ShowDetails($event.value)">
+               (onChange)="ShowDetails($event.value)">
               </p-dropdown>
             </form>
           </div>
-<!-- Ashlesha -->
+          <!-- Ashlesha -->
           <form [formGroup]="ProjectForm" (submit)="submit()">
-          <p-dialog [(visible)]="NewTaskDialog" [breakpoints]="{'960px': '75vw'}"
-          [style]="{width: '70vw'}" [draggable]="false" [resizable]="false" class="pb-2">
-          <!-- <form  #ProjectForm="ngForm" (ngSubmit)="tasksubmit(ProjectForm.valid) ;ProjectForm.resetForm(); "> -->
+            <p-dialog [(visible)]="NewTaskDialog" [breakpoints]="{'960px': '75vw'}" [style]="{width: '70vw'}"
+              [draggable]="false" [resizable]="false" class="pb-2">
+              <!-- <form  #ProjectForm="ngForm" (ngSubmit)="tasksubmit(ProjectForm.valid) ;ProjectForm.resetForm(); "> -->
 
 
-             <c-row class="">
+              <c-row class="">
                 <c-col sm="12" md="4" lg="4" class="mb-3">
-                  <p-dropdown  [options]="projectnames" [style]="{'minWidth':'100%'}" optionLabel="projectname"
-                  optionValue="projectid" [filter]="true" name="projectname"
-                  filterBy="projectname" [showClear]="true" placeholder="Select a Project"
-                  formControlName="pname" [readonly]="true" >
+                  <label class="pb-2">Project</label>
+                  <p-dropdown [options]="projectnames" [style]="{'minWidth':'100%'}" optionLabel="projectname"
+                    optionValue="projectid" [filter]="true" name="projectname" filterBy="projectname" [showClear]="true"
+                    placeholder="Select a Project" formControlName="pname">
                   </p-dropdown>
                 </c-col>
 
                 <c-col sm="12" md="4" lg="4" class="mb-3">
+                  <label class="pb-2">Task Name</label>
                   <input type="text" class="w-full" placeholder="Task Name*" pInputText name="taskname"
-                  [style]="{'minWidth':'100%'}"
-                  formControlName="taskname" [readonly]="true" >
+                    [style]="{'minWidth':'100%'}" formControlName="taskname" >
                 </c-col>
 
                 <c-col sm="12" md="4" lg="4" class="mb-3">
-                    <p-dropdown [options]="filterdata" [style]="{'minWidth':'100%'}" optionLabel="tasktype_name" [filter]="true"
-                        filterBy="tasktype_name" [showClear]="true" value="tasktypeid" placeholder="Task Type*" class="" 
-                        name="tasktype_name"  formControlName="taskType" [readonly]="true"
-                          optionValue="tasktypeid">
-                    </p-dropdown>
-                </c-col>
-
-                <c-col sm="12" md="4" lg="4" class="mb-3">
-                  <p-dropdown [options]="filterdata" [style]="{'minWidth':'100%'}" optionLabel="assignee_name" [filter]="true"
-                      filterBy="assignee_name" [showClear]="true" value="assignee_id" 
-                      formControlName="assigneeName"  placeholder="Assignee Name*" class=""
-                        optionValue="assignee_id" name="assignee_name" [readonly]="true"
-                       >
-                        
+                  <label class="pb-2">Task Type</label>
+                  <p-dropdown [options]="filterdata" [style]="{'minWidth':'100%'}" optionLabel="tasktype_name"
+                    [filter]="true" filterBy="tasktype_name" [showClear]="true" value="tasktypeid"
+                    placeholder="Task Type*" class="" name="tasktype_name" formControlName="taskType" 
+                    optionValue="tasktypeid">
                   </p-dropdown>
-              </c-col>
-                
+                </c-col>
 
-            <c-col sm="12" md="4" lg="4" class="mb-3">
-              <input type="text" class="w-full" placeholder="Task Status*" pInputText name="taskStatus"
-              [style]="{'minWidth':'100%','minHeight':'10%'}"
-              formControlName="taskStatus" [readonly]="true">
-            </c-col>
+                <c-col sm="12" md="4" lg="4" class="mb-3">
+                  <label class="pb-2">Assignee Name</label>
+                  <p-dropdown [options]="filterdata" [style]="{'minWidth':'100%'}" optionLabel="assignee_name"
+                    [filter]="true" filterBy="assignee_name" [showClear]="true" value="assignee_id"
+                    formControlName="assigneeName" placeholder="Assignee Name*" class="" optionValue="assignee_id"
+                    name="assignee_name" >
+                  </p-dropdown>
+                </c-col>
 
 
-              <c-col sm="12" md="4" lg="4" class="mb-3">
-                <p-dropdown [options]="ProjectStates" [style]="{'minWidth':'100%'}" optionValue="typeid"
+                <c-col sm="12" md="4" lg="4" class="mb-3">
+                  <label class="pb-2">Task Status</label>
+                  <input type="text" class="w-full" placeholder="Task Status*" pInputText name="taskStatus"
+                    [style]="{'minWidth':'100%','minHeight':'10%'}" formControlName="taskStatus">
+                </c-col>
+
+
+                <c-col sm="12" md="4" lg="4" class="mb-3">
+                  <label class="pb-2">New Status</label>
+                  <p-dropdown [options]="ProjectStates" [style]="{'minWidth':'100%'}" optionValue="typeid"
                     optionLabel="name" [filter]="true" filterBy="name" [showClear]="true" value="typeid"
                     placeholder="New Status*" (onChange)="GetAllProjectStatus($event.value)"
                     formControlName="PrjStatus">
-                </p-dropdown>
-            </c-col>
+                  </p-dropdown>
+                </c-col>
 
-            
-            
+
+
                 <c-col sm="12" md="4" lg="4" class="mb-3">
-                    <input type="number" class="w-full" placeholder="Efforts In Hrs*" pInputText name="efforts"
-                    [style]="{'minWidth':'100%'}"
-                    formControlName="efforts" [readonly]="true">
+                  <label class="pb-2">Efforts In Hrs</label>
+                  <input type="number" class="w-full" placeholder="Efforts In Hrs*" pInputText name="efforts"
+                    [style]="{'minWidth':'100%'}" formControlName="efforts">
                 </c-col>
 
                 <c-col sm="12" md="4" lg="4" class="mb-3">
-                    <p-calendar [style]="{'minWidth':'100%'}" [showIcon]="true" appendTo="body" placeholder="Start Date"
-                        inputId="icon"  name="startdate" formControlName="startDate" [readonlyInput]="true"
-                        [readonlyInput]="true" ></p-calendar>
+                  <label class="pb-2">Start Date</label>
+                  <p-calendar [style]="{'minWidth':'100%'}" [showIcon]="true" appendTo="body" placeholder="Start Date"
+                    inputId="icon" name="startdate" formControlName="startDate"
+                    [readonlyInput]="true"></p-calendar>
                 </c-col>
 
                 <c-col sm="12" md="4" lg="4" class="mb-3">
-                    <p-calendar [style]="{'minWidth':'100%'}" [showIcon]="true" appendTo="body" placeholder="End Date"
-                        inputId="icon" name="enddate" formControlName="endDate" [readonlyInput]="true"
-                          [readonlyInput]="true">
-                      </p-calendar>
+                  <label class="pb-2">End Date</label>
+                  <p-calendar [style]="{'minWidth':'100%'}" [showIcon]="true" appendTo="body" placeholder="End Date"
+                    inputId="icon" name="enddate" formControlName="endDate" [readonlyInput]="true"
+                    [readonlyInput]="true">
+                  </p-calendar>
                 </c-col>
 
-                
-                
+
+
                 <c-col sm="12" md="4" lg="4" class="mb-3">
+                  <label class="pb-2">Comments</label>
                   <input type="text" class="w-full" placeholder="Comments*" pInputText name="comments"
-                  [style]="{'minWidth':'150%'}"
-                  formControlName="Comments"  required />
+                    [style]="{'minWidth':'150%'}" formControlName="Comments" required  />
                 </c-col>
-              
 
-            </c-row>
-            <p-button *ngIf="showSaveBtn" type="submit" (click)="SubmitNewTask()"
-            label="Save" styleClass="p-button-warning px-3 py-2"></p-button>
 
-            <p-button *ngIf="!showSaveBtn" type="submit"  (click)="UpdateTask()"
-            label="Submit" styleClass="p-button-warning px-3 py-2"></p-button>
+              </c-row>
+              <p-button *ngIf="showSaveBtn" type="submit" (click)="SubmitNewTask()" label="Save"
+                styleClass="p-button-warning px-3 py-2"></p-button>
 
-            <p-button (click)="NewTaskDialog=false" label="Back" styleClass="p-button-text pb-2"></p-button>
-          <!-- </form> -->
+              <p-button *ngIf="!showSaveBtn" type="submit" (click)="UpdateTask()" label="Submit"
+                styleClass="p-button-warning px-3 py-2"></p-button>
 
-          </p-dialog>
+              <p-button (click)="NewTaskDialog=false" label="Back" styleClass="p-button-text pb-2"></p-button>
+              <!-- </form> -->
+
+            </p-dialog>
           </form>
-<!-- ashelesha -->
+          <!-- ashelesha -->
 
-            
+
           <c-row class="grid mt-4">
             <c-col sm="12" xl="6" xxl="3">
               <div class="bg-green-400 font-bold text-gray-900 py-2 text-center mb-2 text-white">Completed
@@ -130,13 +133,14 @@
               <p-scrollPanel [style]="{width: '100%', height: '420px'}" styleClass="custombar1">
                 <div class="mb-1">
 
-                  <c-row *ngFor="let item of completedTask" class="mb-2 px-2 border-bottom"
-                   (click)="EditTaskDetails(completedTask)">
-                    <span class="">{{item.taskname}}</span>
-                    <div class="flex justify-content-between">
-                      <span class="">{{item.assignee_name}}</span>
-                      <span class="">{{item.enddate | date:'dd-MMM-yyyy'}}</span>
-                    </div>
+                  <c-row *ngFor="let item of completedTask" class="mb-2 px-2 border-bottom">
+                    <span (click)="EditTaskDetails(item)">
+                      <span class="">{{item.taskname}}</span>
+                      <div class="flex justify-content-between">
+                        <span class="">{{item.assignee_name}}</span>
+                        <span class="">{{item.enddate | date:'dd-MMM-yyyy'}}</span>
+                      </div>
+                    </span>
                   </c-row>
 
                   <!-- <p-table [value]="completedTask" styleClass="p-datatable-sm" [tableStyle]="{'min-width': '50rem'}">
@@ -159,14 +163,15 @@
                 {{totalProgess}}
               </div>
               <p-scrollPanel [style]="{width: '100%', height: '420px'}" styleClass="custombar1">
-                <div class="mb-1">
-                  <c-row *ngFor="let item of progressTask" class="mb-2 px-2 border-bottom"
-                  (click)="EditTaskDetails(progressTask)">
+                <div class="mb-1" *ngFor="let item of progressTask">
+                 <c-row class="mb-2 px-2 border-bottom">
+                  <span (click)="EditTaskDetails(item)">
                     <span class="">{{item.taskname}}</span>
                     <div class="flex justify-content-between">
                       <span class="">{{item.assignee_name}}</span>
                       <span class="">{{item.enddate | date:'dd-MMM-yyyy'}}</span>
                     </div>
+                  </span>
                   </c-row>
 
                   <!-- <p-table [value]="progressTask" dataKey="id" editMode="row" [tableStyle]="{'min-width': '50rem'}">
@@ -191,13 +196,15 @@
               </div>
               <p-scrollPanel [style]="{width: '100%', height: '420px'}" styleClass="custombar1">
                 <div class="mb-1">
-                  <c-row *ngFor="let item of notstartedTask" class="mb-2 px-2 border-bottom"
-                  (click)="EditTaskDetails(notstartedTask)">
-                    <span class="">{{item.taskname}}</span>
-                    <div class="flex justify-content-between">
-                      <span class="">{{item.assignee_name}}</span>
-                      <span class="">{{item.enddate | date:'dd-MMM-yyyy'}}</span>
-                    </div>
+                  <c-row *ngFor="let item of notstartedTask" class="mb-2 px-2 border-bottom" >
+                    
+                      <span (click)="EditTaskDetails(item)">
+                        <span class="">{{item.taskname}}</span>
+                        <div class="flex justify-content-between">
+                          <span class="">{{item.assignee_name}}</span>
+                          <span class="">{{item.enddate | date:'dd-MMM-yyyy'}}</span>
+                        </div>
+                      </span>
                   </c-row>
                   <!-- <p-table [value]="notstartedTask" dataKey="id" editMode="row" [tableStyle]="{'min-width': '50rem'}">
 
@@ -223,13 +230,14 @@
               </div>
               <p-scrollPanel [style]="{width: '100%', height: '420px'}" styleClass="custombar1">
                 <div class="mb-1">
-                  <c-row *ngFor="let item of allTask" class="mb-2 px-2 border-bottom"
-                  (click)="EditTaskDetails(allTask)">
-                    <span class="">{{item.taskname}}</span>
-                    <div class="flex justify-content-between">
-                      <span class="">{{item.assignee_name}}</span>
-                      <span class="">{{item.enddate | date:'dd-MMM-yyyy'}}</span>
-                    </div>
+                  <c-row *ngFor="let item of allTask" class="mb-2 px-2 border-bottom">
+                    <span (click)="EditTaskDetails(item)">
+                      <span class="">{{item.taskname}}</span>
+                      <div class="flex justify-content-between">
+                        <span class="">{{item.assignee_name}}</span>
+                        <span class="">{{item.enddate | date:'dd-MMM-yyyy'}}</span>
+                      </div>
+                    </span>
                   </c-row>
                   <!-- <p-table [value]="allTask" dataKey="id" editMode="row" [tableStyle]="{'min-width': '50rem'}">
 

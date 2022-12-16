@@ -111,6 +111,12 @@ const routes: Routes = [
         loadChildren: () =>
           import('./views/masters/masters.module').then((m) => m.MastersModule)
       },
+
+      {
+        path: 'weekely-efforts',
+        loadChildren: () =>
+         import('./views/weekely-efforts/weekely-efforts.module').then((m) => m.WeekelyEffortsModule)
+      },
     ]
   },
   {
@@ -143,7 +149,7 @@ const routes: Routes = [
   },
   { path: '**', redirectTo: 'login' }
 ];
-
+ 
 @NgModule({
   imports: [
     RouterModule.forRoot(routes, {

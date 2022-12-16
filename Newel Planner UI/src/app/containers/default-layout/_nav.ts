@@ -37,6 +37,12 @@ export const navItems: INavData[] = [
         url: '/mapping/ra-mapping'
 
       },
+      {
+
+        name: 'Weekely Efforts',
+        url: '/weekely-efforts',
+        iconComponent: { name: 'cil-puzzle' },
+      },
 
     ]
 

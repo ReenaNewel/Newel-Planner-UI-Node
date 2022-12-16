@@ -4,6 +4,7 @@ import { Global } from 'src/app/common/global';
 import { Message, MessageService, PrimeNGConfig } from 'primeng/api';
 import * as moment from 'moment';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Dropdown } from 'primeng/dropdown';
 
 @Component({
   selector: 'app-new-task',
@@ -34,6 +35,7 @@ export class NewTaskComponent implements OnInit {
   ProjectActivities: any[];
   ProjectNames: any[];
   ProjectTypes: any[];
+  taskStatusName:any[];
   projectnames1: any;
   Tasknames: any;
   projectId: any;
@@ -131,7 +133,7 @@ SelectedProjectNames: any[];
       userid: this.getAssigneName
     }
 
-    // console.log("save task model", model);
+    console.log("save task model", model);
     var apiUrl = '';
     apiUrl = '/NewTask/CreateNewTask';
 
@@ -159,6 +161,8 @@ SelectedProjectNames: any[];
     
   }
   colId:any;
+  EditTaskid:any;
+  editTaskStatus:any;
   EditTaskDetails(row: any) {
     this.flag = 1
 
@@ -173,6 +177,7 @@ SelectedProjectNames: any[];
     this.selectedTaskName = row.taskname;
     this.selectedTaskTypeName = row.tasktypeid;
     this.selectedtaskstatus = row.status;
+    this.editTaskStatus =this.selectedtaskstatus;
     this.selectedTaskAssignee = row.assignee_name_id;
     this.selectedEfforts = Math.round(row.efforts);
     this.selectedStartDate =new Date(row.startdate);
@@ -180,11 +185,46 @@ SelectedProjectNames: any[];
     this.selectedComment = row.comments;
     this.colId = row.id;
     this.colunqId = row.unqid;
+    this.EditTaskid = row.taskid;
 
+
+  }
+  getTaskStatusid:any
+  GetTaskStatus(value:any){
+this.getTaskStatusid=value;
+console.log("getTaskStatusid",this.getTaskStatusid);
 
   }
 
   UpdateTask(){
+
+console.log("taskStatusName",this.taskStatusName);
+
+
+    
+    console.log("stateall",this.getTaskStatusid);
+    console.log("this.selectedtaskstatus",this.editTaskStatus);
+    
+    if (this.editTaskStatus != this.getTaskStatusid) {
+    
+      var modeltask ={
+        taskId:this.EditTaskid,
+        statusId: this.getTaskStatusid ,
+        created_by:this.userId,
+        unqid:  this.colunqId
+        }
+    
+      console.log("UpdateTask model",modeltask)
+      this.rest.postParams(this.Global.getapiendpoint() +'/NewTask/UpdateStatusTaskDetails',modeltask).subscribe((data: any) => {
+        console.log('data',data.Data)
+        this.selectedtaskstatus=this.getTaskStatusid ;
+      
+       
+      })
+    }
+  
+  
+
     var model ={
       id :  this.colId,
       unqid: this.colunqId,
@@ -200,7 +240,7 @@ SelectedProjectNames: any[];
       userid:this.selectedTaskAssignee,
      
     }
-    // console.log("UpdateTask model",model)
+    console.log("After if codition UpdateTask model",model)
     this.rest.postParams(this.Global.getapiendpoint() +'/NewTask/UpdateTask',model).subscribe((data: any) => {
       if (data.Success) {
         this.messageService.add({ severity: 'success', summary: 'Service Message', detail: 'Task details updated successfully' });
@@ -211,6 +251,7 @@ SelectedProjectNames: any[];
       }
   
      }) 
+    
   }
 
 
@@ -218,15 +259,17 @@ SelectedProjectNames: any[];
   GetAllProjectName(value: any) {
     this.projectid = value
   }
-
+  createdbyId:any;
   ShowDetails() {
-    // get All data from newtask
-    this.rest.getAll(this.Global.getapiendpoint() + '/NewTask/GetAllNewTask').subscribe((data: any) => {
-      // console.log("GetAllNewTask",data.Data);
-      // this.dataSource = new MatTableDataSource(data.Data);
-      // //  console.log(this.dataSource);
-      // this.dataSource.paginator = this.paginator;
-      // this.dataSource.sort = this.sort;
+    this.createdbyId=this.userId
+    var model = {
+      Createdby: this.createdbyId
+    }
+    console.log(model);
+    
+    this.rest.postParams(this.Global.getapiendpoint() + '/NewTask/GetAllNewTask', model).subscribe((data: any) => {
+      console.log("GetAllNewTask",data.Data);
+     
       if (data.Success) {
         this.SelectedProjectNames = data.Data
       }
@@ -318,7 +361,11 @@ SelectedProjectNames: any[];
 
     this.rest.getAll(this.Global.getapiendpoint() + '/General/getAllTasks').subscribe((data: any) => {
       if(data.Success){
+        
         this.tasks = data.Data;
+        console.log("Dropdown value",this.tasks);
+        
+        this.taskStatusName= this.tasks;
       }
     })
   }

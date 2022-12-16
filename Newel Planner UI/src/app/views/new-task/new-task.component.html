@@ -52,7 +52,7 @@
             <c-col sm="12" md="4" lg="4" class="mb-3">
                 <p-dropdown [options]="tasks" [style]="{'minWidth':'100%'}" optionLabel="name" [filter]="true"
                     filterBy="name" name="taskstatus" [showClear]="true" value="typeid" placeholder="Task Status*"
-                    class="" required [(ngModel)]="selectedtaskstatus" optionValue="typeid">
+                    class="" required [(ngModel)]="selectedtaskstatus"  (onChange)="GetTaskStatus($event.value)" optionValue="typeid">
                 </p-dropdown>
             </c-col>
 

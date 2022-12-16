@@ -33,7 +33,7 @@ import { DropdownModule } from 'primeng/dropdown';
 import { TimesheetDashboardComponent } from './components/timesheet-dashboard/timesheet-dashboard.component';
 import { TableModule } from 'primeng/table';
 import { FullCalendarModule } from '@fullcalendar/angular';
-
+import { ToastModule } from 'primeng/toast';
 import {ButtonModule} from 'primeng/button';
 import {PrimeIcons,MenuItem} from 'primeng/api';
 import {CalendarModule} from 'primeng/calendar';
@@ -85,7 +85,8 @@ FullCalendarModule.registerPlugins([
     DialogModule,
     MessageModule,
     MessagesModule,
-    InputTextModule
+    InputTextModule,
+    ToastModule
     // FullCalendarModule,
     // BrowserModule
 
