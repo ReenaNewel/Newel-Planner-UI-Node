@@ -11,11 +11,12 @@
     </ng-template>
 
     <ng-template pTemplate="right">
-        <p-button (click)="showCreateNewProjectDialog()" icon="pi pi-plus" label="New Leave Request"
+        <p-button (click)="showCreateNewProjectDialog()"  icon="pi pi-plus" label="New Leave Request"
             styleClass="p-button-warning px-3 py-2 mb-md-1">
         </p-button>
     </ng-template>
 </p-toolbar>
+
 
 <c-card class="mb-4">
     <c-card-header>Leave Request</c-card-header>
@@ -48,43 +49,63 @@
                         <th>Status
                         </th>
                         <th>Remark
-                        <!-- </th>
-                        <th style="width:2rem !important">Action</th> -->
+                        </th>
+                        <th style="width:2rem !important">Edit</th>
+
+                        <th style="width:2rem !important">Cancel</th>
                     </tr>
-                 
+
                 </ng-template>
-                <ng-template pTemplate="body" let-SelectedProject let-editing="editing" let-ri="rowIndex">
-                    <tr [pEditableRow]="SelectedProject">
+                <ng-template pTemplate="body" let-SelectedLeave let-editing="editing" let-ri="rowIndex">
+                    <tr [pEditableRow]="SelectedLeave">
                         <td>
-                            {{SelectedProject.username }}
+                            {{SelectedLeave.username }}
                         </td>
                         <td>
-                            {{SelectedProject.fromdate | date:'dd/MM/yyyy'}}
+                            {{SelectedLeave.fromdate | date:'dd/MM/yyyy'}}
                         </td>
                         <td>
-                            {{SelectedProject.todate | date:'dd/MM/yyyy'}}
+                            {{SelectedLeave.todate | date:'dd/MM/yyyy'}}
                         </td>
                         <td>
-                            {{SelectedProject.no_of_leaves}}
+                            {{SelectedLeave.no_of_leaves}}
                         </td>
                         <td>
-                            {{SelectedProject.leavetype}}
+                            {{SelectedLeave.leavetype}}
 
                         </td>
                         <td>
-                            {{SelectedProject.description}}
+                            {{SelectedLeave.description}}
                         </td>
-                       
+
                         <td>
-                            {{SelectedProject.approvedby}}
-                        </td>
-                        <td>
-                            {{SelectedProject.leavestatus}}
+                            {{SelectedLeave.approvedby}}
                         </td>
                         <td>
-                            {{SelectedProject.remark}}
+                            {{SelectedLeave.leavestatus}}
                         </td>
-                   
+                        <td>
+                            {{SelectedLeave.remark}}
+                        </td>
+
+                        <td>
+                            <div class="flex align-items-center justify-content-center gap-2">
+                                <button pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil"
+                                    (click)="editLeaveRequest(SelectedLeave)"
+                                    class="p-button-rounded p-button-text"
+                                    [disabled]="SelectedLeave.status === 2 || SelectedLeave.status === 3"></button>
+                            </div>
+                        </td>
+
+                        <td>
+                            <div class="flex align-items-center justify-content-center gap-2">
+
+
+                                <button [disabled]="SelectedLeave.status === 2 || SelectedLeave.status === 3" pButton pRipple type="button" pCancelEditableRow icon="pi pi-times"
+                                    class="p-button-rounded p-button-text p-button-danger"
+                                    (click)="CancelLeaveRequest(SelectedLeave)"></button>
+                            </div>
+                        </td>
                     </tr>
                 </ng-template>
             </p-table>
@@ -94,27 +115,193 @@
 </c-card>
 
 
-<p-dialog [modal]= "true" header="Leave Request" [(visible)]="projectDialog" [breakpoints]="{'960px': '75vw'}"
+
+
+<c-card class="mb-4">
+    <c-card-header>Leave Details for Approval</c-card-header>
+    <c-card-body class="px-3">
+
+        <div class="card">
+            <p-table #dt [value]="ApprovalLeaveData" [rows]="5" [paginator]="true"
+                [globalFilterFields]="['username','fromdate','todate','no_of_leaves','leavetype', 'description', 'Approvedon', 'approvedby', 'leavestatus', 'remark']"
+                dataKey="id" editMode="row" [tableStyle]="{'min-width': '50rem'}" [rowHover]="true"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                [showCurrentPageReport]="true">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="width:2rem !important">UserName
+                        </th>
+                        <th>Fromdate
+                        </th>
+                        <th>Todate
+                        </th>
+                        <th>Applied leave
+                        </th>
+                        <th>LeaveType
+                        </th>
+                        <th>Reason
+                        </th>
+                        <!-- <th>Approvedon
+                        </th> -->
+                        <!-- <th>Approvedby
+                        </th> -->
+                        <th>Status
+                        </th>
+                        <th>Remark
+                        </th>
+                        <th style="width:2rem !important">Approved</th>
+
+                        <th style="width:2rem !important">Reject</th>
+                    </tr>
+
+                </ng-template>
+                <ng-template pTemplate="body" let-SelectedLeave let-editing="editing" let-ri="rowIndex">
+                    <tr [pEditableRow]="SelectedLeave">
+                        <td>
+                            {{SelectedLeave.username }}
+                        </td>
+                        <td>
+                            {{SelectedLeave.fromdate | date:'dd/MM/yyyy'}}
+                        </td>
+                        <td>
+                            {{SelectedLeave.todate | date:'dd/MM/yyyy'}}
+                        </td>
+                        <td>
+                            {{SelectedLeave.no_of_leaves}}
+                        </td>
+                        <td>
+                            {{SelectedLeave.leavetype}}
+
+                        </td>
+                        <td>
+                            {{SelectedLeave.description}}
+                        </td>
+
+                        <!-- <td>
+                            {{SelectedLeave.approvedby}}
+                        </td> -->
+                        <td>
+                            {{SelectedLeave.leavestatus}}
+                        </td>
+                        <td>
+                            {{SelectedLeave.remark}}
+                        </td>
+
+                        <!-- <td>
+                            <div class="flex align-items-center justify-content-center gap-2">
+                                <button pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil"
+                                    (click)="editLeaveRequest(SelectedLeave)"
+                                    class="p-button-rounded p-button-text"></button>
+                            </div>
+                        </td> -->
+                        <td>
+                            <div class="flex align-items-center justify-content-center gap-2">
+                                <button  pButton pRipple type="button" pSaveEditableRow
+                                    icon="pi pi-check" class="p-button-rounded p-button-text p-button-success mr-2"
+                                    (click)="ApproveLeaveRequest(SelectedLeave)"
+                                    ></button>
+                            </div>
+                        </td>
+
+                        <td>
+                            <div class="flex align-items-center justify-content-center gap-2">
+
+                                
+                                <button [disabled]="SelectedLeave.status==5" pButton pRipple type="button" pCancelEditableRow icon="pi pi-times"
+                                    class="p-button-rounded p-button-text p-button-danger"
+                                    (click)="RejectLeaveRequest(SelectedLeave)"></button>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+
+    </c-card-body>
+</c-card>
+
+
+
+<p-dialog [modal]="true" header="Leave Request" [(visible)]="projectDialog" [breakpoints]="{'960px': '75vw'}"
     [style]="{width: '70vw'}" [draggable]="false" [resizable]="false" class="pb-2" (onHide)="Cancel_form()">
+
+    <!-- <c-card-header>Balance Leave</c-card-header>
+    <c-card-body class="px-3">
+
+        <div class="card">
+            <p-table #dt [value]="balanceleavedata" [rows]="5" [paginator]="false" 
+                dataKey="id" editMode="row" [tableStyle]="{'min-width': '50rem'}" [rowHover]="true"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                [showCurrentPageReport]="true">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="width:2rem !important">Casual
+                        </th>
+                        <th>Marriage
+                        </th>
+                        <th>Maternity
+                        </th>
+                        <th>Paternity
+                        </th>
+                        <th>Sick
+                        </th>
+                        <th>PrevYearBalanced
+                        </th>
+                    </tr>
+
+                </ng-template>
+                <ng-template pTemplate="body" let-balanceleave let-editing="editing" let-ri="rowIndex">
+                    <tr [pEditableRow]="balanceleave">
+                        <td>
+                            {{balanceleave.casual}}
+                        </td>
+                        <td>
+                            {{balanceleave.marriage}}
+                        </td>
+                        <td>
+                            {{balanceleave.maternity }}
+                        </td>
+                        <td>
+                            {{balanceleave.paternity }}
+                        </td>
+                        <td>
+                            {{balanceleave.sick}}
+                        </td>
+                        <td>
+                            {{balanceleave.prevYearBalanced}}
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+
+    </c-card-body> -->
+
+
+
+   
+
     <form [formGroup]="ProjectForm" (submit)="submit()">
         <c-row class="">
-            
+
             <c-col sm="12" md="6" lg="6" class="mb-3">
                 <p-calendar [style]="{'minWidth':'100%'}" [showIcon]="true" appendTo="body"
-                    placeholder="Project Start Date" inputId="icon"  name="startdate" formControlName="startdate" >
+                    placeholder="Fromdate" inputId="icon" name="startdate"
+                    [(ngModel)]="today" formControlName="startdate">
                 </p-calendar>
             </c-col>
             <c-col sm="12" md="6" lg="6" class="mb-3">
                 <p-calendar [style]="{'minWidth':'100%'}" [showIcon]="true" appendTo="body"
-                    placeholder="Project End Date" inputId="icon" required name="enddate" formControlName="enddate" (onSelect)="leavecount()">
+                    placeholder="Todate" inputId="icon" required name="enddate" formControlName="enddate"
+                    (onSelect)="leavecount()">
                 </p-calendar>
             </c-col>
             <!-- <c-col sm="12" md="6" lg="6" class="mb-3">
             </c-col> -->
             <c-col sm="12" md="4" lg="6" class="mb-3">
-                <p-dropdown [options]="leavetypeDropdown" [style]="{'minWidth':'100%'}" optionValue="typeid" optionLabel="name"
-                    [filter]="true" filterBy="name" [showClear]="true" value="typeid" placeholder="LeaveType*" required
-                    formControlName="LeaveDropdwon">
+                <p-dropdown [options]="leavetypeDropdown" [style]="{'minWidth':'100%'}" optionValue="typeid"
+                    optionLabel="name" [filter]="true" filterBy="name" [showClear]="true" value="typeid"
+                    placeholder="LeaveType*" required formControlName="LeaveDropdwon">
                 </p-dropdown>
 
 
@@ -130,26 +317,116 @@
             </c-col>
 
             <c-col sm="12" md="6" lg="6" class="mb-3">
-               
-                <textarea cFormControl class="w-30rem" id="exampleFormControlTextarea1" rows="3"
-                    placeholder="Reason" formControlName="Reason" required></textarea>
+                <!-- class="w-30rem" -->
+                <textarea cFormControl  id="exampleFormControlTextarea1" rows="3" placeholder="Reason"
+                    formControlName="Reason" required style="  width: 430px;
+                    height: 80px;"></textarea>
                 <small class="p-error block"
                     *ngIf="ProjectForm.controls['Reason'].touched && ProjectForm.controls['Reason'].invalid">
                     <span *ngIf="ProjectForm.controls['Reason'].errors">This field is mandatory.</span>
                 </small>
             </c-col>
             <c-col sm="12" md="6" lg="6" class="mb-3">
+                <c-card-header>Balance Leave</c-card-header>
+                <c-card-body >
+            
+                    <div class="card">
+                        <p-table #dt [value]="balanceleavedata"  
+                            dataKey="id" editMode="row" [tableStyle]="{'min-width': '20rem'}" [rowHover]="true"
+                            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                            [showCurrentPageReport]="true">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th style="width:2rem !important">Name
+                                    </th>
+                                    <th>leaveCount
+                                    </th>
+                                </tr>
+            
+                            </ng-template>
+                            <ng-template pTemplate="body" let-balanceleave let-editing="editing" let-ri="rowIndex">
+                                <tr [pEditableRow]="balanceleave">
+                                    <td>
+                                        {{balanceleave.name}}
+                                    </td>
+                                    <td>
+                                        {{balanceleave.leaveCount}}
+                                    </td>
+                              
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+            
+                </c-card-body>
+
+
+
+                <!-- <table>
+                    <tr>
+                      <th>Name</th>
+                      <th>leaveCount</th>
+                      
+                    </tr>
+                    <tr *ngFor="let count of balanceleavedata">
+                      <td>{{count.name}}</td>
+                      <td>{{count.leaveCount}}</td>
+                      
+                    </tr>
+                </table> -->
             </c-col>
             <br>
             <c-col>
-                <p-button  type="submit"  (click)="leaveRequestSaveData()"
-                    label="Save" styleClass="p-button-warning px-3 py-2" [disabled]="!ProjectForm.valid"></p-button>
-                
+                <p-button *ngIf="showSaveBtn" type="submit" (click)="leaveRequestSaveData()" label="Save"
+                    styleClass="p-button-warning px-3 py-2" [disabled]="!ProjectForm.valid"></p-button>
+                <p-button *ngIf="!showSaveBtn" type="submit" (click)="UpdateLeaveRequest()" label="Update"
+                    styleClass="p-button-warning px-3 py-2"></p-button>
+
                 <p-button (click)="projectDialog=false" (click)="Cancel_form()" label="Back"
-                    styleClass="p-button-text pb-2" ></p-button>
+                    styleClass="p-button-text pb-2"></p-button>
             </c-col>
 
-            
+
+        </c-row>
+    </form>
+
+</p-dialog>
+
+
+
+
+
+
+
+
+
+<p-dialog [modal]="true" header="Remark" [(visible)]="RejectDialog" [breakpoints]="{'960px': '75vw'}"
+    [style]="{width: '50vw', height: '25vw'}" [draggable]="false" [resizable]="false" class="pb-2"
+    (onHide)="Cancel_form()">
+    <form [formGroup]="RejectForm" (submit)="submit()">
+        <c-row class="">
+
+
+            <c-col sm="12" md="12" lg="12" class="mb-3">
+
+                <textarea cFormControl class="w-30rem" id="exampleFormControlTextarea1" rows="3" placeholder="Remark"
+                    formControlName="Reason" required></textarea>
+                <small class="p-error block"
+                    *ngIf="RejectForm.controls['Reason'].touched && RejectForm.controls['Reason'].invalid">
+                    <span *ngIf="RejectForm.controls['Reason'].errors">This field is mandatory.</span>
+                </small>
+            </c-col>
+
+            <br>
+            <c-col>
+                <p-button type="submit" (click)="UpdateRejectLeaveRequest()" label="Update"
+                    styleClass="p-button-warning px-3 py-2"></p-button>
+
+                <p-button (click)="RejectDialog=false" (click)="Cancel_form()" label="Back"
+                    styleClass="p-button-text pb-2"></p-button>
+            </c-col>
+
+
         </c-row>
     </form>
 

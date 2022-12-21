@@ -35,6 +35,7 @@ var server = app.listen(config.service_port, function() {
     var message = "Server :- " + host + " running on Port : - " + port + " Started at :- " + datetime;
     //console.log(message);
 });
+server.timeout = 0;
 const staticImageRootLocal = path.join(__dirname);
 app.use(express.static(staticImageRootLocal));
 client.connect();
@@ -81,23 +82,31 @@ app.use("/RoleMaster", RoleMaster);
 var WeekelyEffortsService = require('./Service/Weekely-Efforts/weekely-efforts')();
 app.use("/WeekelyEfforts", WeekelyEffortsService);
 
+var Reports = require('./Service/Reports/reportsService')();
+app.use("/Reports", Reports);
+
 
 
 // ******************************************************************************************************************
 // Ashlesha
 app.get('/users', (req, res)=>{
     try{
-    client.query(`Select tbl_master_userdetails.id, tbl_master_userdetails.name as uname,  tbl_master_userdetails.emailid,
-    tbl_master_userdetails.password, tbl_master_userdetails.defaultroleid,tbl_general_master.parentid
-    ,tbl_general_master.name,tbl_general_master.typeid,
-      Case when   tbl_master_userdetails.isactive = true then 'Active' when
-      tbl_master_userdetails.isactive = false then
-       'InActive'else 'NA' end as isactive, created_date, created_by,modified_date, modified_by
-       from tbl_master_userdetails,tbl_general_master 
-       where tbl_master_userdetails.defaultroleid = tbl_general_master.typeid and 
-       tbl_general_master.parentid=1`, (err, result)=>{
+      
+        client.query(`Select tbl_master_userdetails.id, tbl_master_userdetails.name as username , 
+        CONCAT(tbl_master_userdetails.first_name , ' ' ,tbl_master_userdetails.last_name)as uname,
+         tbl_master_userdetails.last_name as last_name, tbl_master_userdetails.first_name as first_name,
+         tbl_master_userdetails.emailid,
+        tbl_master_userdetails.password, tbl_master_userdetails.defaultroleid,tbl_general_master.parentid
+        ,tbl_general_master.name,tbl_general_master.typeid,
+        Case when tbl_master_userdetails.isactive = true then 'Active' when
+        tbl_master_userdetails.isactive = false then
+        'InActive'else 'NA' end as isactive, created_date, created_by,modified_date, modified_by
+        from tbl_master_userdetails,tbl_general_master
+        where tbl_master_userdetails.defaultroleid = tbl_general_master.typeid and
+        tbl_general_master.parentid=1`, (err, result)=>{
         if(!err){
-            res.send(result.rows);
+            res.status(200).json({ Success: true, Message: 'Get All Users Data.', Data: result.rows });
+            // res.send(result.rows);
 
         }
         else{
@@ -120,7 +129,8 @@ try{
     from tbl_general_master 
     where tbl_general_master.parentid=1`, (err, result)=>{
     if(!err){
-        res.send(result.rows);
+        res.status(200).json({ Success: true, Message: "Get all default role data", Data: result.rows});
+        // res.send(result.rows);
     }
     else{
         dataconn.errorlogger('index', 'usersByRole', err);
@@ -141,9 +151,16 @@ app.post('/users', (req, res)=> {
     const user = req.body;
 
     //console.log(user);
-    let insertQuery = `insert into tbl_master_userdetails( name, emailid, password,defaultroleid,isactive) 
-                       values('${user.name}', '${user.emailid}', '${user.password}',
-                       '${user.defaultroleid}','${user.isactive}')`
+    let insertQuery = `insert into tbl_master_userdetails(first_name,last_name,emailid,name,password,defaultroleid,isactive,created_date, created_by)
+                       values('${user.first_name}',
+                       '${user.last_name}',
+                       '${user.emailid}',
+                       '${user.name}',
+                       '${user.password}',
+                        ${user.defaultroleid},
+                       '${user.isactive}',
+                       '${user.created_date}',
+                       '${user.created_by}')`
                        
     client.query(insertQuery, (err, result)=>{
         //console.log(insertQuery);
@@ -169,13 +186,16 @@ app.post('/updateusers', (req, res)=> {
     try{
     let user = req.body;
     //console.log(user);
-    let updateQuery = `update tbl_master_userdetails
-                       set name  = '${user.name}',
+    let updateQuery =`update tbl_master_userdetails
+                       set first_name = '${user.first_name}',
+                       last_name = '${user.last_name}',
                        emailid = '${user.emailid}',
+                       name  = '${user.name}',
                        password = '${user.password}',
                        defaultroleid = '${user.defaultroleid}',
-                       isactive = '${user.isactive}'
-                       
+                       isactive = '${user.isactive}',
+                       modified_date = '${user.modified_date}',
+                       modified_by = '${user.modified_by}'
                        where id = ${user.id}`
 
     client.query(updateQuery, (err, result)=>{

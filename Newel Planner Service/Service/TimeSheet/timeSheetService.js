@@ -165,6 +165,42 @@ var routes = function () {
             }
         });
 
+     router.route('/GetTimeSheetProjectNamesByRole')
+        .post(function (req, res) {
+
+            try {
+                let user = req.body;
+                var querytext = `SELECT "GetProjectNameForTimesheetDashboard"('${user.userid}',:p_ref); FETCH ALL IN "abc"`;
+               // console.log("querytext", querytext);
+                var param = {
+                    replacements: {
+                        // p_active: true,
+                        p_ref: 'abc'
+                    },
+                    type: connect.sequelize.QueryTypes.SELECT
+                }
+                connect.sequelize
+                    .query(querytext, param)
+                    .then(function (result) {
+                   //     console.log("result", result);
+                        result.shift();
+                        res.status(200).json({
+
+                            Success: true,
+                            Message: "Get all project name successfully",
+                            Data: result
+                        });
+                    }, function (err) {
+                        console.log(err);
+                        dataconn.errorlogger("timesheetService", "GetTimeSheetProjectNamesByRole", err);
+                        res.status(200).json({ Success: false, Message: ' GetTimeSheetProjectNamesByRole API failed.', Data: null });
+                    });
+            } catch (err) {
+                dataconn.errorlogger("timesheetService", "GetTimeSheetProjectNamesByRole", err);
+                res.status(200).json({ Success: false, Message: ' GetTimeSheetProjectNamesByRole API failed.', Data: null });
+            }
+        });
+
 // Reena
 
     router.route('/GetTimesheetProject')
@@ -204,7 +240,7 @@ var routes = function () {
         });
 
     // Reena
-    router.route("/GetTaskname")
+    router.route("/GetTaskname")    
         .post(function (req, res) {
             try {
                 let user = req.body;

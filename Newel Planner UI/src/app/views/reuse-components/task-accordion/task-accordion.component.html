@@ -6,7 +6,7 @@
     <c-accordion-item #item0="cAccordionItem" [visible]="false">
       <ng-template cTemplateId="accordionHeaderTemplate">
         <button (click)="item0.toggleItem()" [collapsed]="!item0.visible" cAccordionButton>
-          <span class="text-primary">today{{TimesheetDate5 | date:'shortDate'}}</span>
+          <span class="text-primary">{{TimesheetDate5 | date:'shortDate':'d'}}</span>
           <span class="ml-auto">Total hours: <span class="font-semibold">{{totaltimehr4|number :
               '1.2-2'}}</span></span>
         </button>

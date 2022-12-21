@@ -354,6 +354,7 @@ export class TaskAccordionComponent implements OnInit {
     this.rest.postParams(this.Global.getapiendpoint() + '/timesheet/GetTimesheetDashboard', model).subscribe((data: any) => {
       if (data.Success) {
         this.dataSource5 = data.Data
+        console.log( 'accordian data', this.dataSource5 )
         if (this.dataSource5.length > 0) {
           this.TimesheetDate5 = data.Data[0].date
           for (var i = 0; i < this.dataSource5.length; i++) { 

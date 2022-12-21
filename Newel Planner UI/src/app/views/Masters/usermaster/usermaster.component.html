@@ -1,4 +1,173 @@
+<p-toast></p-toast>
+<p-toolbar styleClass="mb-4 gap-2">
+  <ng-template pTemplate="left">
+      <span class="p-input-icon-left">
+          <i class="pi pi-search"></i>
+          <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
+              placeholder="Search..." />
+      </span>
+
+  </ng-template>
+
+  <ng-template pTemplate="right">
+      <p-button (click)="showCreateNewProjectDialog()" icon="pi pi-plus" label="User"
+          styleClass="p-button-warning px-3 py-2 mb-md-1">
+      </p-button>
+  </ng-template>
+</p-toolbar>
+<c-card class="mb-4">
+  <c-card-header>User Master</c-card-header>
+  <c-card-body class="px-3">
+
+      <div class="card">
+          <p-table #dt [value]="AllUserData" [rows]="10" [paginator]="true"
+              [globalFilterFields]="['name','Defaultroleid','emailid',]"
+              dataKey="id" editMode="row" [tableStyle]="{'min-width': '50rem'}" [rowHover]="true"
+              currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+              [showCurrentPageReport]="true">
+              <ng-template pTemplate="header">
+                  <tr>
+                      <th style="width:2rem !important"> Name
+                      </th>
+                      <th> Default Role
+                      </th>
+                      <th>Email Id
+                      </th>
+                      
+                      <th style="width:2rem !important">Action</th>
+                  </tr>
+                  
+              </ng-template>
+              <ng-template pTemplate="body" let-AllUserData let-editing="editing" let-ri="rowIndex">
+                  <tr [pEditableRow]="AllUserData">
+                      <td>
+                          {{AllUserData.uname }}
+                      </td>
+                      <td>
+                          {{AllUserData.name}}
+                      </td>
+                      <td>
+                          {{AllUserData.emailid}}
+                      </td>
+                      
+                      <td>
+                          <div class="flex align-items-center justify-content-center gap-2">
+                              <button pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil"
+                                  (click)="EditEmployee(AllUserData)"
+                                  class="p-button-rounded p-button-text"></button>
+                          </div>
+                      </td>
+                  </tr>
+              </ng-template>
+          </p-table>
+      </div>
+
+  </c-card-body>
+</c-card>
+
+<!-- <div>form for creat user</div> -->
+<p-dialog header="User Master" [(visible)]="projectDialog" [breakpoints]="{'960px': '75vw'}" (onHide)="Cancel_form()"
+    [style]="{width: '70vw'}" [draggable]="false" [resizable]="false" class="pb-2"  [modal]="true">
+    <form [formGroup]="ProjectForm" (submit)="submit()">
+        <c-row class="">
+            <c-col sm="12" md="4" lg="4" class="mb-3">
+              <label>First Name</label>
+                <input type="text" class="w-full" placeholder="First Name*" pInputText required
+                    formControlName="first_name" />
+                <small *ngIf="ProjectForm.controls['first_name'].touched && ProjectForm.controls['first_name'].invalid"
+                    class="p-error block">
+                    <span *ngIf="ProjectForm.controls['first_name'].errors">This field is mandatory.</span>
+                </small>
+            </c-col>
+
+            <c-col sm="12" md="4" lg="4" class="mb-3">
+              <label>Last Name</label>
+              <input type="text" class="w-full" placeholder="Last Name*" pInputText required
+                  formControlName="last_name" />
+              <small *ngIf="ProjectForm.controls['last_name'].touched && ProjectForm.controls['last_name'].invalid"
+                  class="p-error block">
+                  <span *ngIf="ProjectForm.controls['last_name'].errors">This field is mandatory.</span>
+              </small>
+          </c-col>
+            
+            
+            
+            <c-col sm="12" md="4" lg="4" class="mb-3">
+              <label>EmailId</label>
+                <input type="email" class="w-full"  placeholder="Ex. abc@newel.com" pInputText required
+                    formControlName="emailid" />
+                <small
+                    *ngIf="ProjectForm.controls['emailid'].touched && ProjectForm.controls['emailid'].invalid"
+                    class="p-error block">
+                    <span *ngIf="ProjectForm.controls['emailid'].errors">This field is mandatory.</span>
+                </small>
+            </c-col>
+
+            <c-col sm="12" md="4" lg="4" class="mb-3">
+              <label>User Name</label>
+              <input type="text" class="w-full" placeholder="User Name*" pInputText required
+                  formControlName="name" />
+              <small *ngIf="ProjectForm.controls['name'].touched && ProjectForm.controls['name'].invalid"
+                  class="p-error block">
+                  <span *ngIf="ProjectForm.controls['name'].errors">This field is mandatory.</span>
+              </small>
+          </c-col>
+
+            <c-col sm="12" md="4" lg="4" class="mb-3">
+              <label>Password</label>
+              <input type="password" class="w-full"  placeholder="Password" pInputText required
+                  formControlName="password" />
+              <small
+                  *ngIf="ProjectForm.controls['password'].touched && ProjectForm.controls['password'].invalid"
+                  class="p-error block">
+                  <span *ngIf="ProjectForm.controls['password'].errors">This field is mandatory.</span>
+              </small>
+          </c-col>
+            
+           
+            <c-col sm="12" md="4" lg="4" class="mb-3">
+              <label>Role</label>
+                <p-dropdown [options]="UserRole" [style]="{'minWidth':'100%'}" optionValue="typeid"
+                    optionLabel="name" [filter]="true" filterBy="name" [showClear]="true" value="typeid"
+                    placeholder="Role Name*" (selectionChange)="changeemployeeid($event.value)" required
+                    formControlName="defaultroleid"appendTo="body">
+                </p-dropdown>
+            </c-col>
+
+            <c-col sm="12" md="12" lg="12">
+              <label>Status</label>
+              <div class="field-radiobutton">
+                  <p-radioButton value="true" formControlName="isactive" required></p-radioButton>
+                  <label for="Active">Active</label>
+                  <span class="px-3"></span>
+                  
+                  <p-radioButton value="false" formControlName="isactive" required>
+                  </p-radioButton>
+                  <label for="InActive">In Active</label>
+              </div>
+              <small class="p-error block"
+                  *ngIf="ProjectForm.controls['isactive'].touched && ProjectForm.controls['isactive'].invalid">
+                  <span *ngIf="ProjectForm.controls['isactive'].errors">This field is mandatory.</span>
+              </small>
+          </c-col>
+
+            
+            <c-col>
+                <p-button *ngIf="showSaveBtn" type="submit" [disabled]="!ProjectForm.valid" (click)="submitUserDetails()"
+                    label="Save" styleClass="p-button-warning px-3 py-2"></p-button>
+                <p-button *ngIf="!showSaveBtn" type="submit" [disabled]="!ProjectForm.valid" (click)="UpdateUser()"
+                    label="Update" styleClass="p-button-warning px-3 py-2"></p-button>
+                <p-button (click)="projectDialog=false" (click)="Cancel_form()" label="Back" styleClass="p-button-text pb-2"></p-button>
+            </c-col>
+
+        </c-row>
+    </form>
+
+</p-dialog>
+<!-- <div>Form Close</div> -->
+
 <!-- <div *ngIf="isCreate==true">
+
   <div class="form-container">
     <mat-card class="mat-card-1">
       <mat-card-header>

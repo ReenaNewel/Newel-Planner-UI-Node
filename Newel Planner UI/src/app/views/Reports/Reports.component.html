@@ -1,0 +1,72 @@
+<form [formGroup]="ReportForm">
+    <p-toolbar styleClass="mb-4 gap-2">
+
+        <c-col sm="12" md="4" lg="5" class="mb-3">
+            <label class="pb-2">Report Type</label>
+            <p-dropdown [options]="ReportTypeMasterDetails" [style]="{'minWidth':'100%'}" optionLabel="ReportType"
+                [filter]="true" filterBy="ReportType" [showClear]="true" value="id" placeholder="Report Type*" class=""
+                name="ReportType" formControlName="ReportType" optionValue="id" required
+                (onChange)="ShowReportsDetails($event.value)">
+            </p-dropdown>
+        </c-col>
+       
+        <!-- <c-col sm="12" md="4" lg="4" class="mb-3" style="margin-right:90%;"> -->
+        <c-col sm="12" md="4" lg="3" class="mb-3">
+            <label class="pb-2">From Date</label>
+            <p-calendar [style]="{'minWidth':'100%'}" [showIcon]="true" appendTo="body" placeholder="Report Start Date"
+                inputId="icon" name="fromdate" formControlName="fromdate" [(ngModel)] = "today">
+            </p-calendar>
+        </c-col>
+    
+        <!-- <c-col sm="12" md="4" lg="4" class="mb-3" style="margin-right:150px"> -->
+         <c-col sm="12" md="4" lg="3" class="mb-3">
+            <label class="pb-2">To Date</label>
+            <p-calendar [style]="{'minWidth':'100%'}" [showIcon]="true" appendTo="body" placeholder="Report End Date"
+                inputId="icon" required name="todate" formControlName="todate" [(ngModel)] = "todate">
+            </p-calendar>
+        </c-col>
+        <ng-template pTemplate="right">
+            <p-button [disabled]="!ReportForm.valid" (click)="GenerateReport()" label="Generate Report"
+                styleClass="p-button-warning px-3 py-2 mb-md-1">
+            </p-button>
+        </ng-template>
+
+    </p-toolbar>
+</form>
+
+
+
+
+
+<c-card class="mb-4">
+    <c-card-header>Report Data
+        <a href="javascript: void(0);" (click)="ExporttoExcelReport()" style="margin-left:77%;">Export to Excel</a>
+
+    </c-card-header>
+    <c-card-body class="px-3">
+
+        <div class="card">
+            <p-table #dt [value]="ReportTypeTimeSheetDetails" [rows]="5" [paginator]="true"
+                [globalFilterFields]="['activity','projectname','startdate','enddate','taskdescription', 'taskname', 'timespend', 'username']"
+                dataKey="id" editMode="row" [tableStyle]="{'min-width': '50rem'}" [rowHover]="true"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                [showCurrentPageReport]="true">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th *ngFor="let col of cols"> {{col.header}} </th>
+                    </tr>
+
+                </ng-template>
+                <ng-template pTemplate="body" let-ReportTypeTimeSheetDetails let-editing="editing" let-ri="rowIndex">
+                    <tr [pEditableRow]="ReportTypeTimeSheetDetails">
+                        <!-- <tr *ngFor="let ReportTypeTime for ReportTypeTimeSheetDetails">{{ReportTypeTime}}</tr> -->
+                        <td *ngFor="let col of cols"> {{ReportTypeTimeSheetDetails[col.field]}} </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+
+    </c-card-body>
+
+
+</c-card>

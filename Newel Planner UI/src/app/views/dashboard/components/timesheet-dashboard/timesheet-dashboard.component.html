@@ -1,37 +1,93 @@
-    <c-row>
+<c-row>
+<p-toolbar styleClass="mb-4 gap-2">
     <div class="flex justify-content-center flex-wrap mb-3">
+      
+            <div *ngIf="this.projectFlag == 0">
+                <p-dropdown [options]="member" [(ngModel)]="selectedMem"  class="mx-3" 
+                    (onChange)="ChangeMember(selectedMem)">
+                </p-dropdown>
+            </div>
+      
+       
         <div *ngIf="this.projectFlag == 1">
-            <p-dropdown [options]="ProjectNames" [(ngModel)]="selectedProject" value="projectid" optionLabel="projectname"
-                [filter]="true" required name="projectname" (onChange)="GetTaskNameByProject(selectedProject)"
-                filterBy="projectname" [showClear]="true" placeholder="Project Name" class="borderNone">
+            <div *ngIf="selectedMem == 'Only Me'">
+                <div class="field-checkbox">
+                        <p-checkbox [(ngModel)]="checked" [binary]="true" inputId="binary"
+                        (click)="RAUsers()"></p-checkbox>
+                        <label for="binary">RA Wise</label>
+                </div> 
+            </div>
+         
+            <div *ngIf="!checked" >
+                <!-- this.applicant.country = 'India'; -->
+                <p-dropdown [options]="member" [(ngModel)]="selectedMem"  class="mx-3" 
+                        (onChange)="ChangeMember(selectedMem)">
+                </p-dropdown>
+               
+            </div>
+            
+            <!-- {{!checked}}{{selectedMem}} -->
+            <div *ngIf="!checked" >
+                <div *ngIf="selectedMem == 'Team'">
+                    <p-dropdown [options]="ProjectNames" [(ngModel)]="selectedProject" value="projectid" optionLabel="projectname"
+                        [filter]="true" required name="projectname" (onChange)="GetTaskNameByProject(selectedProject)"
+                        filterBy="projectname" [showClear]="true" placeholder="Project Name" class="borderNone">
+                        <ng-template pTemplate="selectedItem">
+                            <div class="country-item country-item-value" *ngIf="selectedProject">
+                                <div pTooltip="Project Name" tooltipPosition="top">{{selectedProject?.projectname | slice:0:12}}
+                                </div>
+                            </div>  
+                        </ng-template>
+                    </p-dropdown>
+
+                    <p-dropdown [options]="UserData" [(ngModel)]="selectedUserByProject" value="userid" optionLabel="name"
+                        [filter]="true"  required name="username" (onChange)="GetUserid(selectedUserByProject)"
+                        filterBy="username" [showClear]="true" placeholder="User Name" class="borderNone">
+                        <!-- <ng-template pTemplate="selectedItem">
+                            <div class="country-item country-item-value" *ngIf="selectedUserByProject">
+                                <div pTooltip="User Name" tooltipPosition="top">{{selectedUserByProject?.username | slice:0:12}}
+                                </div>
+                            </div>  
+                        </ng-template> -->
+                    </p-dropdown>
+                    
+                </div>
+            </div>
+      
+        <div *ngIf="checked">
+            <!-- <c-col sm="12" md="6" lg="6" class="mb-3"> -->
+            <!-- <label class="pb-2">Resource Name</label> -->
+            <p-dropdown [options]="RAFilterData" [(ngModel)]="selectedUser" value="userid" 
+                optionLabel="username"
+                [filter]="true" required name="username" (onChange)="GetUserid(selectedUser)"
+                filterBy="username" [showClear]="true" placeholder="Resource Name" class="borderNone">
                 <ng-template pTemplate="selectedItem">
-                    <div class="country-item country-item-value" *ngIf="selectedProject">
-                        <div pTooltip="Project Name" tooltipPosition="top">{{selectedProject?.projectname | slice:0:12}}
+                    <div class="country-item country-item-value" *ngIf="selectedUser">
+                        <div pTooltip="User Name" tooltipPosition="top">{{selectedUser?.username | slice:0:12}}
                         </div>
                     </div>  
                 </ng-template>
-                
             </p-dropdown>
+            <!-- </c-col> -->
         </div>
 
-        <p-dropdown [options]="member" [(ngModel)]="selectedMem" placeholder="Select" class="mx-3"
-            (onChange)="GetTimesheetData($event.value)">
-        </p-dropdown>
-
-        <p-dropdown *ngIf="selectedMem == 'Team' " [options]="values" [(ngModel)]="selectedValue"
-            optionLabel="name" [filter]="true" filterBy="name" [showClear]="true" placeholder="Select Team List">
-            <ng-template pTemplate="selectedItem">
-                <div class="country-item country-item-value" *ngIf="selectedValue">
-                    <div>{{selectedValue.name}}</div>
-                </div>
-            </ng-template>
-            <ng-template let-value pTemplate="item">
-                <div class="country-item">
-                    <div>{{value.name}}</div>
-                </div>
-            </ng-template>
-        </p-dropdown>
+            <!-- <p-dropdown *ngIf="selectedMem == 'Team' " [options]="values" [(ngModel)]="selectedValue"
+                optionLabel="name" [filter]="true" filterBy="name" [showClear]="true" placeholder="Select Team List">
+                <ng-template pTemplate="selectedItem">
+                    <div class="country-item country-item-value" *ngIf="selectedValue">
+                        <div>{{selectedValue.name}}</div>
+                    </div>
+                </ng-template>
+                <ng-template let-value pTemplate="item">
+                    <div class="country-item">
+                        <div>{{value.name}}</div>
+                    </div>
+                </ng-template>
+            </p-dropdown> -->
+           
+        </div>
     </div>
+</p-toolbar>
 </c-row>
 
 <c-row class="mt-4">

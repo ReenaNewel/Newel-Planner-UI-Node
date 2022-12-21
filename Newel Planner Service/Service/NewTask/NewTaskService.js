@@ -182,7 +182,9 @@ var routes = function () {
 
       dataaccess.Create(NewTaskMst, values).then(
         function (result) {
-          if (result != null) var requserid = req.body.userid;
+          if (result != null) 
+          var requserid = req.body.userid;
+          console.log(' requserid ', requserid )
           for (let i = 0; i < requserid.length; i++) {
             {
               // console.log('result',result.id)
@@ -207,7 +209,7 @@ var routes = function () {
                       assigneeId: assigneeID,
                       active: true
                     };
-                    console.log(`value in NewAssignDetails`, model);
+                    // console.log(`value in NewAssignDetails`, model);
                     dataaccess.Create(NewTaskStatus, model)
                       .then(function (resultS) {
                         if (resultS != null) {

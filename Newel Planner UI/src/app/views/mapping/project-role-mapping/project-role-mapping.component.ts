@@ -37,6 +37,8 @@ export class ProjectRoleMappingComponent implements OnInit {
   projectid: any;
 
   usernameDropdown:boolean
+  editflag: any;
+  selectedusername: any;
 
   constructor(
     private rest: RestService,
@@ -53,10 +55,13 @@ export class ProjectRoleMappingComponent implements OnInit {
     // this.getUserDetails();
     this.GetAllRoleDetails();
     this.showformdetails();
+    this.editflag=0;
     this.flag = 0;
+   
   }
 
   ShowProjectRoleDialogBox() {
+    this.editflag=0
     this.ProjectRoleDialog = true;
     this.showSaveBtn = true;
     this.ProjectRoleMappingForm.reset();
@@ -113,17 +118,21 @@ export class ProjectRoleMappingComponent implements OnInit {
  
   EditProjectRoleDetails(row: any) {
 
+    this.editflag=1;
+   
     this.usernameDropdown =true
     this.flag = 1;
     this.ProjectRoleDialog = true;
     this.showSaveBtn = false;
     // this.username = row.userid;
     this.selectedUserid = row.userid;
+    // console.log(' this.selectedUserid ', this.selectedUserid )
     this.roledata = row.rolename;   
     var arrayrolename = this.roledata.split(',');
+    this.selectedusername = row.username;
     this.selected3 = arrayrolename;   
     this.ProjectRoleMappingForm = this.fb.group({
-      userName: [this.selectedUserid],
+      userName: [this.selectedusername],
       role: [this.selected3],
     });
     this.oldroleid = this.selected3;
@@ -178,6 +187,7 @@ export class ProjectRoleMappingComponent implements OnInit {
   }
 
   SaveResource() {
+    this.editflag=0;
     this.flag = 0;
     var model = {
       projectid: this.projectid,
@@ -223,6 +233,7 @@ export class ProjectRoleMappingComponent implements OnInit {
           });
           this.Cancel_form();
           this.flag = 0
+          this.editflag=0
         } else {
           this.messageService.add({severity: 'warn',summary: 'Success',detail: 'Record not updated..!!',
           });

@@ -19,6 +19,8 @@ export class TimesheetDashboardComponent implements OnInit {
   userEmail: any;
   userLoggedIn: any;
   selectedProject: any;
+  checked: boolean = false;
+
 
   member: any[];
   selectedValue: string;
@@ -34,7 +36,17 @@ export class TimesheetDashboardComponent implements OnInit {
   totalCalculatedhrs: number;
   TaskDt: any;
   projectId: any;
-  projectFlag: number;
+  projectFlag :any;
+  RADetails: any;
+  RAName: any;
+  ra_filter: any;
+  RAFilterData: any;
+  selectedUser:any;
+  UserData: any;
+  userValue: any;
+  paramsUserId: any;
+  member1: string;
+
   constructor(
     private rest: RestService,
     private Global: Global,
@@ -45,11 +57,21 @@ export class TimesheetDashboardComponent implements OnInit {
     this.userRole = this.userLoggedIn.defaultroleid;
     this.userId = this.userLoggedIn.id;
     this.userEmail = this.userLoggedIn.emailid;
-
+    this.userValue = this.userId
+    // this.member1="Only Me"
     this.GetProjectbyTask()
-
-    // this.member = ['Only Me', 'Team'];
-    this.member = ['Only Me']
+    this.ShowDetails()
+    // console.log('this.projectFlag',this.projectFlag)
+    // if(this.projectFlag == 0){
+    //   this.GetTimesheetData()
+    // }
+if(this.projectFlag==0){
+  this.member = ['Only Me'];
+}
+else{
+    this.member = ['Only Me', 'Team'];
+}
+    // this.member = ['Only Me']
   }
 
   // arr = [
@@ -78,33 +100,68 @@ export class TimesheetDashboardComponent implements OnInit {
 
 
   };
+
+ 
+
   handleEvents(events: EventApi[]) {
     this.currentEvents = events;
-    // alert('2 eventsSet' + this.currentEvents)
-    // console.log("this.currentEvents", this.currentEvents);
+   
   }
+  ShowDetails() {
+    this.rest.getAll(this.Global.getapiendpoint() + '/RAMapping/GetRADetails').subscribe((data: any) => {
+      if (data.Success) {
+        this.RADetails = data.Data;
+        // this.RAName = this.removeDuplicates(this.RADetails, "raname")
+       
+      }
+    })
+  }
+  RAUsers() {
+    // if(this.checked){
+    //   this.selectedMem.value='Only Me'
+    // }
+     this.ra_filter = this.userId
+    //  console.log( 'ra filter',  this.ra_filter)
+     this.RAFilterData = this.RADetails.filter(task => task.ra_id === this.ra_filter);
+    
+   }
 
+  ChangeMember(member:any){
+    
+    // console.log('member' ,member)
+    if(member=='Only Me'){
+      this.checked=false
+      this.paramsUserId = this.userId
+      this.GetTimesheetData(this.paramsUserId)
+    }
+    if(member=='Team'){
+      this.checked=false
+      this.paramsUserId =  this.userValue
+      // this.GetTimesheetData()
+    }
+  }
   handleDateClick(arg:any) {
-    // console.log("arg", arg);
-    // console.log("dateStr", arg.dateStr);
+
+   
     this.TaskDt = arg.dateStr
-    // console.log("dateStr",  this.TaskDt );
-    // this.handleEvents.bind(this);
+    
     var model = {
-      userid: this.userId,
+      userid:  this.userValue,
+      // this.userId,
       date: arg.dateStr
     }
     console.log('date model',model);
     this.rest.postParams(this.Global.getapiendpoint() + '/timesheet/GetMonthlyhoursData', model).subscribe((data: any) => {
       if (data.Success) {
         this.taskDate = data.Data;
-        console.log('date model', this.taskDate );
+        // console.log('date model', this.taskDate );
       }
     })
   }
 
   dat: any;
   onDateClick(date: { dateStr: string; }) {
+    
     // this.modalRef = this.modalService.show(this.viewModal);
     this.dat = date.dateStr;
     this.handleDateClick(this.dat)
@@ -115,7 +172,7 @@ export class TimesheetDashboardComponent implements OnInit {
       userid: this.userId
 
     }
-  console.log('time sheet date model' , model)
+  // console.log('time sheet date model' , model)
     // this.rest.postParams(this.Global.getapiendpoint() + '/timesheet/GetTaskname', model).subscribe((data: any) => {
     //   if (data.Success) {
     //     this.ProjectNames = data.Data;
@@ -129,16 +186,26 @@ export class TimesheetDashboardComponent implements OnInit {
 
     }
     // this.projectFlag=0
-    this.rest.postParams(this.Global.getapiendpoint() + '/timesheet/GetProjectNamesByRole', model1).subscribe((data: any) => {
+    this.rest.postParams(this.Global.getapiendpoint() + '/timesheet/GetTimeSheetProjectNamesByRole', model1).subscribe((data: any) => {
       
       if (data.Success) {
-        this.projectFlag = 1
-        this.ProjectNames = data.Data;
-        console.log(this.ProjectNames)
+        // console.log('data.length' ,data.Data.length )
+        if(data.Data.length > 0) {
+          this.projectFlag = 1
+          this.ProjectNames = data.Data;
+          this.member = ['Only Me', 'Team'];
+        
+          this.GetTimesheetData(this.userValue)
+          // console.log(this.ProjectNames)
+        }
+        else{
+          this.projectFlag = 0
+          // console.log('projectflag',this.projectFlag)
+          this.member = ['Only Me'];
+          this.GetTimesheetData(this.userValue)
+        }
       }
-      else{
-        this.projectFlag = 0
-      }
+     
      
     })
 
@@ -149,27 +216,32 @@ export class TimesheetDashboardComponent implements OnInit {
     // // console.log(this.projectName)
     // this.selectedTaskProject = this.projectName
     this.projectId = Project.projectid
-    console.log('selected project', this.projectId)
+    // console.log('selected project', this.projectId)
+    this.getUserByProjectId()
 
   }
 
   hours =0
   minutes=0
   params:any
-  GetTimesheetData(event: any) {
+  GetTimesheetData(user:any) {
+    // console.log(user)
     this.hoursArray = []
     this.datedata=[]
-    // this.Montharray=[]
+
+       this.Montharray.splice(0);
+
         this.params = {
-          userid: this.userId
+          userid: user
         }
   
-    console.log('GetTimesheetData' ,  this.params)
-
+    // console.log('GetTimesheetData of user' ,  this.params)
+    // console.log('calendarOptions',this.calendarOptions)
     this.rest.postParams(this.Global.getapiendpoint() + '/timesheet/GetTimesheetProject',this.params).subscribe((data: any) => {
-      console.log("Timesheet hours minute data", data);
+      // console.log("Timesheet hours minute data", data);
       if(data.Success){
           this.datedata = data.Data;
+          
           for (let i = 0; i < this.datedata.length; i++) {
             // console.log("MonthArray..", this.datedata[i]);
             this.totalhours = 0;
@@ -199,9 +271,12 @@ export class TimesheetDashboardComponent implements OnInit {
           }
           // this.totaltimehr = this.totalhours + this.totalCalculatedhrs;
             this.Montharray.push({ title: this.totaltimehr, date: this.datedata[i].date.substring(0, 10) })
+            
+            console.log('this.Montharray',this.Montharray)
 
           }
           this.hoursArray = this.Montharray;
+          // this.Montharray=[]
           // console.log("MonthArrayData..", this.Montharray);
 
           // console.log("totaltimehr", this.totaltimehr);
@@ -209,7 +284,33 @@ export class TimesheetDashboardComponent implements OnInit {
     })
   }
 
+  GetUserid(user:any){
+    // console.log('user',user)
+    // this.calendarOptions.get('date').setValue(null);
+    if(user){
+      this.userValue = user.userid
+      console.log('user', this.userValue)
+      this.GetTimesheetData(this.userValue)
+    }
+    else{
+      this.userValue = this.userId
+    }
+  }
 
+  getUserByProjectId() {
+    if (this.selectedProject) {
+      var model = {
+        projectid: this.selectedProject.projectid
+      }
+      // console.log('project id', model)
+      this.rest.postParams(this.Global.getapiendpoint() + '/NewTask/GetAllUsersByProjectID', model).subscribe((data: any) => {
+        if (data.Success) {
+          this.UserData = data.Data;
+          // console.log('user data',this.UserData)
+        }
+      })
+    }
+  }
 
   dateClick(event) {
     // console.log("Date Data", event);

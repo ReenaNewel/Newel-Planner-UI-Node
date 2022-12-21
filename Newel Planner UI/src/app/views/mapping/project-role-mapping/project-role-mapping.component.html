@@ -29,12 +29,21 @@
 
             <c-row class="mb-4">
                 <c-col sm="12" md="6" lg="6" class="mb-3">
+                <div *ngIf="editflag==0">
                     <label class="pb-2">User Name</label>
-                <p-dropdown [options]="userDetails" [style]="{'width':'100%'}"
-                        (onChange)="GetSelectedUserName($event.value)" optionLabel="name" [filter]="true"
-                        filterBy="name" formControlName="userName" [showClear]="true" [(ngModel)]="selectedUserid" value="id"
-                        placeholder="User Name*" class="" required name="name" optionValue="id" [disabled]="usernameDropdown" appendTo="body">
-                </p-dropdown>
+
+                    <p-dropdown [options]="userDetails" [style]="{'width':'100%'}"
+                            (onChange)="GetSelectedUserName($event.value)" optionLabel="name" [filter]="true"
+                            filterBy="name" formControlName="userName" [showClear]="true" [(ngModel)]="selectedUserid" value="id"
+                            placeholder="User Name*" class="" required name="name" optionValue="id" [readonly]="usernameDropdown" appendTo="body">
+                    </p-dropdown>
+                </div>
+                <div *ngIf="editflag==1">
+                    <label class="pb-2">User Name</label>
+                    <input type="text" class="w-full" placeholder="User Name*" pInputText required
+                    [(ngModel)]="selectedusername" formControlName="userName" readonly="true" />
+
+              </div>
                     <!-- <p-dropdown [options]="userDetails" [style]="{'width':'100%'}"
                         (onChange)="GetSelectedUserName($event.value)" optionLabel="name" [filter]="true"
                         filterBy="name" formControlName="userName" [showClear]="true" [(ngModel)]="username" value="id"
@@ -64,9 +73,9 @@
             </c-row>
         </form>
 
-        <p-button *ngIf="showSaveBtn" type="submit" (click)="SaveResource()" label="Save"
+        <p-button *ngIf="showSaveBtn" type="submit"[disabled]="!ProjectRoleMappingForm.valid" (click)="SaveResource()" label="Save"
             styleClass="p-button-warning px-3 py-2"></p-button>
-        <p-button *ngIf="!showSaveBtn" type="submit" (click)="UpdateRoleMapping()" label="Update"
+        <p-button *ngIf="!showSaveBtn" type="submit"[disabled]="!ProjectRoleMappingForm.valid" (click)="UpdateRoleMapping()" label="Update"
             styleClass="p-button-warning px-3 py-2"></p-button>
         <p-button (click)="ProjectRoleDialog=false" label="Back" styleClass="p-button-text pb-2"></p-button>
 

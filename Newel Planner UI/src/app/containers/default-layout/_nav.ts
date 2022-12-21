@@ -43,6 +43,12 @@ export const navItems: INavData[] = [
         url: '/weekely-efforts',
         iconComponent: { name: 'cil-puzzle' },
       },
+      {
+
+        name: 'Reports',
+        url: '/Reports'
+
+      },
 
     ]
 
@@ -290,6 +296,10 @@ export const navItems: INavData[] = [
       {
         name: 'Project',
         url: '/masters/project'
+      },
+      {
+        name: 'User',
+        url: '/masters/user'
       },
       // {
       //   name: 'User',

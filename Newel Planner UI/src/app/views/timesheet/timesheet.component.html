@@ -39,7 +39,7 @@
         <c-col sm="12" md="12" lg="12" xl="auto" xxl="auto" class="border-1 ps-0">
           <p-dropdown [options]="Tasknames" [(ngModel)]="selectedTask" value="taskid" optionLabel="taskname"
             [filter]="true" filterBy="taskname" [showClear]="true" name="taskname" placeholder="Task Name"
-            class="borderNone" appendTo="body" required>
+            class="borderNone" appendTo="body" (click)="GetTaskNameByProject(selectedProject)"required>
             <ng-template pTemplate="selectedItem">
               <div class="country-item country-item-value" *ngIf="selectedTask">
                 <div pTooltip="Task Name" tooltipPosition="top">{{selectedTask?.taskname | slice:0:12}}</div>
@@ -163,6 +163,7 @@
       <c-col sm="12" md="4" lg="4" class="mb-3">
         <p-multiSelect [options]="UserData" [maxSelectedLabels]="1" [style]="{'width':'100%'}" optionLabel="name"
           [filter]="true" filterBy="name" optionValue="userid" [showClear]="true" value="userid"
+          (onChange)="GetAssigneeName($event.value)"
           (click)="getUserByProjectId()" defaultLabel="Assignee Name*"
           class="" required [(ngModel)]="selectedTaskAssignee" name="assignee_name" appendTo="body">
         </p-multiSelect>

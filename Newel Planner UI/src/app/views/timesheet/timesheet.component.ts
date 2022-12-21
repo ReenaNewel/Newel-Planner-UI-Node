@@ -224,7 +224,7 @@ export class TimesheetComponent implements OnInit, AfterViewInit {
     if (this.selectedhours == 0) {
       this.minutes = [15, 30, 45]
     } else {      
-      this.selectedminutes = 0;
+      // this.selectedminutes = 0;
       this.minutes = ['00', 15, 30, 45]
       // console.log("selectedminutes", this.selectedminutes );
 
@@ -247,6 +247,7 @@ export class TimesheetComponent implements OnInit, AfterViewInit {
 
   createTaskClose() {
     this.taskDate = new Date;
+   
     this.Cancel_form()
     // console.log(" this.taskdate", this.taskDate);
     // this.selectedProject = '';
@@ -339,6 +340,7 @@ export class TimesheetComponent implements OnInit, AfterViewInit {
 
       if (data.Success) {
         this.Tasknames = data.Data;
+        console.log(this.Tasknames )
       }
       else {
       }
@@ -355,12 +357,13 @@ export class TimesheetComponent implements OnInit, AfterViewInit {
 
       if (data.Success) {
         this.ProjectNames = data.Data;
+        console.log('ProjectNames',this.ProjectNames)
       }
       else {
       }
     })
   }
-  saveTimesheet() {
+  saveTimesheet() { 
 
     this.createTaskDialog = false
     let model = {
@@ -378,7 +381,7 @@ export class TimesheetComponent implements OnInit, AfterViewInit {
 
     } 
 
-    // console.log("save timesheet model", model);
+    console.log("save timesheet model", model);
     this.rest.create(this.Global.getapiendpoint() + "/timesheet/CreateTimesheet", model).subscribe((data: any) => {
       if (data.Success) {
         this.messageService.add({ severity: 'success', summary: 'Service Message', detail: 'Timesheet Record added successfully' });
@@ -437,12 +440,12 @@ export class TimesheetComponent implements OnInit, AfterViewInit {
       this.rest.postParams(this.Global.getapiendpoint() + '/NewTask/GetAllUsersByProjectID', model).subscribe((data: any) => {
         if (data.Success) {
           this.UserData = data.Data;
-          console.log('user data',this.UserData)
+          // console.log('user data',this.UserData)
         }
       })
     }
   }
-
+ 
   onUpload(event) {
     // console.log("event", event);
     // console.log("event.files", event.files);
@@ -457,7 +460,7 @@ export class TimesheetComponent implements OnInit, AfterViewInit {
 
   Cancel_form() {
 
-    this.ShowDetails()
+    // this.ShowDetails()
     this.getProjectActivity()
     this.getProjectName()
     this.GetProjectbyTask()

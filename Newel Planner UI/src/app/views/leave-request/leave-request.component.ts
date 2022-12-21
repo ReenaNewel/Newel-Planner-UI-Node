@@ -38,14 +38,18 @@ export class LeaveRequestComponent implements OnInit {
   // leaveform!:FormGroup
 
   ProjectForm !: FormGroup
-
+  RejectForm !: FormGroup
   dataSource: any;
   userLoggedIn: any;
   userid: any;
   projectDialog: boolean;
   showSaveBtn: boolean;
+  RejectDialog: boolean;
   displayedColumns: string[] = ['UserName', 'Fromdate', 'Todate', 'leave', 'LeaveType', 'reason', 'Approvedon',
-  'Approvby', 'status', 'remark'];
+    'Approvby', 'status', 'remark'];
+  updateid: any;
+  leavestatus: any;
+  today: Date;
 
   constructor(private fb: FormBuilder, private router: Router,
     private rest: RestService, private Global: Global,
@@ -60,6 +64,7 @@ export class LeaveRequestComponent implements OnInit {
 
     this.userLoggedIn = JSON.parse(localStorage.getItem('userLoggedIn')!);
     this.userid = this.userLoggedIn.id;
+    this.today = new Date();
     this.ProjectForm = this.fb.group({
       startdate: [''],
       enddate: [''],
@@ -68,7 +73,13 @@ export class LeaveRequestComponent implements OnInit {
       LeaveDropdwon: [''],
     })
 
+    this.RejectForm = this.fb.group({
+      Reason: ['']
+    })
+
+
     this.LeaveDetails();
+    this.LeaveDetailsForApproval();
     this.leavetypedetaiils();
     this.RAIdDetails();
 
@@ -82,17 +93,20 @@ export class LeaveRequestComponent implements OnInit {
       userid: this.userid
     }
     this.rest.postParams(this.Global.getapiendpoint() + '/Leave/GetLeaveRequestData', model).subscribe((data: any) => {
-      if(data.Success){
-      // console.log(`Get All data`, data.Data);
-      this.leaveData = data.Data;
+      if (data.Success) {
+        console.log(`Get All data`, data.Data);
+        this.leaveData = data.Data;
+
       }
-  
+
     });
   }
 
   showCreateNewProjectDialog() {
+    this.today = new Date()
     this.projectDialog = true;
     this.showSaveBtn = true;
+    this.Balanceleave();
   }
 
 
@@ -101,7 +115,7 @@ export class LeaveRequestComponent implements OnInit {
     this.rest
       .getAll(this.Global.getapiendpoint() + '/Leave/getLeaveTypeDetails')
       .subscribe((data: any) => {
-        if(data.Success){
+        if (data.Success) {
           this.leavetypeDropdown = data.Data;
         }
       });
@@ -118,12 +132,12 @@ export class LeaveRequestComponent implements OnInit {
       userid: this.userid//this.userid
     }
     this.rest.postParams(this.Global.getapiendpoint() + '/Leave/getRAIId', model).subscribe((data: any) => {
-      if(data.Success){
+      if (data.Success) {
         this.Raid = data.Data.ra_id;
-    }
-    else{
+      }
+      else {
 
-    }
+      }
 
     });
   }
@@ -154,8 +168,8 @@ export class LeaveRequestComponent implements OnInit {
       //roleid: this.roleid,
       reason: this.ProjectForm.value.Reason,
       leaveno: this.datecount,
-      fromdate: this.ProjectForm.value.startdate,
-      todate: this.ProjectForm.value.enddate,
+      fromdate: moment(this.ProjectForm.value.startdate).format('YYYY-MM-DD'),
+      todate: moment(this.ProjectForm.value.enddate).format('YYYY-MM-DD'),
       created_by: this.userLoggedIn.id,
       leave_name: this.ProjectForm.value.LeaveDropdwon,
       ra_id: this.Raid,
@@ -175,7 +189,7 @@ export class LeaveRequestComponent implements OnInit {
           this.Cancel_form();
           this.LeaveDetails();
         }
-        else{
+        else {
           this.messageService.add({ severity: 'warn', summary: 'Success', detail: 'Leave Request not created' });
         }
 
@@ -184,7 +198,10 @@ export class LeaveRequestComponent implements OnInit {
   }
 
   Cancel_form() {
+    this.projectDialog = false;
     this.ProjectForm.reset();
+    this.RejectDialog = false;
+    this.RejectForm.reset();
   }
 
   submit() {
@@ -235,7 +252,7 @@ export class LeaveRequestComponent implements OnInit {
 
     iDateDiff -= iAdjust // take into account both days on weekend
     this.datecount = iDateDiff + 1;
-     
+
     this.ProjectForm.controls['LeaveNO'].setValue(this.datecount);
     // console.log("Date Count", iDateDiff + 1);
   }
@@ -249,4 +266,216 @@ export class LeaveRequestComponent implements OnInit {
   }
 
 
+  //new changes
+  editLeaveRequest(row) {
+    console.log("Edit Row", row);
+
+    this.projectDialog = true;
+    this.showSaveBtn = false;
+
+    this.updateid = row.id;
+    this.leavestatus = row.status
+    this.ProjectForm = this.fb.group({
+      startdate: [new Date(row.fromdate)],
+      enddate: [new Date(row.todate)],
+      LeaveNO: [row.no_of_leaves],
+      Reason: [row.description],
+      LeaveDropdwon: [row.leaveid],
+    })
+  }
+  
+
+  UpdateLeaveRequest() {
+  var model = {
+      userid: this.userLoggedIn.id,
+      id: this.updateid,
+      reason: this.ProjectForm.value.Reason,
+      leaveno: this.ProjectForm.value.LeaveNO,
+      fromdate: moment(this.ProjectForm.value.startdate).format('YYYY-MM-DD'),
+      todate: moment(this.ProjectForm.value.enddate).format('YYYY-MM-DD'),
+      created_by: this.userLoggedIn.id,
+      leave_name: this.ProjectForm.value.LeaveDropdwon,
+      ra_id: this.Raid,
+      leavestatus: this.leavestatus,
+      created_date: moment().format('YYYY-MM-DD'),
+    };
+
+    console.log("UpdateTask model", model)
+    this.rest.postParams(this.Global.getapiendpoint() + '/Leave/UpdateLeaveRequestDetails', model).subscribe((data: any) => {
+      console.log('data', data.Data)
+      if (data.Success) {
+        this.messageService.add({ severity: 'success', summary: 'Service Message', detail: 'Task details updated successfully' });
+        this.Cancel_form();
+        this.LeaveDetails();
+      }
+      else {
+        this.messageService.add({ severity: 'warn', summary: 'Success', detail: 'Record not updated..!!' });
+      }
+    })
+  }
+
+  CancelLeaveRequest(rows) {
+    console.log("Cancel Row", rows);
+    this.updateid = rows.id;
+    var model = {
+      userid: this.userLoggedIn.id,
+      id: this.updateid,
+      ra_id: this.Raid,
+      cancel_status: 1,
+      leavestatus: rows.status,
+      created_date: moment().format('YYYY-MM-DD'),
+
+      reason: rows.description,
+      leaveno: rows.no_of_leaves,
+      fromdate: moment(rows.fromdate).format('YYYY-MM-DD'),
+      todate: moment(rows.todate).format('YYYY-MM-DD'),
+      created_by: this.userLoggedIn.id,
+      leave_name: rows.leave_type,
+      };
+
+    console.log("Cancel model", model)
+    this.rest.postParams(this.Global.getapiendpoint() + '/Leave/CancelLeaveRequestDetails', model).subscribe((data: any) => {
+      console.log('data', data.Data)
+      if (data.Success) {
+        this.messageService.add({ severity: 'success', summary: 'Service Message', detail: 'Leave Request Cancel successfully' });
+        this.Cancel_form();
+        this.LeaveDetails();
+      }
+      else {
+        this.messageService.add({ severity: 'warn', summary: 'Success', detail: 'Record not updated..!!' });
+      }
+    })
+  }
+
+
+  ApprovalLeaveData: any;
+   LeaveDetailsForApproval() {
+
+    var model = {
+      userid: this.userid
+    }
+    this.rest.postParams(this.Global.getapiendpoint() + '/Leave/GetLeaveDetailsforApproval', model).subscribe((data: any) => {
+      if (data.Success) {
+           this.ApprovalLeaveData = data.Data;
+        console.log(`ApprovalLeaveData`, this.ApprovalLeaveData);
+     
+      }
+
+    });
+  }
+
+
+
+  RejectLeaveRequest(rows) {
+    console.log("Cancel Row", rows);
+    this.updateid = rows.id;
+    this.RejectDialog = true;
+    var model = {
+      //projectid: this.projectid,
+      userid: this.userLoggedIn.id,
+      id: this.updateid,
+       reason: this.RejectForm.value.Reason,
+      // leaveno: this.ProjectForm.value.LeaveNO,
+      // fromdate: moment(this.ProjectForm.value.startdate).format('YYYY-MM-DD'),
+      // todate: moment(this.ProjectForm.value.enddate).format('YYYY-MM-DD'),
+      // created_by: this.userLoggedIn.id,
+      // leave_name: this.ProjectForm.value.LeaveDropdwon,
+      ra_id: this.Raid,
+      cancel_status: 1,
+      created_date: moment().format('YYYY-MM-DD'),
+    };
+
+    console.log("Cancel model", model)
+  
+  }
+
+  UpdateRejectLeaveRequest() {
+
+    var model = {
+      //projectid: this.projectid,
+      userid: this.userLoggedIn.id,
+      id: this.updateid,
+      reason: this.RejectForm.value.Reason,
+      ra_id: this.Raid,
+      cancel_status: 1,
+      created_date: moment().format('YYYY-MM-DD'),
+    };
+
+    console.log("Reject model", model)
+    this.rest.postParams(this.Global.getapiendpoint() + '/Leave/RejectLeaveRequestDetails', model).subscribe((data: any) => {
+      console.log('data', data.Data)
+      if (data.Success) {
+        this.messageService.add({ severity: 'success', summary: 'Service Message', detail: 'Task details updated successfully' });
+        this.Cancel_form();
+        this.LeaveDetails();
+      }
+      else {
+        this.messageService.add({ severity: 'warn', summary: 'Success', detail: 'Record not updated..!!' });
+      }
+    })
+  }
+
+
+  ApproveLeaveRequest(rows) {
+    console.log("Approve Row", rows);
+    this.updateid = rows.id;
+    var model = {
+      userid: this.userLoggedIn.id,
+      id: this.updateid,
+      ra_id: this.Raid,
+      leavestatus: rows.status,
+      user_id: rows.user_id
+
+
+      //cancel_status: 4,
+      //created_date: moment().format('YYYY-MM-DD'),
+    };
+
+    // console.log("Cancel model", model)
+    this.rest.postParams(this.Global.getapiendpoint() + '/Leave/ApproveLeaveRequestDetails', model).subscribe((data: any) => {
+      console.log('data', data.Data)
+      if (data.Success) {
+        this.messageService.add({ severity: 'success', summary: 'Service Message', detail: 'Leave Request Approved successfully' });
+        this.Cancel_form();
+        this.LeaveDetails();
+        this.LeaveDetailsForApproval()
+      }
+      else {
+        this.messageService.add({ severity: 'warn', summary: 'Success', detail: 'Record not updated..!!' });
+      }
+    })
+  }
+
+  
+// balanceleavedata: any;
+// Balanceleave() {
+//   this.rest
+//     .getAll(this.Global.getapiendpoint() + '/Leave/getBalancedLeave')
+//     .subscribe((data: any) => {
+//       //if (data.Success) {
+//         this.balanceleavedata = data.Data;
+
+//         console.log("Balance Leave", this.balanceleavedata);
+//       //}
+//     });
+// }
+
+balanceleavedata: any;
+Balanceleave() {
+  var model = {
+    userid: this.userid//this.userid
+  }
+  this.rest.postParams(this.Global.getapiendpoint() + '/Leave/getBalancedLeave', model).subscribe((data: any) => {
+    if (data.Success) {
+      this.balanceleavedata = data.Data;
+      console.log("Balance leave", this.balanceleavedata);
+    }
+    else {
+
+    }
+
+  });
 }
+}
+
+

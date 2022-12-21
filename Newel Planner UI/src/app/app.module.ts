@@ -19,6 +19,7 @@ import {LeaveRequestModule } from './views/leave-request/leave-request.module';
 import { MappingModule } from './views/mapping/mapping.module';
 import {WeekelyEffortsModule} from './views/weekely-efforts/weekely-efforts.module'
 
+
 import {
   PERFECT_SCROLLBAR_CONFIG,
   PerfectScrollbarConfigInterface,
@@ -57,12 +58,14 @@ import {
   SidebarModule,
   TabsModule,
   UtilitiesModule,
+ 
 } from '@coreui/angular';
 
 import { IconModule, IconSetService } from '@coreui/icons-angular';
 import { TimesheetModule } from './views/timesheet/timesheet.module';
 import { ApiserviceService } from './Service/apiservice.service';
 import { NewTaskModule } from './views/new-task/new-task.module';
+import { ReportsModule } from './views/Reports/Reports.module';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
@@ -121,7 +124,8 @@ FullCalendarModule.registerPlugins([
     InputTextModule,
     LeaveRequestModule,
     MappingModule,
-    WeekelyEffortsModule
+    WeekelyEffortsModule,
+    ReportsModule
 
 
   ],

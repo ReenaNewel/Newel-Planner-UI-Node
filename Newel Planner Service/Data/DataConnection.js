@@ -18,6 +18,7 @@ module.exports.CheckConnection = function (res) {
 module.exports.CreateTable = function (res) {
 
     datamodel.Error_Log();
+    datamodel.Report_type_master();
     // datamodel.tbl_master_holiday();
    
     connect.sequelize.sync()

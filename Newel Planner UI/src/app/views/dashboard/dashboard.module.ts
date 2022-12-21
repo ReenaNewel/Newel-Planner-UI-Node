@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import {ToolbarModule} from 'primeng/toolbar';
 
 import {
   AvatarModule,
@@ -45,6 +46,8 @@ import listPlugin from '@fullcalendar/list';
 import interactionPlugin from '@fullcalendar/interaction';
 import { MessagesModule } from 'primeng/messages';
 import { MessageModule } from 'primeng/message';
+import {CheckboxModule} from 'primeng/checkbox';
+
 // import { BrowserModule } from '@angular/platform-browser';
 
 FullCalendarModule.registerPlugins([
@@ -56,11 +59,13 @@ FullCalendarModule.registerPlugins([
 
 @NgModule({
   imports: [
+    ToolbarModule,
     DashboardRoutingModule,
     FormsModule,
     FullCalendarModule,
     CardModule,
     NavModule,
+    CheckboxModule,
     IconModule,
     TabsModule,
     CommonModule,

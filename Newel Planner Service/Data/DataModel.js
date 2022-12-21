@@ -32,6 +32,7 @@ class Error_Log extends Model{}
 class tbl_leave_details extends Model{}
 class tbl_weekly_efforts extends Model{}
 class tbl_month_week extends Model{}
+class Report_type_master extends Model{}
 
 
 
@@ -501,7 +502,23 @@ module.exports.tbl_ui_Rolemap =function(){
 
     }
 
+    module.exports.Report_type_master = function () {
+        Report_type_master.init({
+        id:{type: Sequelize.BIGINT, primaryKey: true, autoIncrement: true,allowNull: false },
+        ReportType:{ type: Sequelize.STRING, allowNull: true },
+        ReportTypeid:{ type: Sequelize.INTEGER, allowNull: true },
+        isactive:{  type: Sequelize.BOOLEAN, defaultValue: true }
     
+        }, {
+            sequelize,
+            modelName: 'Report_type_master',
+            tableName: 'Report_type_master'
+    
+        });
+    
+        return Report_type_master;
+    }
+
 module.exports.tbl_leave_details = function () {
     tbl_leave_details.init({
 

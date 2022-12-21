@@ -117,6 +117,14 @@ const routes: Routes = [
         loadChildren: () =>
          import('./views/weekely-efforts/weekely-efforts.module').then((m) => m.WeekelyEffortsModule)
       },
+   
+      {
+
+        path: 'Reports',
+        loadChildren: () =>
+        import('./views/Reports/Reports.module').then((m) => m.ReportsModule)
+
+      },
     ]
   },
   {
