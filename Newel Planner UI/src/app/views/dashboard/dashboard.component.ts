@@ -153,6 +153,7 @@ TotalData:any;
   this.ProjectForm.get('Comments')?.disable()
   this.ProjectForm.get('assigneeName')?.disable()
   this.ProjectForm.get('taskStatus')?.disable()
+  this.ProjectForm.get('taskType')?.disable()
 }
   
 GetAllProjectStatus(value: any) {
@@ -168,12 +169,12 @@ ShowDetails(projectid:any){
     p_userid:this.userId,
     p_projectid:projectid
   }
-  console.log('showdetails',model)
+  // console.log('showdetails',model)
 
           this.rest.postParams(this.Global.getapiendpoint() + '/NewTask/GetTaskDetailsByuser',model).subscribe((data: any) => {
            
              this.filterdata = data.Data;
-           console.log("total acount",data.Data);
+          //  console.log("total acount",data.Data);
             //  console.log("this.compelete",this.completed);
         
              
@@ -231,13 +232,13 @@ ShowProjectNmaes()
   //   // console.log('projectNames',data.Data);
   //   this.projectnames=data.Data;
   //  }
-  console.log('project names')
+  // console.log('project names')
   this.rest.postParams(this.Global.getapiendpoint() + '/timesheet/GetProjectNamesByRole', model).subscribe((data: any) => {
       
     if (data.Success) {
      
       this.projectnames = data.Data;
-      console.log('task projects  ',this.projectnames)
+      // console.log('task projects  ',this.projectnames)
     }
  
   })
@@ -263,7 +264,7 @@ console.warn(this.ProjectForm.value)
 }
 
 getrowdetails(event:any){
-  console.log("getrowdetails",event);
+  // console.log("getrowdetails",event);
   
 }
 editprojectName:any
@@ -273,13 +274,13 @@ EditTaskDetails(taskDetails) {
   this.NewTaskDialog = true;
   this.showSaveBtn = false;
   this.colId = taskDetails.id;
-  console.log("this.colId",this.colId);
+  // console.log("this.colId",this.colId);
   
  
  this.editcreated_by =taskDetails.created_by;
 // komal
 this.editprojectName= taskDetails.projectid;
-console.log("taskDetails.enddate",taskDetails.enddate);
+// console.log("taskDetails.enddate",taskDetails.enddate);
 
   this.ProjectForm = this.fb.group({
   pname :[this.editprojectName],
@@ -309,7 +310,7 @@ UpdateTask(){
     unqid: this.EditUnqID
 }
 
-  console.log("UpdateTask model",model)
+  // console.log("UpdateTask model",model)
   this.rest.postParams(this.Global.getapiendpoint() +'/NewTask/UpdateStatusTaskDetails',model).subscribe((data: any) => {
     // console.log('data',data.Data)
     if (data.Success) {

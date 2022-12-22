@@ -15,7 +15,7 @@
           <!-- formControlName="projectname" -->
           <div class="flex justify-content-center flex-wrap">
             <form [formGroup]="ProjectForm" (submit)="submit()">
-              <p-dropdown class="dropdown" [options]="projectnames" optionLabel="projectname" optionValue="projectid"
+              <p-dropdown pTooltip="Project Name" tooltipPosition="top" class="dropdown" [options]="projectnames" optionLabel="projectname" optionValue="projectid"
                 [filter]="true" filterBy="projectname" [showClear]="true" placeholder="Select a Project"
                (onChange)="ShowDetails($event.value)">
               </p-dropdown>
@@ -31,7 +31,7 @@
               <c-row class="">
                 <c-col sm="12" md="4" lg="4" class="mb-3">
                   <label class="pb-2">Project</label>
-                  <p-dropdown [options]="projectnames" [style]="{'minWidth':'100%'}" optionLabel="projectname"
+                  <p-dropdown pTooltip="Project Name" tooltipPosition="top" [options]="projectnames" [style]="{'minWidth':'100%'}" optionLabel="projectname"
                     optionValue="projectid" [filter]="true" name="projectname" filterBy="projectname" [showClear]="true"
                     placeholder="Select a Project" formControlName="pname">
                   </p-dropdown>
@@ -39,13 +39,13 @@
 
                 <c-col sm="12" md="4" lg="4" class="mb-3">
                   <label class="pb-2">Task Name</label>
-                  <input type="text" class="w-full" placeholder="Task Name*" pInputText name="taskname"
+                  <input pTooltip="Task Name" tooltipPosition="top" type="text" class="w-full" placeholder="Task Name*" pInputText name="taskname"
                     [style]="{'minWidth':'100%'}" formControlName="taskname" >
                 </c-col>
 
                 <c-col sm="12" md="4" lg="4" class="mb-3">
                   <label class="pb-2">Task Type</label>
-                  <p-dropdown [options]="filterdata" [style]="{'minWidth':'100%'}" optionLabel="tasktype_name"
+                  <p-dropdown pTooltip="TAsk Type" tooltipPosition="top" [options]="filterdata" [style]="{'minWidth':'100%'}" optionLabel="tasktype_name"
                     [filter]="true" filterBy="tasktype_name" [showClear]="true" value="tasktypeid"
                     placeholder="Task Type*" class="" name="tasktype_name" formControlName="taskType" 
                     optionValue="tasktypeid">
@@ -54,7 +54,7 @@
 
                 <c-col sm="12" md="4" lg="4" class="mb-3">
                   <label class="pb-2">Assignee Name</label>
-                  <p-dropdown [options]="filterdata" [style]="{'minWidth':'100%'}" optionLabel="assignee_name"
+                  <p-dropdown pTooltip="Assignee Name" tooltipPosition="top" [options]="filterdata" [style]="{'minWidth':'100%'}" optionLabel="assignee_name"
                     [filter]="true" filterBy="assignee_name" [showClear]="true" value="assignee_id"
                     formControlName="assigneeName" placeholder="Assignee Name*" class="" optionValue="assignee_id"
                     name="assignee_name" >
@@ -71,7 +71,7 @@
 
                 <c-col sm="12" md="4" lg="4" class="mb-3">
                   <label class="pb-2">New Status</label>
-                  <p-dropdown [options]="ProjectStates" [style]="{'minWidth':'100%'}" optionValue="typeid"
+                  <p-dropdown pTooltip="New Status" tooltipPosition="top" [options]="ProjectStates" [style]="{'minWidth':'100%'}" optionValue="typeid"
                     optionLabel="name" [filter]="true" filterBy="name" [showClear]="true" value="typeid"
                     placeholder="New Status*" (onChange)="GetAllProjectStatus($event.value)"
                     formControlName="PrjStatus">

@@ -30,7 +30,7 @@
                         [value]="selectedTaskProject" [(ngModel)]="selectedTaskProject" required
                         [readOnly]="true" />
                 </span> -->
-                <p-dropdown [options]="ProjectNames"  [style]="{'minWidth':'100%'}" optionValue="projectid"
+                <p-dropdown   pTooltip="Project Name" tooltipPosition="top" [options]="ProjectNames"  [style]="{'minWidth':'100%'}" optionValue="projectid"
                  [(ngModel)]="selectedProject" value="projectid" optionLabel="projectname"
                 [filter]="true" required name="projectname" (onChange)="getUserByProjectId(selectedProject)"
                 filterBy="projectname" [showClear]="true" placeholder="Project Name" class="borderNone">
@@ -38,19 +38,19 @@
             </c-col>
 
             <c-col sm="12" md="8" lg="8" class="mb-3">
-                <input type="text" class="w-full" placeholder="Task Name*" pInputText required name="taskname"
+                <input  pTooltip="Task Name" tooltipPosition="top" type="text" class="w-full" placeholder="Task Name*" pInputText required name="taskname"
                     [(ngModel)]="selectedTaskName" />
             </c-col>
 
             <c-col sm="12" md="4" lg="4" class="mb-3">
-                <p-dropdown [options]="tasktypes" [style]="{'minWidth':'100%'}" optionLabel="name" [filter]="true"
+                <p-dropdown  pTooltip="Task Type" tooltipPosition="top" [options]="tasktypes" [style]="{'minWidth':'100%'}" optionLabel="name" [filter]="true"
                     filterBy="name" [showClear]="true" value="typeid" placeholder="Task Type*" class="" required
                     name="tasktype_name" [(ngModel)]="selectedTaskTypeName" optionValue="typeid">
                 </p-dropdown>
             </c-col>
 
             <c-col sm="12" md="4" lg="4" class="mb-3">
-                <p-dropdown [options]="tasks" [style]="{'minWidth':'100%'}" optionLabel="name" [filter]="true"
+                <p-dropdown  pTooltip="Task Status" tooltipPosition="top" [options]="tasks" [style]="{'minWidth':'100%'}" optionLabel="name" [filter]="true"
                     filterBy="name" name="taskstatus" [showClear]="true" value="typeid" placeholder="Task Status*"
                     class="" required [(ngModel)]="selectedtaskstatus"  (onChange)="GetTaskStatus($event.value)" optionValue="typeid">
                 </p-dropdown>
@@ -61,14 +61,14 @@
             <c-col sm="12" md="4" lg="4" class="mb-3">
                 <!-- {{flag}} -->
                 <div *ngIf="flag==1">
-                    <p-dropdown [options]="UserData" [style]="{'minWidth':'100%'}" optionLabel="name" [filter]="true"
+                    <p-dropdown  pTooltip="Assignee Name" tooltipPosition="top" [options]="UserData" [style]="{'minWidth':'100%'}" optionLabel="name" [filter]="true"
                     filterBy="name" [showClear]="true" 
                     placeholder="Assignee Name*" class=""
                     required [(ngModel)]="selectedTaskAssignee" optionValue="userid" name="assignee_name">
                     </p-dropdown>
                 </div>
                 <div *ngIf="flag==0">
-                    <p-multiSelect [options]="UserData" [style]="{'minWidth':'100%'}" optionLabel="name"
+                    <p-multiSelect  pTooltip="Assignee Name" tooltipPosition="top" [options]="UserData" [style]="{'minWidth':'100%'}" optionLabel="name"
                     [filter]="true" filterBy="name" optionValue="userid"
                     [showClear]="true"  value="userid" (onChange)="GetAssigneeName($event.value)" 
                     placeholder="Assignee Name*" class="" required
@@ -78,23 +78,24 @@
             </c-col>
 
             <c-col sm="12" md="4" lg="4" class="mb-3">
-                <input type="number" class="w-full" placeholder="Efforts In Hrs*" pInputText name="efforts"
+                <input  pTooltip="Efforts in Hrs" tooltipPosition="top" type="number" class="w-full"
+                 placeholder="Efforts In Hrs*" pInputText name="efforts"
                     [(ngModel)]="selectedEfforts" />
                    
             </c-col>
 
             <c-col sm="12" md="4" lg="4" class="mb-3">
-                <p-calendar [style]="{'minWidth':'100%'}" [showIcon]="true" appendTo="body" placeholder="Start Date"
+                <p-calendar  pTooltip="Start Date" tooltipPosition="top" [style]="{'minWidth':'100%'}" [showIcon]="true" appendTo="body" placeholder="Start Date"
                     inputId="icon" required name="startdate" [(ngModel)]="selectedStartDate"></p-calendar>
             </c-col>
 
             <c-col sm="12" md="4" lg="4" class="mb-3">
-                <p-calendar [style]="{'minWidth':'100%'}" [showIcon]="true" appendTo="body" placeholder="End Date"
+                <p-calendar  pTooltip="End Date" tooltipPosition="top" [style]="{'minWidth':'100%'}" [showIcon]="true" appendTo="body" placeholder="End Date"
                     inputId="icon" required name="enddate" [(ngModel)]="selectedEndate"></p-calendar>
             </c-col>
 
             <c-col sm="12" md="8" lg="8" class="mb-3">
-                <input type="text" class="w-full" placeholder="Comment" pInputText name="comments"
+                <input  pTooltip="Comments" tooltipPosition="top" type="text" class="w-full" placeholder="Comment" pInputText name="comments"
                     [(ngModel)]="selectedComment"  form/>
             </c-col>         
         </c-row>

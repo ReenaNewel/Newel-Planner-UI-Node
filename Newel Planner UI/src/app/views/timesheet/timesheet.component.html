@@ -136,32 +136,32 @@
     <c-row class="">
       <c-col sm="12" md="4" lg="4" class="mb-3">
         <span class="p-float-label">
-          <input type="text" class="w-full" placeholder="Normal" pInputText name="name" [value]="selectedTaskProject"
+          <input pTooltip="Project Name" tooltipPosition="top" type="text" class="w-full" placeholder="Project" pInputText name="name" [value]="selectedTaskProject"
             [(ngModel)]="selectedTaskProject" required [readOnly]="true" />
         </span>
       </c-col>
 
       <c-col sm="12" md="8" lg="8" class="mb-3">
-        <input type="text" class="w-full" placeholder="Task Name*" pInputText required name="taskname"
+        <input  pTooltip="Task Name" tooltipPosition="top" type="text" class="w-full" placeholder="Task Name*" pInputText required name="taskname"
           [(ngModel)]="selectedTaskName" />
       </c-col>
 
       <c-col sm="12" md="4" lg="4" class="mb-3">
-        <p-dropdown [options]="tasktypes" [style]="{'minWidth':'100%'}" optionLabel="name" [filter]="true"
+        <p-dropdown  pTooltip="Task Type" tooltipPosition="top" [options]="tasktypes" [style]="{'minWidth':'100%'}" optionLabel="name" [filter]="true"
           filterBy="name" [showClear]="true" value="typeid" placeholder="Task Type*" class="" appendTo="body" required
           name="tasktype_name" [(ngModel)]="selectedTaskTypeName">
         </p-dropdown>
       </c-col>
 
       <c-col sm="12" md="4" lg="4" class="mb-3">
-        <p-dropdown [options]="tasks" [style]="{'minWidth':'100%'}" optionLabel="name" optionValue="typeid"
+        <p-dropdown  pTooltip="Task Status" tooltipPosition="top" [options]="tasks" [style]="{'minWidth':'100%'}" optionLabel="name" optionValue="typeid"
           [filter]="true" filterBy="name" name="taskstatus" [showClear]="true" value="typeid" placeholder="Task Status*"
           class="" required [(ngModel)]="selectedtaskstatus" appendTo="body">
         </p-dropdown>
       </c-col>
 
       <c-col sm="12" md="4" lg="4" class="mb-3">
-        <p-multiSelect [options]="UserData" [maxSelectedLabels]="1" [style]="{'width':'100%'}" optionLabel="name"
+        <p-multiSelect  pTooltip="Assignee Name" tooltipPosition="top" [options]="UserData" [maxSelectedLabels]="1" [style]="{'width':'100%'}" optionLabel="name"
           [filter]="true" filterBy="name" optionValue="userid" [showClear]="true" value="userid"
           (onChange)="GetAssigneeName($event.value)"
           (click)="getUserByProjectId()" defaultLabel="Assignee Name*"
@@ -170,7 +170,7 @@
       </c-col>
 
       <c-col sm="12" md="4" lg="4" class="mb-3">
-        <input type="number" class="w-full" placeholder="Efforts In Hrs*" pInputText name="efforts"
+        <input  pTooltip="Efforts in Hrs" tooltipPosition="top" type="number" class="w-full" placeholder="Efforts In Hrs*" pInputText name="efforts"
           [(ngModel)]="selectedEfforts" />
         <!-- <p-inputNumber inputId="minmax" [min]="0" [max]="500" 
         inputId="integeronly" placeholder="Efforts In Hrs*"
@@ -179,17 +179,17 @@
       </c-col>
 
       <c-col sm="12" md="4" lg="4" class="mb-3">
-        <p-calendar [style]="{'minWidth':'100%'}" [showIcon]="true" appendTo="body" placeholder="Start Date"
+        <p-calendar  pTooltip="Start Date" tooltipPosition="top" [style]="{'minWidth':'100%'}" [showIcon]="true" appendTo="body" placeholder="Start Date"
           inputId="icon" required name="startdate" [(ngModel)]="selectedStartDate"></p-calendar>
       </c-col>
 
       <c-col sm="12" md="4" lg="4" class="mb-3">
-        <p-calendar [style]="{'minWidth':'100%'}" [showIcon]="true" appendTo="body" placeholder="End Date"
+        <p-calendar  pTooltip="End Date" tooltipPosition="top" [style]="{'minWidth':'100%'}" [showIcon]="true" appendTo="body" placeholder="End Date"
           inputId="icon" required name="enddate" [(ngModel)]="selectedEndate"></p-calendar>
       </c-col>
 
       <c-col sm="12" md="8" lg="8" class="mb-3">
-        <input type="text" class="w-full" placeholder="Comment" pInputText name="comments"
+        <input  pTooltip="Comments" tooltipPosition="top" type="text" class="w-full" placeholder="Comment" pInputText name="comments"
           [(ngModel)]="selectedComment" />
       </c-col>
 

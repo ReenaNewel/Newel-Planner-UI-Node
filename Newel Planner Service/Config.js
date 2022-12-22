@@ -1,11 +1,11 @@
 const environmentConfig = {
     
     local: {
-        service_port: 8686,
+        service_port: 1350,
         ui_url: 'http://localhost:4200/planner/',
         dbConn: {
             dbServer: '43.204.223.103',
-            dbName: 'Planner',
+            dbName: 'Planner_Prod',
             dbUser: 'postgres',
             dbPassword: 'India@123',
         }

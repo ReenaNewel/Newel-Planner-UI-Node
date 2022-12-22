@@ -21,6 +21,7 @@ import { DialogModule } from 'primeng/dialog';
 import {ToolbarModule} from 'primeng/toolbar';
 import { TableModule } from 'primeng/table';
 import { MultiSelectModule } from 'primeng/multiselect';
+import {TooltipModule} from 'primeng/tooltip';
 @NgModule({
   declarations: [NewTaskComponent],
   imports: [
@@ -42,7 +43,8 @@ import { MultiSelectModule } from 'primeng/multiselect';
     DialogModule,
     ToolbarModule,
     TableModule,
-    MultiSelectModule
+    MultiSelectModule,
+    TooltipModule
   ]
 })
 export class NewTaskModule { }

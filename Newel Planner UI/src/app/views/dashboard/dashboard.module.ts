@@ -47,6 +47,7 @@ import interactionPlugin from '@fullcalendar/interaction';
 import { MessagesModule } from 'primeng/messages';
 import { MessageModule } from 'primeng/message';
 import {CheckboxModule} from 'primeng/checkbox';
+import {TooltipModule} from 'primeng/tooltip';
 
 // import { BrowserModule } from '@angular/platform-browser';
 
@@ -91,7 +92,8 @@ FullCalendarModule.registerPlugins([
     MessageModule,
     MessagesModule,
     InputTextModule,
-    ToastModule
+    ToastModule,
+    TooltipModule
     // FullCalendarModule,
     // BrowserModule
 

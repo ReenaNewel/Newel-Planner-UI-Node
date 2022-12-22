@@ -58,7 +58,7 @@ export class LoginComponent {
   }
 
   openSnackBarError() {
-    console.log("openSnackBarError");
+    // console.log("openSnackBarError");
 
     this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Please Enter valid username and password' });
 
@@ -83,10 +83,10 @@ export class LoginComponent {
 
     };
 
-    console.log(this.global.getapiendpoint() + '/AuthenticateUser')
+    // console.log(this.global.getapiendpoint() + '/AuthenticateUser')
     this.rest.create(this.global.getapiendpoint() + '/AuthenticateUser', model).subscribe((data: any) => {
 
-      console.log("data:", data);
+      // console.log("data:", data);
       // GetPrimeSubMenubyRoleId
 
       if (data.Success) {
@@ -120,7 +120,7 @@ export class LoginComponent {
        
       }
       else {
-        // this.openSnackBarError();
+        this.openSnackBarError();
       }
     });
   }
