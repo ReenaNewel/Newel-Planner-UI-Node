@@ -26,6 +26,7 @@ import { MessagesModule } from 'primeng/messages';
 import { MessageModule } from 'primeng/message';
 import { DialogModule } from 'primeng/dialog';
 import {ToolbarModule} from 'primeng/toolbar';
+import {TooltipModule} from 'primeng/tooltip';
 
 
 @NgModule({
@@ -58,6 +59,7 @@ import {ToolbarModule} from 'primeng/toolbar';
     TableModule,
     DialogModule,
     ToolbarModule,
+    TooltipModule
 
   ]
 })

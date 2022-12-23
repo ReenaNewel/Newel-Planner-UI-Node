@@ -132,35 +132,35 @@ export class ReportsComponent implements OnInit {
         if (this.ReportValue == 1) {
 
             this.cols = [
-                { field: 'balanceleave', header: 'Balance leave' },
-                { field: 'created_by', header: 'Created_by' },
-                { field: 'created_date', header: 'Created_date' },
+               // { field: 'balanceleave', header: 'Balance leave' },
+                { field: 'username', header: 'Employee Name' },
+                { field: 'fromdate', header: 'From Date' },
+                { field: 'todate', header: 'To Date' },
+                { field: 'leave_type', header: 'Leave Type' },
+                // { field: 'created_dt', header: 'Created Date' },
+                { field: 'approvedby', header: 'Approved By' },
+                // { field: 'leave_name', header: 'Leave Name' },
+                // { field: 'id', header: 'Id' },
+                // { field: 'created_by', header: 'Created By' },
+                { field: 'created_date', header: 'Created Date' },
+                { field: 'status', header: 'Status' },
                 { field: 'description', header: 'Description' },
-                { field: 'fromdate', header: 'From date' },
-                { field: 'todate', header: 'To date' },
-                { field: 'id', header: 'Id' },
-                { field: 'leave_name', header: 'Leave name' },
-                { field: 'leave_type', header: 'Leave type' },
-                { field: 'username', header: 'User name' },
-
-
-
+               
             ]
 
             this.getAllLeavedetails();
         }
         else if (this.ReportValue == 2) {
             this.cols = [
-                { field: 'activity', header: 'Activity' },
+                { field: 'timesheetdate', header: 'Timesheet Date' },
+                { field: 'username', header: 'Employee Name' },
                 { field: 'projectname', header: 'Project name' },
-                { field: 'startdate', header: 'Start date' },
-                { field: 'enddate', header: 'End date' },
-                { field: 'taskdescription', header: 'Task description' },
                 { field: 'taskname', header: 'Task name' },
+                { field: 'activity', header: 'Activity' },
+                { field: 'description', header: 'Description' },
                 { field: 'timespend', header: 'Time spend' },
-                { field: 'username', header: 'Username' },
-
-
+                { field: 'timesheetcreateddate', header: 'Timesheet Submitted Date' },
+               
             ]
 
             this.getTimesheetreportdata();
@@ -169,21 +169,19 @@ export class ReportsComponent implements OnInit {
         else if (this.ReportValue == 3) {
 
             this.cols = [
-                { field: 'activity', header: 'Activity' },
-                { field: 'clientname', header: 'Client name' },
+               
                 { field: 'projectname', header: 'Project name' },
+                { field: 'user_name', header: 'Employee name' },
+                { field: 'clientname', header: 'Client name' },
                 { field: 'projectstartdate', header: 'Project start date' },
                 { field: 'projectenddate', header: 'Project end date' },
                 { field: 'efforts', header: 'Efforts' },
+                { field: 'activity', header: 'Activity' },
                 { field: 'projectowner', header: 'Project owner' },
                 { field: 'projectlead', header: 'Project lead' },
                 { field: 'projectplatform', header: 'Project platform' },
                 { field: 'projectstatus', header: 'Project status' },
                 { field: 'remarks', header: 'Remarks' },
-                { field: 'user_name', header: 'User name' },
-
-
-
 
 
             ]

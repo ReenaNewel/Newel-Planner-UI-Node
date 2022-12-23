@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-import {ToolbarModule} from 'primeng/toolbar';
 
 import {
   AvatarModule,
@@ -34,18 +33,19 @@ import { DropdownModule } from 'primeng/dropdown';
 import { TimesheetDashboardComponent } from './components/timesheet-dashboard/timesheet-dashboard.component';
 import { TableModule } from 'primeng/table';
 import { FullCalendarModule } from '@fullcalendar/angular';
-import { ToastModule } from 'primeng/toast';
+
 import {ButtonModule} from 'primeng/button';
 import {PrimeIcons,MenuItem} from 'primeng/api';
 import {CalendarModule} from 'primeng/calendar';
 import {DialogModule} from 'primeng/dialog';
-import { InputTextModule } from 'primeng/inputtext';
+
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import listPlugin from '@fullcalendar/list';
 import interactionPlugin from '@fullcalendar/interaction';
 import { MessagesModule } from 'primeng/messages';
 import { MessageModule } from 'primeng/message';
+import {ToolbarModule} from 'primeng/toolbar';
 import {CheckboxModule} from 'primeng/checkbox';
 import {TooltipModule} from 'primeng/tooltip';
 
@@ -60,13 +60,11 @@ FullCalendarModule.registerPlugins([
 
 @NgModule({
   imports: [
-    ToolbarModule,
     DashboardRoutingModule,
     FormsModule,
     FullCalendarModule,
     CardModule,
     NavModule,
-    CheckboxModule,
     IconModule,
     TabsModule,
     CommonModule,
@@ -91,8 +89,8 @@ FullCalendarModule.registerPlugins([
     DialogModule,
     MessageModule,
     MessagesModule,
-    InputTextModule,
-    ToastModule,
+    ToolbarModule,
+    CheckboxModule,
     TooltipModule
     // FullCalendarModule,
     // BrowserModule

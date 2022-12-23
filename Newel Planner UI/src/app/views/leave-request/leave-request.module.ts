@@ -10,7 +10,7 @@ import { CardModule, GridModule } from '@coreui/angular';
 //import { WidgetsModule } from '../widgets/widgets.module';
 import { HttpClientModule } from '@angular/common/http';
 
-
+import {TooltipModule} from 'primeng/tooltip';
 // prime-ng
 import { ToastModule } from 'primeng/toast';
 import { InputTextModule } from 'primeng/inputtext';
@@ -54,7 +54,8 @@ import {ToolbarModule} from 'primeng/toolbar';
     HttpClientModule,
     InputNumberModule,
     LeaveRequestRoutingModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    TooltipModule
   ]
 })
 export class LeaveRequestModule { }

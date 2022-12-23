@@ -593,6 +593,146 @@ var routes = function () {
     }
   });
 
+// TAsk Summary Tab
+  router.route('/GetOverdueTaskData')
+  .post(function (req, res) {
+      try {
+          var querytext = 'SELECT "GetOverdueTasks"(:overduetype,:p_userid,:p_ref); FETCH ALL IN "abc"';
+
+          var param = {
+              replacements: {
+                  overduetype: req.body.member,
+                  p_userid: req.body.userid,
+                  p_ref: 'abc'
+              },
+              type: connect.sequelize.QueryTypes.SELECT
+          }
+          console.log('overdue param', param)
+          
+          connect.sequelize
+              .query(querytext, param)
+              .then(function (result) {
+                  result.shift();
+                  //console.log('result...',result)
+                  res.status(200).json({
+                      Success: true,
+                      Message: "Get all Overdue Details successfully",
+                      Data: result
+                  });
+              }, function (err) {
+                  dataconn.errorlogger('NewTaskService', 'GetOverdueTaskData', err);
+                  res.status(200).json({ Success: false, Message: ' NewTask table API failed.', Data: null });
+              });
+      } catch (err) {
+          dataconn.errorlogger('NewTaskService', 'GetOverdueTaskData', err);
+          res.status(200).json({ Success: false, Message: '  table API failed.', Data: null });
+      }
+  });
+
+
+  router.route('/GetUpcomingdeadlines')
+  .post(function (req, res) {
+      try {
+
+          var querytext = 'SELECT "upcomingdeadlines"(:overduetype,:p_userid,:p_ref); FETCH ALL IN "abc"';
+
+          var param = {
+              replacements: {
+                  overduetype: req.body.member,
+                  p_userid: req.body.userid,
+                  p_ref: 'abc'
+              },
+              type: connect.sequelize.QueryTypes.SELECT
+          }
+          connect.sequelize
+              .query(querytext, param)
+              .then(function (result) {
+                  result.shift();
+                  //console.log('result...',result)
+                  res.status(200).json({
+                      Success: true,
+                      Message: "Get all Overdue Details successfully",
+                      Data: result
+                  });
+              }, function (err) {
+                  dataconn.errorlogger('NewTaskService', 'GetOverdueTaskData', err);
+                  res.status(200).json({ Success: false, Message: ' NewTask table API failed.', Data: null });
+              });
+      } catch (err) {
+          dataconn.errorlogger('NewTaskService', 'GetOverdueTaskData', err);
+          res.status(200).json({ Success: false, Message: '  table API failed.', Data: null });
+      }
+  });
+
+
+  router.route('/GetProjectNames')
+  .post(function (req, res) {
+      try {
+
+          var querytext = 'SELECT "GetProjectNameForTimesheetDashboard"(:p_userid,:p_ref); FETCH ALL IN "abc"';
+
+          var param = {
+              replacements: {
+                  p_userid: req.body.userid,
+                  p_ref: 'abc'
+              },
+              type: connect.sequelize.QueryTypes.SELECT
+          }
+          connect.sequelize
+              .query(querytext, param)
+              .then(function (result) {
+                  result.shift();
+                  //console.log('result...',result)
+                  res.status(200).json({
+                      Success: true,
+                      Message: "Get all GetProjectNames Details successfully",
+                      Data: result
+                  });
+              }, function (err) {
+                  dataconn.errorlogger('NewTaskService', 'GetProjectNames', err);
+                  res.status(200).json({ Success: false, Message: ' NewTask table API failed.', Data: null });
+              });
+      } catch (err) {
+          dataconn.errorlogger('NewTaskService', 'GetProjectNames', err);
+          res.status(200).json({ Success: false, Message: '  table API failed.', Data: null });
+      }
+  });
+
+
+  router.route('/GetProjectTaskStatusSummary')
+  .post(function (req, res) {
+      try {
+
+          var querytext = 'SELECT "getProjectTaskStatusSummary"(:p_projectid,:p_ref); FETCH ALL IN "abc"';
+
+          var param = {
+              replacements: {
+                  p_projectid: req.body.projectid,
+                  p_ref: 'abc'
+              },
+              type: connect.sequelize.QueryTypes.SELECT
+          }
+          connect.sequelize
+              .query(querytext, param)
+              .then(function (result) {
+                  result.shift();
+                  //console.log('result...',result)
+                  res.status(200).json({
+                      Success: true,
+                      Message: "Get all GetProjectNames Details successfully",
+                      Data: result
+                  });
+              }, function (err) {
+                  dataconn.errorlogger('NewTaskService', 'GetProjectNames', err);
+                  res.status(200).json({ Success: false, Message: ' NewTask table API failed.', Data: null });
+              });
+      } catch (err) {
+          dataconn.errorlogger('NewTaskService', 'GetProjectNames', err);
+          res.status(200).json({ Success: false, Message: '  table API failed.', Data: null });
+      }
+  });
+
+
   return router;
 };
 module.exports = routes;

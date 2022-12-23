@@ -127,6 +127,41 @@ var routes = function () {
             }
         });
 
+
+        router.route('/UpdateEffortActiveStatus')
+        .post(function (req, res) {
+
+            try {
+                var querytext = `update tbl_weekly_efforts set isactive=false where id=${req.body.id}`;
+                console.log("querytext",querytext);
+                var param = {
+                    replacements: {
+                        p_ref: 'abc'
+                    },
+                    type: connect.sequelize.QueryTypes.SELECT
+                }
+                connect.sequelize
+                    .query(querytext, param)
+                    .then(function (result) {
+                        //console.log("result",result);
+                        result.shift();
+                        res.status(200).json({
+
+                            Success: true,
+                            Message: "update record successfully",
+                            Data: null
+                        });
+                    }, function (err) {
+                        // //console.log(err);
+                        dataconn.errorlogger('WeekelyEffortsService', 'UpdateEffortActiveStatus', err);
+                        res.status(200).json({ Success: false, Message: 'API failed.', Data: null });
+                    });
+            } catch (err) {
+                dataconn.errorlogger('WeekelyEffortsService', 'UpdateEffortActiveStatus', err);
+                res.status(200).json({ Success: false, Message: ' API failed.', Data: null });
+            }
+        });
+
     router.route('/UpdateWeekelyEfforts')
         .post(function (req, res) {
             try {
@@ -182,12 +217,13 @@ var routes = function () {
         
             try {
              
-                var querytext = `SELECT "GetPendinghours"(:p_userid,:p_weekid,:p_ref); FETCH ALL IN "abc"`;
+                var querytext = `SELECT "GetPendinghours"(:p_userid,:p_weekid,:p_effortid,:p_ref); FETCH ALL IN "abc"`;
                 
                 var param = {
                     replacements: {
                         p_userid: req.body.userid,
                         p_weekid: req.body.weekeid,
+                        p_effortid: req.body.effortid,
                         p_ref: "abc",
                     },
                     type: connect.sequelize.QueryTypes.SELECT,

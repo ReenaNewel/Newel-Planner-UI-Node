@@ -49,6 +49,9 @@ export class ProjectMasterComponent implements OnInit {
   userLoggedIn: any
   userid: any
   projectDialog: boolean;
+  Active:boolean;
+  Inactive: boolean
+
 
   // @ViewChild(MatPaginator) paginator!: MatPaginator;
   // @ViewChild(MatSort) sort!: MatSort;
@@ -68,7 +71,7 @@ export class ProjectMasterComponent implements OnInit {
     // private messageService: MessageService
   ) { }
 
-
+  val1: boolean = true;
 
   ngOnInit(): void {
 
@@ -115,6 +118,7 @@ export class ProjectMasterComponent implements OnInit {
   }
   editing:boolean
   showCreateNewProjectDialog() {
+    this.val1 = true;
     this.projectDialog = true;
     this.showSaveBtn = true;
   }
@@ -140,6 +144,7 @@ export class ProjectMasterComponent implements OnInit {
   // }
 
   showformdetails() {
+    // this.Active =true
     // this.ProjectForm.reset()
     this.ProjectForm = this.fb.group({
       PrjName: [''],
@@ -165,7 +170,7 @@ export class ProjectMasterComponent implements OnInit {
       if (data.Success) {
         this.SelectedProjectNames = data.Data
       }
-      console.log('project data', this.SelectedProjectNames)
+      console.log('selected project data', this.SelectedProjectNames)
     })
 
 
@@ -310,6 +315,7 @@ export class ProjectMasterComponent implements OnInit {
 
     this.projectid = row.projectid
     this.plannedEffort = row.plannedeffort
+    this.val1 = row.activestatus
 
     // console.log('client date', row.prjtodate)
 
@@ -323,7 +329,7 @@ export class ProjectMasterComponent implements OnInit {
       PrjOwner: [row.owner],
       PrjStage: [row.projectstageid],
       Activity: [row.projectdesc],
-      PrjActive: [row.activestatus],
+      PrjActive: [this.val1],
       fromdate: [new Date(row.prjstartdate)],
       // fromdate: [row.prjtodate],
       todate: [new Date(row.prjtodate)],

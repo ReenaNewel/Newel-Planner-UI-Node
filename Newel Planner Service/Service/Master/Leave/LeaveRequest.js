@@ -65,7 +65,8 @@ var routes = function () {
 
                 var param = {
                     where: {
-                        parentid: 6
+                        parentid: 6 ,
+                        isactive: true
                     }, order: [['typeid']]
                 };
                 //console.log(param)

@@ -5,13 +5,15 @@ import { ApiserviceService } from 'src/app/Service/apiservice.service';
 import { RestService } from 'src/app/services/rest.service';
 import { Global } from 'src/app/common/global';
 import * as moment from 'moment';
-import { Message, MessageService, PrimeNGConfig } from 'primeng/api';
+import { ConfirmationService, Message, MessageService, PrimeNGConfig } from 'primeng/api';
+import { RowComponent } from '@coreui/angular';
+import * as FileSaver from 'file-saver';
 
 @Component({
   selector: 'app-weekely-efforts',
   templateUrl: './weekely-efforts.component.html',
   styleUrls: ['./weekely-efforts.component.scss'],
-  providers: [MessageService]
+  providers: [MessageService,ConfirmationService]
 })
 export class WeekelyEffortsComponent implements OnInit {
   userLoggedIn: any;
@@ -38,10 +40,14 @@ export class WeekelyEffortsComponent implements OnInit {
   u_id: any;
   weekehours: any;
   weekhoursarray: any = [];
+  balancedHours : any;
+  AssignedHours: any;
+
   constructor(private fb: FormBuilder, private router: Router,
     private rest: RestService, private Global: Global,
     private ApiService: ApiserviceService,
     private messageService: MessageService,
+    private confirmationService: ConfirmationService
   ) { }
 
   ngOnInit(): void {
@@ -85,6 +91,7 @@ export class WeekelyEffortsComponent implements OnInit {
     })
   }
   updateid: any;
+
   RAFilterData1:any
   editWeekelyEfforts(row: any) {
   //this.RAUsers(row)
@@ -96,10 +103,12 @@ export class WeekelyEffortsComponent implements OnInit {
    
 
   //  console.log("RA Filter Data",this.RAFilterData);   
-  this.HoursDetails(row.idweek);
+  
  
     this.updateid = row.id;
-    // console.log("hours row", row.hours);
+    this.AssignedHours = row.hours;
+    console.log("  this.updateid  ",  this.updateid );
+    this.HoursDetails(row.idweek);
     //this.updateid = parseInt(row.id);
     setTimeout(() => {
       this.WeekelyEffortsDialog = true;
@@ -221,6 +230,8 @@ export class WeekelyEffortsComponent implements OnInit {
   }
 
   showCreateNewProjectDialog() {
+    this.updateid = 0;
+    this.AssignedHours = 0;
     this.WeekelyEffortsDialog = true;
     this.showSaveBtn = true;
   }
@@ -232,8 +243,10 @@ export class WeekelyEffortsComponent implements OnInit {
 
     var model = {
       userid: this.u_id,
-      weekeid: weekeids
+      weekeid: weekeids ,
+      effortid:this.updateid
     }
+
     console.log('user id hours',model)
     this.rest.postParams(this.Global.getapiendpoint() + '/WeekelyEfforts/GetHoursData', model).subscribe((data: any) => {
       //if(data.Success){
@@ -241,7 +254,7 @@ export class WeekelyEffortsComponent implements OnInit {
 
       this.weekehours = data.Data[0].hours;
 
-      console.log("Hours Data....",this.weekehours);
+      // console.log("Hours Data....",this.weekehours);
 
       if(this.weekehours === null){
         this.weekhoursarray = 40;
@@ -255,13 +268,72 @@ export class WeekelyEffortsComponent implements OnInit {
     });
   }
   ShouwHours(weekhours) {
-
+    console.log('weekhours',weekhours ,  this.AssignedHours )
+    // weekhours = parseInt(weekhours) + parseInt(this.AssignedHours);
+   
+     
+    this.hours.splice(0)
     for (let i = 1; i <= weekhours; i++) {
 
       this.hours.push(i);
     }
   }
 
+ExporttoExcelReport(){
+  if (this.WeekelyEffortsData) {
+    import("xlsx").then(xlsx => {
+        const worksheet = xlsx.utils.json_to_sheet(this.WeekelyEffortsData);
+        const workbook = { Sheets: { data: worksheet }, SheetNames: ["data"] };
+        const excelBuffer: any = xlsx.write(workbook, {
+            bookType: "xlsx",
+            type: "array"
+        });
+        this.saveAsExcelFile(excelBuffer, "Weekly effort - ReportDetails");
+    });
+}
+else {
+
+}
+
+
+}
+saveAsExcelFile(buffer: any, fileName: string): void {
+let EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+let EXCEL_EXTENSION = '.xlsx';
+const data: Blob = new Blob([buffer], {
+    type: EXCEL_TYPE
+});
+FileSaver.saveAs(data, fileName + '_export_' + new Date().getTime() + EXCEL_EXTENSION);
+}
+
+
+showConfirm(Selectedrow:any){
+//  alert('hi')
+    this.confirmationService.confirm({
+      message: 'Do you want to delete this record?',
+      header: 'Delete Confirmation',
+      icon: 'pi pi-info-circle',
+      accept: () => {
+        var model={
+          id: Selectedrow.id
+        }
+          // console.log('deleted model',model)
+          this.rest.postParams(this.Global.getapiendpoint() + "/WeekelyEfforts/UpdateEffortActiveStatus", model).subscribe((data: any) => {
+            if (data.Success) {
+              this.messageService.add({ severity: 'info', summary: 'Confirmed', detail: 'Record deleted successfully' });
+              // this.confirmationService.close({severity:'info', summary:'Confirmed', detail:'Record deleted successfully!!'});
+            }
+            this.WeekelyEffortsShowDetails();
+          })
+        
+      },
+      reject: () => {
+     
+      } 
+  });
+}
+    
+  
   SaveResource() {
     
     var model = {

@@ -1,6 +1,6 @@
 <c-row>
 <p-toolbar styleClass="mb-4 gap-2">
-    <div class="flex justify-content-center flex-wrap mb-3">
+    <div class="flex justify-content-center flex-wrap mb-6">
       
             <div *ngIf="this.projectFlag == 0">
                 <p-dropdown [options]="member" [(ngModel)]="selectedMem"  class="mx-3" 
@@ -12,7 +12,7 @@
         <div *ngIf="this.projectFlag == 1">
             <div *ngIf="selectedMem == 'Only Me'">
                 <div class="field-checkbox">
-                        <p-checkbox  [(ngModel)]="checked" [binary]="true" inputId="binary"
+                        <p-checkbox [(ngModel)]="checked" [binary]="true" inputId="binary"
                         (click)="RAUsers()"></p-checkbox>
                         <label for="binary">RA Wise</label>
                 </div> 
@@ -29,7 +29,7 @@
             <!-- {{!checked}}{{selectedMem}} -->
             <div *ngIf="!checked" >
                 <div *ngIf="selectedMem == 'Team'">
-                    <p-dropdown  [options]="ProjectNames" [(ngModel)]="selectedProject" value="projectid" optionLabel="projectname"
+                    <p-dropdown  pTooltip="Project Name" tooltipPosition="top" [options]="ProjectNames" [(ngModel)]="selectedProject" value="projectid" optionLabel="projectname"
                         [filter]="true" required name="projectname" (onChange)="GetTaskNameByProject(selectedProject)"
                         filterBy="projectname" [showClear]="true" placeholder="Project Name" class="borderNone">
                         <ng-template pTemplate="selectedItem">
@@ -63,7 +63,7 @@
                 filterBy="username" [showClear]="true" placeholder="Resource Name" class="borderNone">
                 <ng-template pTemplate="selectedItem">
                     <div class="country-item country-item-value" *ngIf="selectedUser">
-                        <div pTooltip="User Name" tooltipPosition="top">{{selectedUser?.username | slice:0:12}}
+                        <div pTooltip="Resource Name" tooltipPosition="top">{{selectedUser?.username | slice:0:12}}
                         </div>
                     </div>  
                 </ng-template>

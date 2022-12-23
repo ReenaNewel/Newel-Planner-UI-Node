@@ -27,6 +27,8 @@ import { MessageModule } from 'primeng/message';
 import { DialogModule } from 'primeng/dialog';
 import {ToolbarModule} from 'primeng/toolbar';
 import { MultiSelectModule } from 'primeng/multiselect';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+
 @NgModule({
   declarations: [WeekelyEffortsComponent],
   imports: [
@@ -51,7 +53,8 @@ import { MultiSelectModule } from 'primeng/multiselect';
     InputNumberModule,
     WeekelyEffortsRoutingModule,
     ReactiveFormsModule,
-    MultiSelectModule
+    MultiSelectModule,
+    ConfirmDialogModule
   ]
 })
 export class WeekelyEffortsModule { }

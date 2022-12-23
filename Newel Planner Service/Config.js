@@ -1,7 +1,7 @@
 const environmentConfig = {
     
     local: {
-        service_port: 1350,
+        service_port: 1352,
         ui_url: 'http://localhost:4200/planner/',
         dbConn: {
             dbServer: '43.204.223.103',
@@ -12,7 +12,7 @@ const environmentConfig = {
     },
   
 }
-// 1350
+// 1352
 //// planner_prod
 
 const Domain_name ="https://uatretailwebsiteapi.edelweissarc.in/api"

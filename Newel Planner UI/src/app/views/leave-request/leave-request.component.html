@@ -285,13 +285,13 @@
         <c-row class="">
 
             <c-col sm="12" md="6" lg="6" class="mb-3">
-                <p-calendar [style]="{'minWidth':'100%'}" [showIcon]="true" appendTo="body"
+                <p-calendar pTooltip="From Date" tooltipPosition="top" [style]="{'minWidth':'100%'}" [showIcon]="true" appendTo="body"
                     placeholder="Fromdate" inputId="icon" name="startdate"
                     [(ngModel)]="today" formControlName="startdate">
                 </p-calendar>
             </c-col>
             <c-col sm="12" md="6" lg="6" class="mb-3">
-                <p-calendar [style]="{'minWidth':'100%'}" [showIcon]="true" appendTo="body"
+                <p-calendar pTooltip="To Date" tooltipPosition="top" [style]="{'minWidth':'100%'}" [showIcon]="true" appendTo="body"
                     placeholder="Todate" inputId="icon" required name="enddate" formControlName="enddate"
                     (onSelect)="leavecount()">
                 </p-calendar>
@@ -299,7 +299,7 @@
             <!-- <c-col sm="12" md="6" lg="6" class="mb-3">
             </c-col> -->
             <c-col sm="12" md="4" lg="6" class="mb-3">
-                <p-dropdown [options]="leavetypeDropdown" [style]="{'minWidth':'100%'}" optionValue="typeid"
+                <p-dropdown pTooltip="Leave Type" tooltipPosition="top" [options]="leavetypeDropdown" [style]="{'minWidth':'100%'}" optionValue="typeid"
                     optionLabel="name" [filter]="true" filterBy="name" [showClear]="true" value="typeid"
                     placeholder="LeaveType*" required formControlName="LeaveDropdwon">
                 </p-dropdown>
@@ -308,7 +308,7 @@
             </c-col>
 
             <c-col sm="12" md="6" lg="6" class="mb-3">
-                <input type="text" class="w-full" placeholder="No of Leaves*" pInputText required readonly
+                <input pTooltip="Total Leaves" tooltipPosition="top" type="text" class="w-full" placeholder="No of Leaves*" pInputText required readonly
                     formControlName="LeaveNO" />
                 <small *ngIf="ProjectForm.controls['LeaveNO'].touched && ProjectForm.controls['LeaveNO'].invalid"
                     class="p-error block">
@@ -318,7 +318,7 @@
 
             <c-col sm="12" md="6" lg="6" class="mb-3">
                 <!-- class="w-30rem" -->
-                <textarea cFormControl  id="exampleFormControlTextarea1" rows="3" placeholder="Reason"
+                <textarea pTooltip="Reason for Leave" tooltipPosition="top" cFormControl  id="exampleFormControlTextarea1" rows="3" placeholder="Reason"
                     formControlName="Reason" required style="  width: 430px;
                     height: 80px;"></textarea>
                 <small class="p-error block"

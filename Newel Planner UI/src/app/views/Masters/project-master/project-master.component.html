@@ -114,7 +114,7 @@
     <form [formGroup]="ProjectForm" (submit)="submit()">
         <c-row class="">
             <c-col sm="12" md="4" lg="4" class="mb-3">
-                <input type="text" class="w-full" placeholder="Project Name*" pInputText required
+                <input pTooltip="Project Name" tooltipPosition="top" type="text" class="w-full" placeholder="Project Name*" pInputText required
                     formControlName="PrjName" />
                 <small *ngIf="ProjectForm.controls['PrjName'].touched && ProjectForm.controls['PrjName'].invalid"
                     class="p-error block">
@@ -122,7 +122,7 @@
                 </small>
             </c-col>
             <c-col sm="12" md="4" lg="4" class="mb-3">
-                <p-dropdown [options]="ClientNames" [style]="{'minWidth':'100%'}" optionValue="id" optionLabel="name"
+                <p-dropdown pTooltip="Client Name" tooltipPosition="top" [options]="ClientNames" [style]="{'minWidth':'100%'}" optionValue="id" optionLabel="name"
                     [filter]="true" filterBy="name" [showClear]="true" value="id" placeholder="Client Name*" class=""
                     required formControlName="ClientName">
                 </p-dropdown>
@@ -140,17 +140,17 @@
                     </small> -->
             </c-col>
             <c-col sm="12" md="4" lg="4" class="mb-3">
-                <p-calendar [style]="{'minWidth':'100%'}" [showIcon]="true" appendTo="body"
+                <p-calendar pTooltip="Start Date" tooltipPosition="top" [style]="{'minWidth':'100%'}" [showIcon]="true" appendTo="body"
                     placeholder="Project Start Date" inputId="icon" name="startdate" formControlName="fromdate">
                 </p-calendar>
             </c-col>
             <c-col sm="12" md="4" lg="4" class="mb-3">
-                <p-calendar [style]="{'minWidth':'100%'}" [showIcon]="true" appendTo="body"
+                <p-calendar pTooltip="End Date" tooltipPosition="top" [style]="{'minWidth':'100%'}" [showIcon]="true" appendTo="body"
                     placeholder="Project End Date" inputId="icon" required name="enddate" formControlName="todate">
                 </p-calendar>
             </c-col>
             <c-col sm="12" md="4" lg="4" class="mb-3">
-                <input type="number" class="w-full" placeholder="Effort In Hrs*" pInputText required
+                <input pTooltip="Planned Efforts" tooltipPosition="top" type="number" class="w-full" placeholder="Effort In Hrs*" pInputText required
                     formControlName="PlannedEfforts" />
                 <small
                     *ngIf="ProjectForm.controls['PlannedEfforts'].touched && ProjectForm.controls['PlannedEfforts'].invalid"
@@ -159,7 +159,7 @@
                 </small>
             </c-col>
             <c-col sm="12" md="4" lg="4" class="mb-3">
-                <p-dropdown [options]="ProjectTypes" [style]="{'minWidth':'100%'}" optionValue="typeid"
+                <p-dropdown pTooltip="Project Type" tooltipPosition="top" [options]="ProjectTypes" [style]="{'minWidth':'100%'}" optionValue="typeid"
                     optionLabel="name" [filter]="true" filterBy="name" [showClear]="true" value="typeid"
                     placeholder="Project Type*" (selectionChange)="GetAllProjectType($event.value)" required
                     formControlName="PrjType">
@@ -167,14 +167,14 @@
                 </p-dropdown>
             </c-col>
             <c-col sm="12" md="4" lg="4" class="mb-3">
-                <p-dropdown [options]="ProjectStates" [style]="{'minWidth':'100%'}" optionValue="typeid"
+                <p-dropdown  pTooltip="Project Status" tooltipPosition="top"[options]="ProjectStates" [style]="{'minWidth':'100%'}" optionValue="typeid"
                     optionLabel="name" [filter]="true" filterBy="name" [showClear]="true" value="typeid"
                     placeholder="Project Status*" (selectionChange)="GetAllProjectStatus($event.value)" required
                     formControlName="PrjStatus">
                 </p-dropdown>
             </c-col>
             <c-col sm="12" md="4" lg="4" class="mb-3">
-                <p-dropdown [options]="ProjectStages" [style]="{'minWidth':'100%'}" optionValue="typeid"
+                <p-dropdown pTooltip="Project Stage" tooltipPosition="top" [options]="ProjectStages" [style]="{'minWidth':'100%'}" optionValue="typeid"
                     optionLabel="name" [filter]="true" filterBy="name" [showClear]="true" value="typeid"
                     placeholder="Project Stage*" (selectionChange)="GetAllProjectStage($event.value)" required
                     formControlName="PrjStage">
@@ -183,27 +183,30 @@
             <c-col sm="12" md="8" lg="8" class="mb-3">
                 <!-- <textarea id="float-input" rows="1" cols="100" pInputTextarea required
                     formControlName="Activity"></textarea> -->
-                <textarea cFormControl class="w-30rem" id="exampleFormControlTextarea1" rows="3" placeholder="Description" formControlName="Activity"></textarea>
+                <textarea pTooltip="Description" tooltipPosition="top" 
+                cFormControl class="w-30rem" id="exampleFormControlTextarea1" 
+                rows="3" placeholder="Description" formControlName="Activity"></textarea>
                 <small class="p-error block"
                     *ngIf="ProjectForm.controls['Activity'].touched && ProjectForm.controls['Activity'].invalid">
                     <span *ngIf="ProjectForm.controls['Activity'].errors">This field is mandatory.</span>
                 </small>
             </c-col>
             <c-col sm="12" md="12" lg="12">
-                <div class="field-radiobutton">
-                    <p-radioButton value="true" formControlName="PrjActive"></p-radioButton>
-                    <label for="Active">Active</label>
+                <div class="field-checkbox">
+                   
+                    <p-radioButton [value]="true" formControlName="PrjActive"  [(ngModel)]="val1"></p-radioButton>
+                    <label for="true">Active</label>
                     <span class="px-3"></span>
                     <!-- </div>
                     <div class="field-radiobutton"> -->
-                    <p-radioButton value="false" formControlName="PrjActive">
+                    <p-radioButton [value]="false"  [(ngModel)]="val1" formControlName="PrjActive">
                     </p-radioButton>
-                    <label for="InActive">In Active</label>
+                    <label for="false">In Active</label>
                 </div>
-                <small class="p-error block"
+                <!-- <small class="p-error block"
                     *ngIf="ProjectForm.controls['PrjActive'].touched && ProjectForm.controls['PrjActive'].invalid">
                     <span *ngIf="ProjectForm.controls['PrjActive'].errors">This field is mandatory.</span>
-                </small>
+                </small> -->
             </c-col>
             <c-col>
                 <p-button *ngIf="showSaveBtn" type="submit" [disabled]="!ProjectForm.valid" (click)="SavePrjDetails()"

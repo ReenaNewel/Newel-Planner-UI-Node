@@ -5,13 +5,13 @@ import {Injectable } from '@angular/core';
 })
 export class Global {
 
-     private apiendpoint: string = 'http://localhost:8686';
+    //  private apiendpoint: string = 'http://localhost:8686';
     
     // Local
     //  private apiendpoint: string = 'http://43.204.223.103:1349';
     
     // Prod
-    //  private apiendpoint: string = 'http://43.204.223.103:1352';
+     private apiendpoint: string = 'http://43.204.223.103:1352';
 
     private apiendpoint_sit: string = '';
 
