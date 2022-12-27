@@ -91,7 +91,7 @@
         <!--  formControlName="TimeHr" -->
         <c-col sm="12" md="12" lg="12" xl="auto" xxl="auto" class="border-1 my-2 my-md-0">
           <p-dropdown pTooltip="Hours" tooltipPosition="top" [options]="hours" [(ngModel)]="selectedhours" name="hours"
-            class="time borderNone" (click)="getMinutesList()" required>
+            class="time borderNone" (onChange)="getMinutesList()" required>
 
           </p-dropdown>
           <!-- formControlName="TimeMin" -->

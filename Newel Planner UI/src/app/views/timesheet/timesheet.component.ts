@@ -225,7 +225,10 @@ export class TimesheetComponent implements OnInit, AfterViewInit {
       this.minutes = [15, 30, 45]
     } else {      
       // this.selectedminutes = 0;
+      // this.minutes=[]
+      this.selectedminutes=0
       this.minutes = ['00', 15, 30, 45]
+     
       // console.log("selectedminutes", this.selectedminutes );
 
     }
@@ -242,7 +245,12 @@ export class TimesheetComponent implements OnInit, AfterViewInit {
 
 
   showCreateNewTaskDialog() {
+    if(!this.selectedProject){
+      this.messageService.add({ severity: 'warn', summary: 'Success', detail: 'Please Select Project Name' });
+    }
+    else{
     this.createTaskDialog = true;
+    }
   }
 
   createTaskClose() {
@@ -326,25 +334,29 @@ export class TimesheetComponent implements OnInit, AfterViewInit {
   }
 
   GetTaskNameByProject(Project: any) {
+    console.log('selected' , Project)
+    this.Tasknames=[]
+    this.projectName=''
+    if(Project!=null){
+        this.projectName = Project.projectname;
+        this.selectedTaskProject = this.projectName
+        this.projectId = Project.projectid
 
-    this.projectName = Project.projectname;
-    this.selectedTaskProject = this.projectName
-    this.projectId = Project.projectid
+        var model = {
+          projectid: this.projectId,
+          userid: this.userId
 
-    var model = {
-      projectid: this.projectId,
-      userid: this.userId
+        }
+        this.rest.postParams(this.Global.getapiendpoint() + '/timesheet/GetTaskname', model).subscribe((data: any) => {
 
+          if (data.Success) {
+            this.Tasknames = data.Data;
+            // console.log('task',this.Tasknames )
+          }
+          else {
+          }
+        })
     }
-    this.rest.postParams(this.Global.getapiendpoint() + '/timesheet/GetTaskname', model).subscribe((data: any) => {
-
-      if (data.Success) {
-        this.Tasknames = data.Data;
-        console.log(this.Tasknames )
-      }
-      else {
-      }
-    })
   }
 
   GetProjectbyTask() {
@@ -357,7 +369,7 @@ export class TimesheetComponent implements OnInit, AfterViewInit {
 
       if (data.Success) {
         this.ProjectNames = data.Data;
-        console.log('ProjectNames',this.ProjectNames)
+        // console.log('ProjectNames',this.ProjectNames)
       }
       else {
       }

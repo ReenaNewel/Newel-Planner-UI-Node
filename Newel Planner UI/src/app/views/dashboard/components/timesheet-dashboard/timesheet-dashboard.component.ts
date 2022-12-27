@@ -150,7 +150,7 @@ else{
       // this.userId,
       date: arg.dateStr
     }
-    console.log('date model',model);
+    // console.log('date model',model);
     this.rest.postParams(this.Global.getapiendpoint() + '/timesheet/GetMonthlyhoursData', model).subscribe((data: any) => {
       if (data.Success) {
         this.taskDate = data.Data;

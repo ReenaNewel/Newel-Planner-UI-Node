@@ -1,6 +1,13 @@
 <form [formGroup]="ReportForm">
     <p-toolbar styleClass="mb-4 gap-2">
-
+        <ng-template pTemplate="left">
+            <span class="p-input-icon-left">
+                <i class="pi pi-search"></i>
+                <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
+                    placeholder="Search..." />
+            </span>
+    
+        </ng-template>
         <c-col sm="12" md="4" lg="5" class="mb-3">
             <label class="pb-2">Report Type</label>
             <p-dropdown [options]="ReportTypeMasterDetails" [style]="{'minWidth':'100%'}" optionLabel="ReportType"

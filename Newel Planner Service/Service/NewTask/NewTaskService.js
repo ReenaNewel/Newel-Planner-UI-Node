@@ -554,7 +554,7 @@ var routes = function () {
       userid = reqbody.userid;
       projectid = reqbody.projectid;
 
-      var querytext = `SELECT " "(:p_taskid,:p_statusid,:p_created_by,:p_UnqId)`;
+      var querytext = `SELECT "updatetaskstatus"(:p_taskid,:p_statusid,:p_created_by,:p_UnqId)`;
       var param = {
         replacements: {
           p_taskid: reqbody.taskId,
@@ -597,6 +597,7 @@ var routes = function () {
   router.route('/GetOverdueTaskData')
   .post(function (req, res) {
       try {
+
           var querytext = 'SELECT "GetOverdueTasks"(:overduetype,:p_userid,:p_ref); FETCH ALL IN "abc"';
 
           var param = {

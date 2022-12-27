@@ -414,12 +414,12 @@ var routes = function () {
             var reqbody = req.body;
             console.log('update requestbody', reqbody);
 
-            var querytext = `SELECT "approveleaverequest"(:p_id,:p_userid,:p_leavestatus,:p_user_id)`;
+            var querytext = `SELECT "approveleaverequest"(:p_id,:p_appuserid,:p_leavestatus,:p_user_id)`;
             var param = {
                 replacements: {
 
                     p_id: req.body.id,
-                    p_userid: req.body.userid,
+                    p_appuserid: req.body.userid,
                     p_leavestatus: req.body.leavestatus,
                     p_user_id: req.body.user_id
                 },

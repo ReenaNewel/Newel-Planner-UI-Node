@@ -94,7 +94,7 @@ export class LeaveRequestComponent implements OnInit {
     }
     this.rest.postParams(this.Global.getapiendpoint() + '/Leave/GetLeaveRequestData', model).subscribe((data: any) => {
       if (data.Success) {
-        console.log(`Get All data`, data.Data);
+        // console.log(`Get All data`, data.Data);
         this.leaveData = data.Data;
 
       }
@@ -133,6 +133,7 @@ export class LeaveRequestComponent implements OnInit {
     }
     this.rest.postParams(this.Global.getapiendpoint() + '/Leave/getRAIId', model).subscribe((data: any) => {
       if (data.Success) {
+        // console.log('RA' , data.Data.ra_id)
         this.Raid = data.Data.ra_id;
       }
       else {
@@ -151,13 +152,13 @@ export class LeaveRequestComponent implements OnInit {
     var date1 = new Date(this.ProjectForm.value.startdate);
 
     var date2 = new Date(this.ProjectForm.value.enddate);
-    console.log('dates are', date1, date2);
+    // console.log('dates are', date1, date2);
     var Time = date2.getTime() - date1.getTime();
     this.Days = Time / (1000 * 3600 * 24) + 1
     this.ProjectForm.value.leaveno = this.Days
 
     this.numleaves = this.ProjectForm.value.leaveno
-    console.log('days', this.ProjectForm.value.leaveno)
+    // console.log('days', this.ProjectForm.value.leaveno)
   }
 
   leaveRequestSaveData() {
@@ -176,7 +177,7 @@ export class LeaveRequestComponent implements OnInit {
 
       created_date: moment().format('YYYY-MM-DD'),
     };
-    console.log(`model`, model);
+    // console.log(`model`, model);
 
     this.rest
       .postParams(
@@ -268,7 +269,8 @@ export class LeaveRequestComponent implements OnInit {
 
   //new changes
   editLeaveRequest(row) {
-    console.log("Edit Row", row);
+    this.Balanceleave();
+    // console.log("Edit Row", row);
 
     this.projectDialog = true;
     this.showSaveBtn = false;
@@ -300,9 +302,9 @@ export class LeaveRequestComponent implements OnInit {
       created_date: moment().format('YYYY-MM-DD'),
     };
 
-    console.log("UpdateTask model", model)
+    // console.log("UpdateTask model", model)
     this.rest.postParams(this.Global.getapiendpoint() + '/Leave/UpdateLeaveRequestDetails', model).subscribe((data: any) => {
-      console.log('data', data.Data)
+      // console.log('data', data.Data)
       if (data.Success) {
         this.messageService.add({ severity: 'success', summary: 'Service Message', detail: 'Task details updated successfully' });
         this.Cancel_form();
@@ -315,7 +317,7 @@ export class LeaveRequestComponent implements OnInit {
   }
 
   CancelLeaveRequest(rows) {
-    console.log("Cancel Row", rows);
+    // console.log("Cancel Row", rows);
     this.updateid = rows.id;
     var model = {
       userid: this.userLoggedIn.id,
@@ -333,9 +335,9 @@ export class LeaveRequestComponent implements OnInit {
       leave_name: rows.leave_type,
       };
 
-    console.log("Cancel model", model)
+    // console.log("Cancel model", model)
     this.rest.postParams(this.Global.getapiendpoint() + '/Leave/CancelLeaveRequestDetails', model).subscribe((data: any) => {
-      console.log('data', data.Data)
+      // console.log('data', data.Data)
       if (data.Success) {
         this.messageService.add({ severity: 'success', summary: 'Service Message', detail: 'Leave Request Cancel successfully' });
         this.Cancel_form();
@@ -357,7 +359,7 @@ export class LeaveRequestComponent implements OnInit {
     this.rest.postParams(this.Global.getapiendpoint() + '/Leave/GetLeaveDetailsforApproval', model).subscribe((data: any) => {
       if (data.Success) {
            this.ApprovalLeaveData = data.Data;
-        console.log(`ApprovalLeaveData`, this.ApprovalLeaveData);
+        // console.log(`ApprovalLeaveData`, this.ApprovalLeaveData);
      
       }
 
@@ -367,7 +369,7 @@ export class LeaveRequestComponent implements OnInit {
 
 
   RejectLeaveRequest(rows) {
-    console.log("Cancel Row", rows);
+    // console.log("Cancel Row", rows);
     this.updateid = rows.id;
     this.RejectDialog = true;
     var model = {
@@ -385,7 +387,7 @@ export class LeaveRequestComponent implements OnInit {
       created_date: moment().format('YYYY-MM-DD'),
     };
 
-    console.log("Cancel model", model)
+    // console.log("Cancel model", model)
   
   }
 
@@ -401,9 +403,9 @@ export class LeaveRequestComponent implements OnInit {
       created_date: moment().format('YYYY-MM-DD'),
     };
 
-    console.log("Reject model", model)
+    // console.log("Reject model", model)
     this.rest.postParams(this.Global.getapiendpoint() + '/Leave/RejectLeaveRequestDetails', model).subscribe((data: any) => {
-      console.log('data', data.Data)
+      // console.log('data', data.Data)
       if (data.Success) {
         this.messageService.add({ severity: 'success', summary: 'Service Message', detail: 'Task details updated successfully' });
         this.Cancel_form();
@@ -417,7 +419,7 @@ export class LeaveRequestComponent implements OnInit {
 
 
   ApproveLeaveRequest(rows) {
-    console.log("Approve Row", rows);
+    // console.log("Approve Row", rows);
     this.updateid = rows.id;
     var model = {
       userid: this.userLoggedIn.id,
@@ -432,9 +434,11 @@ export class LeaveRequestComponent implements OnInit {
     };
 
     // console.log("Cancel model", model)
+
     this.rest.postParams(this.Global.getapiendpoint() + '/Leave/ApproveLeaveRequestDetails', model).subscribe((data: any) => {
-      console.log('data', data.Data)
+      // console.log('data', data.Data)
       if (data.Success) {
+
         this.messageService.add({ severity: 'success', summary: 'Service Message', detail: 'Leave Request Approved successfully' });
         this.Cancel_form();
         this.LeaveDetails();
@@ -468,7 +472,7 @@ Balanceleave() {
   this.rest.postParams(this.Global.getapiendpoint() + '/Leave/getBalancedLeave', model).subscribe((data: any) => {
     if (data.Success) {
       this.balanceleavedata = data.Data;
-      console.log("Balance leave", this.balanceleavedata);
+      // console.log("Balance leave", this.balanceleavedata);
     }
     else {
 

@@ -88,6 +88,13 @@ export class DashboardComponent implements OnInit {
   userid: any;
   ProjectNameslist: any;
   ProjectTaskStatusSummary: any;
+  EditTaskid: any;
+  userId: any;
+  EditUnqID: any;
+  editcreated_by: any;
+  userRole: any;
+  userEmail: any;
+  projectid: any;
 
 
   constructor(
@@ -101,6 +108,10 @@ export class DashboardComponent implements OnInit {
   ngOnInit(): void {
     this.userLoggedIn = JSON.parse(localStorage.getItem('userLoggedIn')!);
     this.userid = this.userLoggedIn.id;
+    this.userRole = this.userLoggedIn.defaultroleid;
+    this.userId = this.userLoggedIn.id;
+    this.userEmail = this.userLoggedIn.emailid;
+    
 
     this.ShowProjectNmaes();
     this.ShowAllformDetails();
@@ -149,7 +160,7 @@ export class DashboardComponent implements OnInit {
 
   GetAllProjectStatus(value: any) {
     this.PrjStatus_id = value
-    console.log("project", this.PrjStatus_id);
+    // console.log("project", this.PrjStatus_id);
 
 
 
@@ -158,25 +169,25 @@ OverdueTaskData: any;
 UpcomingdeadlinesData: any;
 
   ShowSummary(events: any) {
-    console.log("Events....", events);
+    // console.log("Events....", events);
 
 
     var model = {
           userid: this.userid,
           member: events
         }
-        console.log("Model", model);
+        // console.log("Model", model);
         this.rest.postParams(this.Global.getapiendpoint() + '/NewTask/GetOverdueTaskData', model).subscribe((data: any) => {
           this.OverdueTaskData = data.Data;
 
 
-          console.log("OVerdue Details", this.OverdueTaskData);
+          // console.log("OVerdue Details", this.OverdueTaskData);
         });
 
         this.rest.postParams(this.Global.getapiendpoint() + '/NewTask/GetUpcomingdeadlines', model).subscribe((data: any) => {
           this.UpcomingdeadlinesData = data.Data;
 
-          console.log("UpcomingdeadlinesData Details", this.UpcomingdeadlinesData);
+          // console.log("UpcomingdeadlinesData Details", this.UpcomingdeadlinesData);
         });
         
   }
@@ -188,7 +199,7 @@ UpcomingdeadlinesData: any;
     var model = {
           userid: this.userid,
         }
-        console.log("Model", model);
+        // console.log("Model", model);
         this.rest.postParams(this.Global.getapiendpoint() + '/NewTask/GetProjectNames', model).subscribe((data: any) => {
           this.ProjectNameslist = data.Data;
 
@@ -207,66 +218,127 @@ UpcomingdeadlinesData: any;
           // console.log("Project Names Details List", this.ProjectTaskStatusSummary);
         }); 
   }
-  ShowDetails(projectid: any) {
+  // ShowDetails(projectid: any) {
 
-    var model = {
-      p_userid: 3,
-      p_projectid: projectid
+  //   var model = {
+  //     p_userid: this.userid,
+  //     p_projectid: projectid
+  //   }
+  //   console.log('showdetails', model)
+
+  //   this.rest.postParams(this.Global.getapiendpoint() + '/NewTask/GetTaskDetailsByuser', model).subscribe((data: any) => {
+
+  //     this.filterdata = data.Data;
+  //     // console.log("total acount", data.Data);
+  //     // console.log("this.compelete", this.completed);
+
+
+  //     // for Completed
+  //     this.totalcompleted = 0;
+  //     this.completed = this.filterdata.filter(task => task.status === 1);
+
+  //     this.completedTask = this.completed;
+  //     //console.log('tasks',this.completedTask);
+  //     //console.log("this.compelete",this.completed.length);
+  //     this.totalcompleted = this.completed.length;
+
+
+  //     //for Inprogess
+
+  //     this.totalProgess = 0;
+  //     this.inprogress = this.filterdata.filter(task => task.status === 2);
+  //     this.progressTask = this.inprogress;
+
+
+  //     //for Not started
+  //     this.totalNotstarted = 0;
+
+  //     this.notstarted = this.filterdata.filter(task => task.status === 3);
+  //     this.notstartedTask = this.notstarted;
+
+  //     //for total
+
+  //     this.totalTask = 0;
+  //     this.allTask = this.data;
+  //     this.TotalData = this.filterdata;
+  //     this.allTask = this.TotalData;
+  //     this.totalTask = this.allTask.length;
+  //   })
+  //   // ashlesha
+  //   var id = 45
+  //   this.rest.getAll(this.Global.getapiendpoint() + '/General/getProjectStatus/' + id).subscribe((data: any) => {
+  //     if (data.Success) {
+  //       this.ProjectStates = data.Data
+  //       // console.log('projectNames',this.ProjectStates);
+  //     }
+  //   })
+
+  // }
+  ShowDetails(projectid:any){
+    this.projectid = projectid
+   
+    var model={
+      p_userid:this.userId,
+      p_projectid:projectid
     }
-    console.log('showdetails', model)
-
-    this.rest.postParams(this.Global.getapiendpoint() + '/NewTask/GetTaskDetailsByuser', model).subscribe((data: any) => {
-
-      this.filterdata = data.Data;
-      // console.log("total acount", data.Data);
-      // console.log("this.compelete", this.completed);
-
-
-      // for Completed
-      this.totalcompleted = 0;
-      this.completed = this.filterdata.filter(task => task.status === 1);
-
-      this.completedTask = this.completed;
-      //console.log('tasks',this.completedTask);
-      //console.log("this.compelete",this.completed.length);
-      this.totalcompleted = this.completed.length;
-
-
-      //for Inprogess
-
-      this.totalProgess = 0;
-      this.inprogress = this.filterdata.filter(task => task.status === 2);
-      this.progressTask = this.inprogress;
-
-
-      //for Not started
-      this.totalNotstarted = 0;
-
-      this.notstarted = this.filterdata.filter(task => task.status === 3);
-      this.notstartedTask = this.notstarted;
-
-      //for total
-
-      this.totalTask = 0;
-      this.allTask = this.data;
-      this.TotalData = this.filterdata;
-      this.allTask = this.TotalData;
-      this.totalTask = this.allTask.length;
-    })
-    // ashlesha
-    var id = 45
-    this.rest.getAll(this.Global.getapiendpoint() + '/General/getProjectStatus/' + id).subscribe((data: any) => {
-      if (data.Success) {
-        this.ProjectStates = data.Data
-        // console.log('projectNames',this.ProjectStates);
-      }
-    })
-
-  }
+    // console.log('showdetails',model)
+  
+            this.rest.postParams(this.Global.getapiendpoint() + '/NewTask/GetTaskDetailsByuser',model).subscribe((data: any) => {
+             
+               this.filterdata = data.Data;
+            //  console.log("total acount",data.Data);
+              //  console.log("this.compelete",this.completed);
+          
+               
+            // for Completed
+              this.totalcompleted=0;
+              this.completed = this.filterdata.filter(task => task.status === 3);
+          
+              this.completedTask=this.completed;
+              // console.log('tasks',this.completedTask);
+              //console.log("this.compelete",this.completed.length);
+              this.totalcompleted= this.completed.length;
+               
+    
+    //for Inprogess
+                
+                 this.totalProgess=0;
+                  this.inprogress = this.filterdata.filter(task => task.status === 2);
+                  this.progressTask = this.inprogress;
+                  this.totalProgess =  this.progressTask.length;
+                  // console.log("this.progressTask",this.progressTask);
+                  
+                
+    
+    //for Not started
+                 this.totalNotstarted=0;
+    
+                 this.notstarted = this.filterdata.filter(task => task.status === 1);
+                 this.notstartedTask = this.notstarted;
+                 this.totalNotstarted = this.notstarted.length;
+                //  console.log("this.notstartedTask",this.notstartedTask);
+        //for total
+      
+         this.totalTask=0;
+         this.allTask = this.data;
+         this.TotalData = this.filterdata;
+         this.allTask = this.TotalData;
+         this. totalTask= this.allTask.length;
+      })
+      // ashlesha
+      var id = 102
+      this.rest.getAll(this.Global.getapiendpoint() + '/General/getProjectStatus/' + id).subscribe((data: any) => {
+          if (data.Success) {
+            this.ProjectStates = data.Data
+            //  console.log('projectNames',this.ProjectStates);
+          }
+        })
+  
+    }
 
   ShowProjectNmaes() {
     var model = {
-      p_userid: 3
+      p_userid: this.userid
     }
     this.rest.postParams(this.Global.getapiendpoint() + '/NewTask/GetProjectNameByuser', model).subscribe((data: any) => {
       // console.log('projectNames',data.Data);
@@ -291,21 +363,22 @@ UpcomingdeadlinesData: any;
   leaveuser() {
     console.warn(this.ProjectForm.value)
   }
-
+ 
   UpdateTask() {
-    var model = {
-      userid: this.colId,
-      statusid: this.PrjStatus_id,
-      taskid: this.editTaskid,
+    var model ={
+      taskId:this.EditTaskid,
+      statusId:this.PrjStatus_id ,
+      created_by:this.userid,
+      unqid: this.EditUnqID
+  }
 
-    }
-
-    console.log("UpdateTask model", model)
+    // console.log("UpdateTask model", model)
     this.rest.postParams(this.Global.getapiendpoint() + '/NewTask/UpdateStatusTaskDetails', model).subscribe((data: any) => {
-      console.log('data', data.Data)
+      // console.log('data', data.Data)
       if (data.Success) {
         this.messageService.add({ severity: 'success', summary: 'Service Message', detail: 'Task details updated successfully' });
         this.Cancel_form()
+        this.ShowDetails(this.projectid)
       }
       else {
         this.messageService.add({ severity: 'warn', summary: 'Success', detail: 'Record not updated..!!' });
@@ -316,27 +389,62 @@ UpcomingdeadlinesData: any;
     this.NewTaskDialog = false;
   }
 
-  EditTaskDetails(row: any) {
+  // EditTaskDetails(row: any) {
 
-    // console.log('project rows :', row)
-    this.NewTaskDialog = true;
-    this.showSaveBtn = false;
-    this.colId = row.id;
-    this.editTaskid = row.taskid;
-    this.ProjectForm = this.fb.group({
-      pname: [row.projectid],
-      taskType: [row.tasktypeid],
-      taskname: [row.taskname],
-      efforts: [row.efforts],
-      endDate: [(new Date(row.enddate))],
-      startDate: [(new Date(moment(row.startdate).format('YYYY-MM-DD')))],
-      Comments: [row.comments],
-      taskStatus: [row.taskstatus],
-      //PrjStatus: [row.projectstatusid],
-      assigneeName: [row.assignee_id]
-    })
+  //   // console.log('project rows :', row)
+  //   this.NewTaskDialog = true;
+  //   this.showSaveBtn = false;
+  //   this.colId = row.id;
+  //   this.editTaskid = row.taskid;
+  //   this.ProjectForm = this.fb.group({
+  //     pname: [row.projectid],
+  //     taskType: [row.tasktypeid],
+  //     taskname: [row.taskname],
+  //     efforts: [row.efforts],
+  //     endDate: [(new Date(row.enddate))],
+  //     startDate: [(new Date(moment(row.startdate).format('YYYY-MM-DD')))],
+  //     Comments: [row.comments],
+  //     taskStatus: [row.taskstatus],
+  //     PrjStatus: [row.projectstatusid],
+  //     assigneeName: [row.assignee_id]
+  //   })
+  //   this.EditUnqID=  taskDetails.unqid;
+  //   this.EditTaskid = taskDetails.taskid;
+  // }
+  editprojectName:any
+EditTaskDetails(taskDetails) {
+ 
+  // console.log('taskDetails  :',taskDetails)
+  this.NewTaskDialog = true;
+  this.showSaveBtn = false;
+  this.colId = taskDetails.id;
+  // console.log("this.colId",this.colId);
+  
+ 
+ this.editcreated_by =taskDetails.created_by;
+// komal
+this.editprojectName= taskDetails.projectid;
+// console.log("taskDetails.enddate",taskDetails.enddate);
 
-  }
+  this.ProjectForm = this.fb.group({
+  pname :[this.editprojectName],
+  taskType:[taskDetails.tasktypeid],
+  taskname:[taskDetails.taskname],
+  efforts:[Math.round(taskDetails.efforts)],
+  // endDate:[taskDetails.enddate],
+  endDate:[moment(taskDetails.enddate).format('MM/DD/YYYY')],
+  // startDate:[taskDetails.startdate],
+  startDate:[moment(taskDetails.startdate).format('MM/DD/YYYY')],
+  Comments:[taskDetails.comments],
+  taskStatus:[taskDetails.taskstatus],
+  PrjStatus: [],
+  assigneeName:[taskDetails.assignee_id]
+
+})
+
+this.EditUnqID=taskDetails.unqid;
+this.EditTaskid = taskDetails.taskid;
+}
 
   ExporttoExcelReport() {
     if(this.OverdueTaskData){

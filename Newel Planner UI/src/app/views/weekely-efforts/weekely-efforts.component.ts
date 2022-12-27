@@ -241,7 +241,7 @@ export class WeekelyEffortsComponent implements OnInit {
   }
   HoursDetails(weekeids:any) {
 
-    var model = {
+    var model = { 
       userid: this.u_id,
       weekeid: weekeids ,
       effortid:this.updateid
@@ -249,7 +249,7 @@ export class WeekelyEffortsComponent implements OnInit {
 
     console.log('user id hours',model)
     this.rest.postParams(this.Global.getapiendpoint() + '/WeekelyEfforts/GetHoursData', model).subscribe((data: any) => {
-      //if(data.Success){
+      //if(data.Success){ 
       this.HoursData = data.Data;
 
       this.weekehours = data.Data[0].hours;

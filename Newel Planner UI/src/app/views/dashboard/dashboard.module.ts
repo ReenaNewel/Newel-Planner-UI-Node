@@ -48,7 +48,8 @@ import { MessageModule } from 'primeng/message';
 import {ToolbarModule} from 'primeng/toolbar';
 import {CheckboxModule} from 'primeng/checkbox';
 import {TooltipModule} from 'primeng/tooltip';
-
+import { InputTextModule } from 'primeng/inputtext';
+import { ToastModule } from 'primeng/toast';
 // import { BrowserModule } from '@angular/platform-browser';
 
 FullCalendarModule.registerPlugins([
@@ -91,7 +92,9 @@ FullCalendarModule.registerPlugins([
     MessagesModule,
     ToolbarModule,
     CheckboxModule,
-    TooltipModule
+    TooltipModule,
+    InputTextModule,
+    ToastModule
     // FullCalendarModule,
     // BrowserModule
 

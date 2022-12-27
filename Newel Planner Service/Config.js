@@ -1,7 +1,7 @@
 const environmentConfig = {
     
     local: {
-        service_port: 1352,
+        service_port: 8686,
         ui_url: 'http://localhost:4200/planner/',
         dbConn: {
             dbServer: '43.204.223.103',
