@@ -24,7 +24,8 @@ export class TimesheetDashboardComponent implements OnInit {
 
   member: any[];
   selectedValue: string;
-  currentEvents: EventApi[];
+  currentEvents: EventApi[] = [];
+  // currentEvents: EventApi[]=[];
   Montharray = [];
   datedata = [];
   hoursArray = [];
@@ -46,7 +47,7 @@ export class TimesheetDashboardComponent implements OnInit {
   userValue: any;
   paramsUserId: any;
   member1: string;
-
+  
   constructor(
     private rest: RestService,
     private Global: Global,
@@ -87,24 +88,54 @@ else{
     dateClick: this.handleDateClick.bind(this), // bind is important!
     events: this.Montharray,
     //   headerToolbar: {
-    //     left: 'prev,next today',
-    //     center: 'title',
-    //     right: 'dayGridMonth,timeGridWeek,timeGridDay'
+        
+    //     // left: 'prev,next today',
+    //     // center: 'title',
+    //     // right: 'dayGridMonth,timeGridWeek,timeGridDay'
     // },
     // editable: true,
     selectable: true,
-    eventsSet: this.handleEvents.bind(this)
+    eventsSet: this.handleEvents.bind(this),
     // selectMirror: true,
     // dayMaxEvents: true,
     //  weekends: false
+    // customButtons: {
+    //   next: {
+    //   text: '>',
+    //   click: this.nextMonth.bind(this)
+    //   },
+    //   prev: {
+    //   text: '<',
+    //   click: this.prevMonth.bind(this)
+    //   }
 
-
+    // }
+    
   };
 
+
+  
+
+  public fetchEvents(e) {
+    console.log(e);
+}
+
+nextMonth(arg :any){
+alert('next')
+}
+
+prevMonth(arg:any){
+  alert('prev')
+}
  
 
   handleEvents(events: EventApi[]) {
+
     this.currentEvents = events;
+    console.log('this.currentEvents ',this.currentEvents)
+    // console.log('this.currentEvents ',this.currentEvents[0]._context)
+    
+    
    
   }
   ShowDetails() {
@@ -144,7 +175,7 @@ else{
 
    
     this.TaskDt = arg.dateStr
-    
+    // console.log('hi')
     var model = {
       userid:  this.userValue,
       // this.userId,
@@ -313,10 +344,10 @@ else{
   }
 
   dateClick(event) {
-    // console.log("Date Data", event);
+    console.log("Date Data", event);
   }
 
   eventClick(event) {
-    // console.log("Event Data", event);
+    console.log("Event Data", event);
   }
 }

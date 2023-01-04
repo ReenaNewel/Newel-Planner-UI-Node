@@ -285,7 +285,8 @@
         <c-row class="">
 
             <c-col sm="12" md="6" lg="6" class="mb-3">
-                <p-calendar pTooltip="From Date" tooltipPosition="top" [style]="{'minWidth':'100%'}" [showIcon]="true" appendTo="body"
+                <p-calendar pTooltip="From Date" tooltipPosition="top" [style]="{'minWidth':'100%'}" 
+                    [showIcon]="true" appendTo="body" (onSelect)="leavecount()"
                     placeholder="Fromdate" inputId="icon" name="startdate"
                     [(ngModel)]="today" formControlName="startdate">
                 </p-calendar>
@@ -299,9 +300,10 @@
             <!-- <c-col sm="12" md="6" lg="6" class="mb-3">
             </c-col> -->
             <c-col sm="12" md="4" lg="6" class="mb-3">
-                <p-dropdown pTooltip="Leave Type" tooltipPosition="top" [options]="leavetypeDropdown" [style]="{'minWidth':'100%'}" optionValue="typeid"
+                <p-dropdown pTooltip="Leave Type" tooltipPosition="top" 
+                    [options]="leavetypeDropdown" [style]="{'minWidth':'100%'}" optionValue="typeid"
                     optionLabel="name" [filter]="true" filterBy="name" [showClear]="true" value="typeid"
-                    placeholder="LeaveType*" required formControlName="LeaveDropdwon">
+                    placeholder="LeaveType*" required formControlName="LeaveDropdwon" (onChange)="checkLeaveCount($event)">
                 </p-dropdown>
 
 
@@ -341,6 +343,12 @@
                                     </th>
                                     <th>leaveCount
                                     </th>
+                                    <th>Pending For Approval
+                                    </th>
+                                    <th>Pending For Cancelled Approval
+                                    </th>
+                                    <th>pending cancelled Approval - pending 
+                                    </th>
                                 </tr>
             
                             </ng-template>
@@ -352,6 +360,18 @@
                                     <td>
                                         {{balanceleave.leaveCount}}
                                     </td>
+                                    <td>
+                                        {{balanceleave.pendingforapproval}}
+                                    </td>
+                                    <td>
+                                        {{balanceleave.pendingforcancellationalapproval}}
+                                    </td>
+                                    <td>
+                                        {{balanceleave.b}}
+                                    </td>
+                              
+                              
+                              
                               
                                 </tr>
                             </ng-template>
@@ -378,7 +398,7 @@
             <br>
             <c-col>
                 <p-button *ngIf="showSaveBtn" type="submit" (click)="leaveRequestSaveData()" label="Save"
-                    styleClass="p-button-warning px-3 py-2" [disabled]="!ProjectForm.valid"></p-button>
+                    styleClass="p-button-warning px-3 py-2" [disabled]="!ProjectForm.valid || chkbalanceflag ==false"></p-button>
                 <p-button *ngIf="!showSaveBtn" type="submit" (click)="UpdateLeaveRequest()" label="Update"
                     styleClass="p-button-warning px-3 py-2"></p-button>
 

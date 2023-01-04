@@ -126,7 +126,44 @@ var routes = function () {
                 res.status(200).json({ Success: false, Message: ' API failed.', Data: null });
             }
         });
+///Reena
+router.route('/GetUpcomingWeekSummary')
+        .post(function (req, res) {
 
+            try {
+                var querytext = `SELECT "GetUpcomingWeekSummary"(:p_usrid,:p_ref); FETCH ALL IN "abc"`;
+                //console.log("querytext",querytext);
+                var param = {
+                    replacements: {
+                        p_usrid:req.body.userid,
+                        p_ref: 'abc'
+                    },
+                    type: connect.sequelize.QueryTypes.SELECT
+                }
+                connect.sequelize
+                    .query(querytext, param)
+                    .then(function (result) {
+                        //console.log("result",result);
+                        result.shift();
+                        res.status(200).json({
+
+                            Success: true,
+                            Message: "Get all Records successfully",
+                            Data: result
+                        });
+                    }, function (err) {
+                        // //console.log(err);
+                        dataconn.errorlogger('WeekelyEffortsService', 'GetUpcomingWeekSummary', err);
+                        res.status(200).json({ Success: false, Message: 'API failed.', Data: null });
+                    });
+            } catch (err) {
+                dataconn.errorlogger('WeekelyEffortsService', 'GetUpcomingWeekSummary', err);
+                res.status(200).json({ Success: false, Message: ' API failed.', Data: null });
+            }
+        });
+
+
+// Reena
 
         router.route('/UpdateEffortActiveStatus')
         .post(function (req, res) {

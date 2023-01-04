@@ -1,7 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import {ActivatedRoute, Router } from '@angular/router';
-
 import { ClassToggleService, HeaderComponent } from '@coreui/angular';
 
 @Component({
@@ -35,5 +34,9 @@ export class DefaultHeaderComponent extends HeaderComponent {
     localStorage.clear()
     // debugger;
     this.router.navigateByUrl('login')
+  }
+
+  showPasswordDialog(){
+    this.router.navigateByUrl('masters/ChangePassword')
   }
 }

@@ -1,75 +1,98 @@
 <c-row>
-<p-toolbar styleClass="mb-4 gap-2">
-    <div class="flex justify-content-center flex-wrap mb-6">
-      
-            <div *ngIf="this.projectFlag == 0">
-                <p-dropdown [options]="member" [(ngModel)]="selectedMem"  class="mx-3" 
+    <div styleClass="mb-4">
+        <div *ngIf="this.projectFlag == 0">
+            <c-row class="grid border border-secondary p-2">
+<p-dropdown [options]="member" [(ngModel)]="selectedMem" class="mx-3"
                     (onChange)="ChangeMember(selectedMem)">
                 </p-dropdown>
-            </div>
-      
-       
-        <div *ngIf="this.projectFlag == 1">
-            <div *ngIf="selectedMem == 'Only Me'">
-                <div class="field-checkbox">
-                        <p-checkbox [(ngModel)]="checked" [binary]="true" inputId="binary"
-                        (click)="RAUsers()"></p-checkbox>
-                        <label for="binary">RA Wise</label>
-                </div> 
-            </div>
-         
-            <div *ngIf="!checked" >
-                <!-- this.applicant.country = 'India'; -->
-                <p-dropdown  [options]="member" [(ngModel)]="selectedMem"  class="mx-3" 
-                        (onChange)="ChangeMember(selectedMem)">
-                </p-dropdown>
-               
-            </div>
-            
-            <!-- {{!checked}}{{selectedMem}} -->
-            <div *ngIf="!checked" >
-                <div *ngIf="selectedMem == 'Team'">
-                    <p-dropdown  pTooltip="Project Name" tooltipPosition="top" [options]="ProjectNames" [(ngModel)]="selectedProject" value="projectid" optionLabel="projectname"
-                        [filter]="true" required name="projectname" (onChange)="GetTaskNameByProject(selectedProject)"
-                        filterBy="projectname" [showClear]="true" placeholder="Project Name" class="borderNone">
-                        <ng-template pTemplate="selectedItem">
-                            <div class="country-item country-item-value" *ngIf="selectedProject">
-                                <div pTooltip="Project Name" tooltipPosition="top">{{selectedProject?.projectname | slice:0:12}}
-                                </div>
-                            </div>  
-                        </ng-template>
-                    </p-dropdown>
+        </c-row>
+    </div>
 
-                    <p-dropdown  pTooltip="User Name" tooltipPosition="top" [options]="UserData" [(ngModel)]="selectedUserByProject" value="userid" optionLabel="name"
-                        [filter]="true"  required name="username" (onChange)="GetUserid(selectedUserByProject)"
-                        filterBy="username" [showClear]="true" placeholder="User Name" class="borderNone">
-                        <!-- <ng-template pTemplate="selectedItem">
+
+        <div *ngIf="this.projectFlag == 1">
+
+            <c-row class="grid border border-secondary p-2">
+                <c-col sm="12" xl="6" xxl="2">
+                    <div *ngIf="selectedMem == 'Only Me'">
+                        <div class="field-checkbox pt-2">
+                            <p-checkbox [(ngModel)]="checked" [binary]="true" inputId="binary"
+                                (click)="RAUsers()"></p-checkbox>
+                            <label for="binary">RA Wise</label>
+                        </div>
+                    </div>
+                </c-col>
+
+                <c-col sm="12" xl="6" xxl="2">
+                    <div *ngIf="!checked">
+                        <!-- this.applicant.country = 'India'; -->
+                        <p-dropdown [options]="member" [(ngModel)]="selectedMem" class="mx-3"
+                            (onChange)="ChangeMember(selectedMem)">
+                        </p-dropdown>
+
+                    </div>
+
+                    <div *ngIf="checked">
+                        <!-- <c-col sm="12" md="6" lg="6" class="mb-3"> -->
+                        <!-- <label class="pb-2">Resource Name</label> -->
+                        <p-dropdown [options]="RAFilterData" [(ngModel)]="selectedUser" value="userid"
+                            optionLabel="username" [filter]="true" required name="username"
+                            (onChange)="GetUserid(selectedUser)" filterBy="username" [showClear]="true"
+                            placeholder="Resource Name" class="borderNone">
+                            <ng-template pTemplate="selectedItem">
+                                <div class="country-item country-item-value" *ngIf="selectedUser">
+                                    <div pTooltip="Resource Name" tooltipPosition="top">{{selectedUser?.username |
+                                        slice:0:12}}
+                                    </div>
+                                </div>
+                            </ng-template>
+                        </p-dropdown>
+                        <!-- </c-col> -->
+                    </div>
+                </c-col>
+
+                <c-col sm="12" xl="6" xxl="2">
+
+                    <!-- {{!checked}}{{selectedMem}} -->
+                    <div *ngIf="!checked">
+                        <div *ngIf="selectedMem == 'Team'">
+                        <p-dropdown pTooltip="Project Name" tooltipPosition="top" [options]="ProjectNames"
+                                [(ngModel)]="selectedProject" value="projectid" optionLabel="projectname"
+                                [filter]="true" required name="projectname"
+                                (onChange)="GetTaskNameByProject(selectedProject)" filterBy="projectname"
+                                [showClear]="true" placeholder="Project Name" class="borderNone">
+                                <ng-template pTemplate="selectedItem">
+                                    <div class="country-item country-item-value" *ngIf="selectedProject">
+                                        <div pTooltip="Project Name" tooltipPosition="top">
+                                            {{selectedProject?.projectname |
+                                            slice:0:12}}
+                                        </div>
+                                    </div>
+                                </ng-template>
+                            </p-dropdown>
+                        </div>
+                    </div>
+                </c-col>
+
+                <c-col sm="12" xl="6" xxl="2">
+
+                    <div *ngIf="!checked">
+                        <div *ngIf="selectedMem == 'Team'">
+                        <p-dropdown pTooltip="User Name" tooltipPosition="top" [options]="UserData"
+                                [(ngModel)]="selectedUserByProject" value="userid" optionLabel="name" [filter]="true"
+                                required name="username" (onChange)="GetUserid(selectedUserByProject)"
+                                filterBy="username" [showClear]="true" placeholder="User Name" class="borderNone">
+                                <!-- <ng-template pTemplate="selectedItem">
                             <div class="country-item country-item-value" *ngIf="selectedUserByProject">
                                 <div pTooltip="User Name" tooltipPosition="top">{{selectedUserByProject?.username | slice:0:12}}
                                 </div>
                             </div>  
                         </ng-template> -->
-                    </p-dropdown>
-                    
-                </div>
-            </div>
-      
-        <div *ngIf="checked">
-            <!-- <c-col sm="12" md="6" lg="6" class="mb-3"> -->
-            <!-- <label class="pb-2">Resource Name</label> -->
-            <p-dropdown  [options]="RAFilterData" [(ngModel)]="selectedUser" value="userid" 
-                optionLabel="username"
-                [filter]="true" required name="username" (onChange)="GetUserid(selectedUser)"
-                filterBy="username" [showClear]="true" placeholder="Resource Name" class="borderNone">
-                <ng-template pTemplate="selectedItem">
-                    <div class="country-item country-item-value" *ngIf="selectedUser">
-                        <div pTooltip="Resource Name" tooltipPosition="top">{{selectedUser?.username | slice:0:12}}
+                            </p-dropdown>
+
                         </div>
-                    </div>  
-                </ng-template>
-            </p-dropdown>
-            <!-- </c-col> -->
-        </div>
+                    </div>
+                </c-col>
+            </c-row>
 
             <!-- <p-dropdown *ngIf="selectedMem == 'Team' " [options]="values" [(ngModel)]="selectedValue"
                 optionLabel="name" [filter]="true" filterBy="name" [showClear]="true" placeholder="Select Team List">
@@ -84,10 +107,9 @@
                     </div>
                 </ng-template>
             </p-dropdown> -->
-           
+
         </div>
     </div>
-</p-toolbar>
 </c-row>
 
 <c-row class="mt-4">
@@ -96,11 +118,11 @@
         <!-- (click)="eventClick($event)" -->
         <!-- dateClick="dateClick($event)"  -->
         <!-- onDateClick="onDateClick" -->
-        <full-calendar deepChangeDetection="true" class="max-w-30rem" [options]="calendarOptions"
-            onDateClick="handleDateClick($event)">
+
+        <!-- onDateClick="handleDateClick($event)" -->
+        <full-calendar deepChangeDetection="true" class="max-w-30rem" [options]="calendarOptions">
         </full-calendar>
     </c-col>
-
 
     <c-col sm="12" md="12" lg="12" xl="7" class="mb-3 py-2">
         <h5 class="text-right">{{TaskDt | date:'dd-MM-YYYY' }}</h5>
@@ -115,7 +137,7 @@
                             <span class="font-bold" class="mr-4">{{item.timeinhours}}:{{item.timeinminutes}}</span>
                         </div>
                         <p class="mb-0">TaskName : {{item.taskname}}</p>
-                        <p class="">Description  : {{item.description}}</p>
+                        <p class="">Description : {{item.description}}</p>
                     </p-scrollPanel>
 
                 </c-row>

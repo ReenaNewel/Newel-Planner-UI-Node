@@ -54,7 +54,7 @@ export class TimesheetComponent implements OnInit, AfterViewInit {
   selectedComment: any
   selectedTaskName: any
   selectedTaskProject: any
-
+  maximumDate = new Date();
 
 
 
@@ -87,6 +87,7 @@ export class TimesheetComponent implements OnInit, AfterViewInit {
 
   @ViewChild(TaskAccordionComponent) child: TaskAccordionComponent;
   getAssigneName: any;
+  dateflag :any;
 
   constructor(
     // private chartsData: DashboardChartsData,
@@ -233,6 +234,19 @@ export class TimesheetComponent implements OnInit, AfterViewInit {
 
     }
   }
+CheckDate(){
+this.dateflag = true
+// console.log('start date ,end date ',this.selectedStartDate,this.selectedEndate)
+    if(this.selectedStartDate || this.selectedEndate){
+      if (this.selectedStartDate > this.selectedEndate){
+        this.dateflag = false
+        this.messageService.add({ severity: 'warn', summary: 'Alert', detail: 'Please Select Correct Date Range' });
+        
+      //  return
+      }
+    }
+     
+  }
 
   getHoursList() {
 
@@ -246,7 +260,7 @@ export class TimesheetComponent implements OnInit, AfterViewInit {
 
   showCreateNewTaskDialog() {
     if(!this.selectedProject){
-      this.messageService.add({ severity: 'warn', summary: 'Success', detail: 'Please Select Project Name' });
+      this.messageService.add({ severity: 'warn', summary: 'Alert', detail: 'Please Select Project Name' });
     }
     else{
     this.createTaskDialog = true;
@@ -265,7 +279,8 @@ export class TimesheetComponent implements OnInit, AfterViewInit {
 
   submit(isvalid: boolean) {
     // console.log('isvalid', isvalid)
-    if (isvalid) {
+    if (isvalid ) {
+     
       this.saveTimesheet()
 
     }
@@ -402,13 +417,16 @@ export class TimesheetComponent implements OnInit, AfterViewInit {
         // this.selectedminutes = 0;
       }
       else {
-        this.messageService.add({ severity: 'warn', summary: 'Success', detail: 'Record not saved' });
+        this.messageService.add({ severity: 'warn', summary: 'Alert', detail: 'Record not saved' });
       }
     });
 
   }
 
   tasksubmit(isvalid: boolean) {
+    // this.CheckDate()
+    // (console.log())
+
     if (isvalid) {
       this.SubmitNewTask()
     }
@@ -522,7 +540,7 @@ export class TimesheetComponent implements OnInit, AfterViewInit {
         this.Cancel_form()
       }
       else {
-        this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Record not saved' });
+        this.messageService.add({ severity: 'warn', summary: 'Info', detail: 'Record not saved' });
       }
     });
 

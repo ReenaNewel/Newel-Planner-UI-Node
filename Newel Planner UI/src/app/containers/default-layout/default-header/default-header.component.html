@@ -20,6 +20,7 @@
         </a>
       </c-nav-item> -->
     </c-header-nav>
+    
 
     <!-- <c-header-nav class="d-none d-lg-flex">
       <c-nav-item>
@@ -135,6 +136,16 @@
           
          {{userEmail}}
         </a>
+      </li>
+      <li>
+        <hr cDropdownDivider />
+      </li>
+      
+      <li>
+          <a class="pt-2" (click)="showPasswordDialog()" cDropdownItem>
+            <svg cIcon class="me-2" name="cilUser"></svg>
+            Change Password
+          </a>
       </li>
       <li>
         <hr cDropdownDivider />

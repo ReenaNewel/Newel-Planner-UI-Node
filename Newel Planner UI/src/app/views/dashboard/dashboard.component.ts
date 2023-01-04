@@ -95,6 +95,19 @@ export class DashboardComponent implements OnInit {
   userRole: any;
   userEmail: any;
   projectid: any;
+  timespanid: number;
+  LastYear: any;
+  CurrentYear: any;
+  p_data: number;
+  Last_Month: any;
+  Current_Month: any;
+  Last_Week: any;
+  Current_Week: any;
+  Yesterday: any;
+  Today: any;
+  OnlymeOrTeams: number;
+  TimeSpanData: any;
+  TimesheetForm:FormGroup;
 
 
   constructor(
@@ -117,9 +130,16 @@ export class DashboardComponent implements OnInit {
     this.ShowAllformDetails();
     this.ShowProjectNamesList();
     this.member = [
-      { name: 'Only Me', code: 'AU', value: 1 },
-      { name: 'Team', code: 'BR', value: 2 }
+
+      { name: 'Only Me', value: 1 },
+      // { name: 'Team', value: 2 }
+
     ]
+
+    this.GetAllTimeSpan();
+    this.ShowTaskSummary_Month();
+    console.log("Member", this.member);
+    this.p_data = this.member[0].value;
     // this.countries = [
     //   { name: 'Australia', code: 'AU' },
     //   { name: 'Brazil', code: 'BR' },
@@ -155,6 +175,13 @@ export class DashboardComponent implements OnInit {
     this.SummaryForm = this.fb.group({
       SummaryDropdown: [''],
       ProjectName: ['']
+    })
+    this.TimesheetForm = this.fb.group({
+
+      Timespan: [''],
+
+      teamselectiondropdown: ['', [Validators.required, Validators.min(1)]]
+
     })
   }
 
@@ -511,4 +538,121 @@ saveAsExcelFile(buffer: any, fileName: string): void {
   //     this.projectnames = data.Data;
   //   })
   // }
+
+  //Bhushan  GetTasksheetTimeSpan
+
+  GetAllTimeSpan() {
+    this.rest.getAll(this.Global.getapiendpoint() + '/NewTask/GetTasksheetTimeSpan').subscribe((data: any) => {
+      if (data.Success) {
+
+        this.TimeSpanData = data.Data;
+        console.log("TimeSpan Details", data);
+
+
+      }
+    })
+  }
+
+  ShowTimespan(events: any) {
+    console.log("Events....", events);
+
+    this.timespanid = events;
+    console.log("Timespan ID", this.timespanid);
+
+    this.ShowTaskSummary_Month();
+  }
+
+  OnlymeOrTeam(event) {
+    this.p_data = event;
+
+    console.log("Team or Me", this.OnlymeOrTeams)
+  }
+
+  month: any;
+  December: any
+  November: any;
+
+  ShowTaskSummary_Month() {
+
+
+    var model = {
+      userid: this.userid,
+      p_type: this.p_data
+    }
+    console.log("Model", model);
+
+    if (this.p_data == 1 && this.timespanid == 1 || this.OnlymeOrTeams == 2 && this.timespanid == 1) {
+      this.rest.postParams(this.Global.getapiendpoint() + '/NewTask/GetTimesheetSummary_Today', model).subscribe((data: any) => {
+
+        this.Today = data.Data;
+        console.log("Today", this.Today);
+      })
+    }
+
+    if (this.p_data == 1 && this.timespanid == 2 || this.p_data == 2 && this.timespanid == 2) {
+      this.rest.postParams(this.Global.getapiendpoint() + '/NewTask/GetTimesheetSummary_Yesterday', model).subscribe((data: any) => {
+
+        this.Yesterday = data.Data;
+        console.log("Yesterday", this.Yesterday);
+      })
+    }
+
+    if (this.p_data == 1 && this.timespanid == 3 || this.p_data == 2 && this.timespanid == 3) {
+      this.rest.postParams(this.Global.getapiendpoint() + '/NewTask/GetTimesheetSummary_CurrentWeek', model).subscribe((data: any) => {
+
+        this.Current_Week = data.Data;
+        console.log("Current_Week", this.Current_Week);
+      })
+    }
+
+    if (this.p_data == 1 && this.timespanid == 4 || this.p_data == 2 && this.timespanid == 4) {
+      this.rest.postParams(this.Global.getapiendpoint() + '/NewTask/GetTimesheetSummary_LastWeek', model).subscribe((data: any) => {
+
+        this.Last_Week = data.Data;
+        console.log("Last_Week", this.Last_Week);
+      })
+    }
+
+
+    if (this.p_data == 1 && this.timespanid == 5 || this.p_data == 2 && this.timespanid == 5) {
+      this.rest.postParams(this.Global.getapiendpoint() + '/NewTask/GetTimesheetSummary_CurrentMonth', model).subscribe((data: any) => {
+
+        this.Current_Month = data.Data;
+        console.log("Current_Month", this.Current_Month);
+      })
+    }
+
+    if (this.p_data == 1 && this.timespanid == 6 || this.p_data == 2 && this.timespanid == 6) {
+
+      this.rest.postParams(this.Global.getapiendpoint() + '/NewTask/GetTimesheetSummary_LastMonth', model).subscribe((data: any) => {
+
+        this.Last_Month = data.Data;
+        console.log("Last Month", this.Last_Month);
+      })
+    }
+
+    if (this.p_data == 1 && this.timespanid == 7 || this.p_data == 2 && this.timespanid == 7) {
+      this.rest.postParams(this.Global.getapiendpoint() + '/NewTask/GetTimesheetSummary_CurrentYear', model).subscribe((data: any) => {
+
+
+        this.CurrentYear = data.Data;
+        console.log("Current Year ", this.CurrentYear);
+      })
+
+
+    }
+
+    if (this.p_data == 1 && this.timespanid == 8 || this.p_data == 2 && this.timespanid == 8) {
+      this.rest.postParams(this.Global.getapiendpoint() + '/NewTask/GetTimesheetSummary_LastYear', model).subscribe((data: any) => {
+
+
+        this.LastYear = data.Data;
+        console.log("LAst Year ", this.LastYear);
+      })
+
+
+    }
+
+    
+  }
 }

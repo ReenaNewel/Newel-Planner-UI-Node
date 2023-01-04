@@ -45,6 +45,7 @@ export class NewTaskComponent implements OnInit {
   flag: any;
   getAssigneName: any;
   colunqId: any;
+  dateflag: boolean;
 
   constructor(
     private rest: RestService,
@@ -56,8 +57,8 @@ export class NewTaskComponent implements OnInit {
   userLoggedIn: any;
   userid:any
   ProjectForm !: FormGroup
-  displayedColumns: string[] = ['Id','name', 'taskname','tasktype_name', 'assigneename','efforts','startdate',
-  'enddate','attachment','comments','Actions'];
+  // displayedColumns: string[] = ['Id','name', 'taskname','tasktype_name', 'assigneename','efforts','startdate',
+  // 'enddate','attachment','comments','Actions'];
 
 
 SelectedProjectNames: any[];
@@ -117,36 +118,39 @@ SelectedProjectNames: any[];
     this.showSaveBtn = true;
   }
 
-  SubmitNewTask() {
-    this.flag = 0;
-    var model = {
-      projectid: this.selectedProject,
-      taskname: this.selectedTaskName,
-      tasktypeid: this.selectedTaskTypeName,
-      status: this.selectedtaskstatus,
-      created_by: this.userId,
-      efforts: this.selectedEfforts,
-      startdate: moment(this.selectedStartDate).format('YYYY-MM-DD'),
-      enddate: moment(this.selectedEndate).format('YYYY-MM-DD'),
-      // attachment: this.ProjectForm.controls['attachment'].value,
-      comments: this.selectedComment,
-      userid: this.getAssigneName
+  SubmitNewTask(valid:boolean) {
+    console.log('validform',valid)
+    if(valid){
+      this.flag = 0;
+      var model = {
+        projectid: this.selectedProject,
+        taskname: this.selectedTaskName,
+        tasktypeid: this.selectedTaskTypeName,
+        status: this.selectedtaskstatus,
+        created_by: this.userId,
+        efforts: this.selectedEfforts,
+        startdate: moment(this.selectedStartDate).format('YYYY-MM-DD'),
+        enddate: moment(this.selectedEndate).format('YYYY-MM-DD'),
+        // attachment: this.ProjectForm.controls['attachment'].value,
+        comments: this.selectedComment,
+        userid: this.getAssigneName
+      }
+
+      console.log("save task model", model);
+      var apiUrl = '';
+      apiUrl = '/NewTask/CreateNewTask';
+
+        this.rest.postParams(this.Global.getapiendpoint() + apiUrl, model).subscribe((data: any) => {
+          if (data.Success) {
+            this.messageService.add({ severity: 'success', summary: 'Success', detail: 'New Task Created Successfully' });
+            this.Cancel_form()
+          }
+          else {
+            this.messageService.add({ severity: 'warn', summary: 'Warning', detail: 'Record not saved' });
+          }
+        });
     }
-
-    console.log("save task model", model);
-    var apiUrl = '';
-    apiUrl = '/NewTask/CreateNewTask';
-
-    this.rest.postParams(this.Global.getapiendpoint() + apiUrl, model).subscribe((data: any) => {
-      if (data.Success) {
-        this.messageService.add({ severity: 'success', summary: 'Success', detail: 'New Task Created Successfully' });
-        this.Cancel_form()
-      }
-      else {
-        this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Record not saved' });
-      }
-    });
-
+   
   }
 
   Cancel_form() {
@@ -190,68 +194,66 @@ SelectedProjectNames: any[];
 
   }
   getTaskStatusid:any
-  GetTaskStatus(value:any){
+GetTaskStatus(value:any){
 this.getTaskStatusid=value;
 console.log("getTaskStatusid",this.getTaskStatusid);
 
   }
 
-  UpdateTask(){
-
-console.log("taskStatusName",this.taskStatusName);
-
-
-    
-    console.log("stateall",this.getTaskStatusid);
-    console.log("this.selectedtaskstatus",this.editTaskStatus);
-    
-    if (this.editTaskStatus != this.getTaskStatusid) {
-    
-      var modeltask ={
-        taskId:this.EditTaskid,
-        statusId: this.getTaskStatusid ,
-        created_by:this.userId,
-        unqid:  this.colunqId
+UpdateTask(isvalid: boolean){
+    // console.log('form valid',isvalid)
+    // // console.log("taskStatusName",this.taskStatusName);
+    // console.log("stateall",this.getTaskStatusid);
+    // console.log("this.selectedtaskstatus",this.editTaskStatus);
+  if(isvalid){
+        if (this.editTaskStatus != this.getTaskStatusid) {
+        
+          var modeltask ={
+            taskId:this.EditTaskid,
+            statusId: this.getTaskStatusid ,
+            created_by:this.userId,
+            unqid:  this.colunqId
+            }
+        
+          console.log("UpdateTask model",modeltask)
+          this.rest.postParams(this.Global.getapiendpoint() +'/NewTask/UpdateStatusTaskDetails',modeltask).subscribe((data: any) => {
+            console.log('data',data.Data)
+           
+          
+          })
+          this.selectedtaskstatus=this.getTaskStatusid ;
         }
-    
-      console.log("UpdateTask model",modeltask)
-      this.rest.postParams(this.Global.getapiendpoint() +'/NewTask/UpdateStatusTaskDetails',modeltask).subscribe((data: any) => {
-        console.log('data',data.Data)
-        this.selectedtaskstatus=this.getTaskStatusid ;
-      
-       
-      })
-    }
-  
-  
 
-    var model ={
-      id :  this.colId,
-      unqid: this.colunqId,
-      projectid:this.selectedProject,
-      taskname:  this.selectedTaskName,
-      tasktypeid:this.selectedTaskTypeName,
-      created_by:this.userId,
-      efforts: this.selectedEfforts,
-      startdate: this.selectedStartDate,
-      enddate: this.selectedEndate,
-      comments: this.selectedComment,
-      status:this.selectedtaskstatus,
-      userid:this.selectedTaskAssignee,
-     
-    }
-    console.log("After if codition UpdateTask model",model)
-    this.rest.postParams(this.Global.getapiendpoint() +'/NewTask/UpdateTask',model).subscribe((data: any) => {
-      if (data.Success) {
-        this.messageService.add({ severity: 'success', summary: 'Service Message', detail: 'Task details updated successfully' });
-        this.Cancel_form()
-      }
-      else{
-        this.messageService.add({ severity: 'warn', summary: 'Success', detail: 'Record not updated..!!' });
-      }
-  
-     }) 
-    
+        // console.log('this.selectedtaskstatus',this.selectedtaskstatus)
+        var model ={
+          id :  this.colId,
+          unqid: this.colunqId,
+          projectid:this.selectedProject,
+          taskname:  this.selectedTaskName,
+          tasktypeid:this.selectedTaskTypeName,
+          created_by:this.userId,
+          efforts: this.selectedEfforts,
+          startdate: this.selectedStartDate,
+          enddate: this.selectedEndate,
+          comments: this.selectedComment,
+          status:this.selectedtaskstatus,
+          userid:this.selectedTaskAssignee,
+        
+        }
+        console.log("After if codition UpdateTask model",model)
+      
+          this.rest.postParams(this.Global.getapiendpoint() +'/NewTask/UpdateTask',model).subscribe((data: any) => {
+            if (data.Success) {
+              this.messageService.add({ severity: 'success', summary: 'Service Message', detail: 'Task details updated successfully' });
+              this.Cancel_form()
+            }
+            else{
+              this.messageService.add({ severity: 'warn', summary: 'warning', detail: 'Record not updated..!!' });
+            }
+        
+          }) 
+ 
+    }   
   }
 
 
@@ -277,7 +279,19 @@ console.log("taskStatusName",this.taskStatusName);
 
     })
   }
-
+  CheckDate(){
+    this.dateflag = true
+    // console.log('start date ,end date ',this.selectedStartDate,this.selectedEndate)
+        if(this.selectedStartDate || this.selectedEndate){
+          if (this.selectedStartDate > this.selectedEndate){
+            this.dateflag = false
+            this.messageService.add({ severity: 'warn', summary: 'Alert', detail: 'Please Select Correct Date Range' });
+            
+          //  return
+          }
+        }
+         
+      }
 
   getProjectActivity() {
     this.rest.getAll(this.Global.getapiendpoint() + '/General/getProjectStatus/' + 60).subscribe((data: any) => {

@@ -159,7 +159,45 @@ router.route('/getAllProjectData')
     } 
 })
 
+router.route('/getAllTaskDetails')
+.post(function (req, res) {
+    try {
 
+    // const UserMST = datamodel.tbl_master_userdetails();
+    // dataaccess.FindAll(UserMST)
+var querytext = `SELECT "getAllTaskDetailsReport"(:p_reporttype,:p_fromdate,:p_todate,:p_ref); FETCH ALL IN "abc"`;
+//console.log("querytext",querytext);
+var param = {
+replacements: {
+    p_reporttype:req.body.Reporttype,
+    p_fromdate: req.body.fromdate,
+    p_todate:req.body.todate,
+    p_ref: 'abc'
+},
+type: connect.sequelize.QueryTypes.SELECT
+}
+// console.log("Param",param);
+connect.sequelize
+.query(querytext,param)
+.then(function (proresult) {
+    proresult.shift();
+    if (proresult != null) {
+        // console.log("Result",proresult);
+        res.status(200).json({ Success: true, Message: 'Get ProjectReport successfully', Data: proresult });
+    } else {
+        // dataconn.errorlogger('GenaralMasterService', 'getProjectStatus', { message: 'No object found', stack: '' });
+        res.status(200).json({ Success: false, Message: 'Error occurred while Getting record', Data: null });
+    }
+}, function (err) {
+    dataconn.errorlogger('ReportsService', 'GetProjectReportData', err);
+    res.status(200).json({ Success: false, Message: ' API failed.', Data: null });
+});
+}
+catch(err)    {
+dataconn.errorlogger('ReportsService', 'GetProjectTypeData', err);
+res.status(200).json({ Success: false, Message: ' API failed.', Data: null });
+} 
+})
 
 
     return router;

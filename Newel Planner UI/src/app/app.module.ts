@@ -17,7 +17,9 @@ import listPlugin from '@fullcalendar/list';
 import interactionPlugin from '@fullcalendar/interaction';
 import {LeaveRequestModule } from './views/leave-request/leave-request.module';
 import { MappingModule } from './views/mapping/mapping.module';
+// import{DefaultHeaderModule} from './containers/default-layout/default-header/default-header.module';
 import {WeekelyEffortsModule} from './views/weekely-efforts/weekely-efforts.module'
+import { PasswordChangeComponent } from './views/masters/password-change/password-change.component';
 
 
 import {
@@ -85,7 +87,8 @@ FullCalendarModule.registerPlugins([
 ])
 
 @NgModule({
-  declarations: [AppComponent, LoginLayoutComponent, AdminLayoutComponent, ...APP_CONTAINERS],
+    
+    declarations: [AppComponent, LoginLayoutComponent, AdminLayoutComponent,PasswordChangeComponent, ...APP_CONTAINERS],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
@@ -125,7 +128,10 @@ FullCalendarModule.registerPlugins([
     LeaveRequestModule,
     MappingModule,
     WeekelyEffortsModule,
-    ReportsModule
+    ReportsModule,
+    
+    
+    // DefaultHeaderModule
 
 
   ],

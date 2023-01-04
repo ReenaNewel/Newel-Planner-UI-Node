@@ -8,10 +8,12 @@ import { RestService } from 'src/app/services/rest.service';
 import { CommonModule } from '@angular/common';
 // import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
+import { Message, MessageService, PrimeNGConfig } from 'primeng/api';
 @Component({
   selector: 'app-general-master',
   templateUrl: './general-master.component.html',
   styleUrls: ['./general-master.component.css'],
+  providers: [MessageService]
 })
 export class GeneralMasterComponent implements OnInit {
   GeneralMasterForm!: FormGroup;
@@ -40,6 +42,17 @@ export class GeneralMasterComponent implements OnInit {
   wareid = [];
   id=[];
 grpId =[];
+
+///komal
+generalDialog : boolean;
+showSaveBtn : boolean;
+showReadOnly : boolean;
+SelectedProjectNames: any[];
+loginid: any
+userLoggedIn: any
+userid: any
+isdisabled:any
+
 selectedItemGroupName: any;
   // result = result;
   generalUpdate ={
@@ -49,81 +62,36 @@ selectedItemGroupName: any;
     // SeqOrder: "",
     // ParantId: "",
   };
+  ParantId: any;
+  editflag: boolean;
 
 
   constructor(
     // private _snackBar: MatSnackBar,
+    private fb: FormBuilder,
     private formBuilder: FormBuilder, 
-    private rest :RestService,private global:Global ,private router : Router) {}
+    private rest :RestService,private global:Global ,
+    private router : Router,
+    private messageService: MessageService) {}
 
   ngOnInit(): void {
     
-    this.GeneralmasterForm = this.formBuilder.group({
-      GrpName: ['', Validators.required],
-      Name:['', Validators.required],
-      typeId:[''],
-      id:[''],
-      SeqOrder: [''],
-      ParantId: [''],
-    });
-    // this.isViewList = true;
-    this.getTableDetails();
-    this.getGrpNameDetails();
-    this.isCreate =true;
-    this.isViewable = false
+    
+    this.userLoggedIn = JSON.parse(localStorage.getItem('userLoggedIn')!);
+    this.userid = this.userLoggedIn.id;
+   
+    this.showformdetails()
+    this.ShowDetails()
+    this.getGrpNameDetails()
+   
+    
   }
 
-  get GrpName() { return this.GeneralmasterForm.get('GrpName'); }
-  get Name() { return this.GeneralmasterForm.get('Name'); }
-  get typeId() { return this.GeneralmasterForm.get('typeId'); }
-  get SeqOrder() { return this.GeneralmasterForm.get('SeqOrder'); }
-  get ParantId() { return this.GeneralmasterForm.get('ParantId'); }
-
-  openSnackBarSuccess(message: any) {
-    // this._snackBar.open(message, 'Close', {
-    //   duration: 3000,
-    //   verticalPosition: 'bottom',
-    //   horizontalPosition: 'right',
-    //   panelClass: ["success"]
-    // });
-
-  }
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
-    }
-  }
-/************GET TABLE DETAILS************/
-  getTableDetails() {   
-    this.rest.getAll(this.global.getapiendpoint() + "/general").subscribe((data: any) => {
-    console.log("GeneralTable Details",data.Data );
-      if (data.Success) {      
-      // console.log("GeneralTable Details",data);
-        // this.dataSource = new MatTableDataSource(data.Data);
-        // this.dataSource.paginator = this.paginator;
-        // this.dataSource.sort = this.sort;
-      }
-
-    });
-
-  }
-
-  submit(){
-
-  }
  
-  OnBack(){
-    this.GeneralmasterForm.reset();
-  }
 
-  OnBackToCreate(){
-    this.isCreate=true;
-    this.isViewable=false;
-    this.GeneralmasterForm.reset();
-  }
-
+  // get GrpName() { return this.GeneralmasterForm.get('GrpName'); }
+  // get Name() { return this.GeneralmasterForm.get('Name'); }
+  // get typeId() { return this.GeneralmasterForm.get('typeId'); }
 
 getGroupId=[];
 getGrpNameDetails(){
@@ -151,71 +119,151 @@ GetwarehouseDetails(event: any) {
   });
 
 }
+grpnameDetails:any;
+idflag:any;
+grpprentId:any;
 getParentId(event:any)
 {
-  console.log("event calling",event);
-  this.rest.getAll(this.global.getapiendpoint() + "/GeneralTableGetGroupName/"+  event.groupname  ).subscribe((data: any) => { 
+  console.log("event group name",event);
+  
+  console.log("event calling",event.value);
+  this.grpnameDetails = event.value;
+  this.rest.getAll(this.global.getapiendpoint() + "/GeneralTableGetGroupName/"+event.value ).subscribe((data: any) => { 
+    console.log("data.Data.rows[0]",data.Data.rows[0]);    
     this.grpId =data.Data.rows[0].parentid ;
-    // console.log("grpId",this.grpId ==0?null);
-    // let getprentid = this.grpId ==0?null: this.grpId;
-    // console.log("getprentid", getprentid);
+    
     });
 }
 
-onSave(){
-  let model = {
-    groupname: this.GeneralmasterForm.controls['GrpName'].value.groupname,
-    name: this.Name?.value,
-    typeid: this.typeId?.value,
-    SeqOrder:this.GeneralmasterForm.controls['SeqOrder'].value,
-    parentid : this.grpId,
-    isactive:'true'
-  }
 
-  this.rest.postParams(this.global.getapiendpoint()+ "/CreategeneralMaster", model).subscribe((data: any) => {
-      console.log("data",data);
-      this.getTableDetails();
-      this.openSnackBarSuccess('Record Created successfully ')  
-      this.isCreate=true;
-  })
-}
 
-onEditById(id:any): void {
-  console.log(id);
-  
-  this.isViewable = true;
-  this.isCreate = false;
 
-  this.rest.getAll(this.global.getapiendpoint() + '/GeneralTableGetId/' + id).subscribe((data: any) => {
-   //console.log("getdataFromId",data.Data.rows);
-    this.Edit_Group_Name =data.Data.rows[0].groupname;
-    this.Edit_Name =data.Data.rows[0].name;
-    this.Edit_Parent_id=data.Data.rows[0].parentid;
-    this.Edit_Type_id = data.Data.rows[0].typeid;
-})
-}
 
-onUpdate(){
+UpdateGeneralMstDetails(){
   // console.log(this.GeneralmasterForm,"this.GeneralmasterForm");
   
   let model = {
     // groupname: this.GeneralmasterForm.controls['GrpName'].value,    
-    name: this.GeneralmasterForm.controls['Name'].value,
+    name:  this.GeneralMasterForm.controls['Name'].value,
     typeid: this.Edit_Type_id,      
     // id:this.GeneralmasterForm.controls['id'].value,    
-    parentid : this.Edit_Parent_id,
+    parentid :this.Edit_parentID,
   }
+    console.log("model",model);
 
   this.rest.postParams(this.global.getapiendpoint() + '/Updategeneraltable',model).subscribe((data: any) => {
-    // console.log("data",data);
-    this.isCreate = true;
-    this.isViewable=false;
-    this.GeneralmasterForm.reset();
-    this.openSnackBarSuccess('Record Updated Successfully');
-    this.getTableDetails();
+    if (data.Success) {
+      this.messageService.add({severity: 'success',summary: 'Success',detail: 'Add New Resource Successfully',
+      });
+      this.Cancel_form();
+      // this.idflag = 0
+      this.GeneralMasterForm.reset();
+    } else {
+      this.messageService.add({severity:'warn',summary: 'warn',detail: 'Record not saved',
+      });
+    }
+   
   });
 }
 Cancel(){
   this.router.navigate(['Planner/PlannerDashboard'])
  }
+
+ showCreateNewProjectDialog() {
+  this.GeneralMasterForm.reset()
+  this.isdisabled = false
+  this.generalDialog = true;
+  this.showSaveBtn = true;
+}
+Edit_name:any;
+Edit_parentID:any;
+
+editGeneral(row:any){
+// console.log("row", row);
+this.isdisabled = true
+this.generalDialog = true;
+this.showSaveBtn = false;
+
+this.Edit_Group_Name=row.groupname;
+this.Edit_name =row.name;
+this.Edit_parentID =row.parentid;
+this.Edit_Type_id =row.typeid;
+this.GeneralMasterForm = this.fb.group({
+  GrpName: [this.Edit_Group_Name],
+  Name:[this.Edit_name],
+  ParantId: [this.Edit_parentID],
+ 
+})
+}
+showformdetails() {
+  // this.ProjectForm.reset()
+  this.GeneralMasterForm = this.fb.group({
+     GrpName: ['', Validators.required],
+     Name:['', Validators.required],
+     typeId:[''],
+     id:[''],
+     SeqOrder: [''],
+     ParantId: [''],
+     PrjActive:[''],
+     PrjInActive:['']
+   
+
+  })
+}
+Cancel_form(){
+  this.ShowDetails();
+  this.generalDialog= false;
+
+}
+submit(){
+
+}
+ShowDetails() {
+  // console.log(this.Global.getapiendpoint() + '/api/Project/GetAllProjects')
+  this.rest.getAll(this.global.getapiendpoint() + "/general").subscribe((data: any) => {
+    console.log("GeneralTable Details",data.Data );
+    if (data.Success) {
+      this.SelectedProjectNames = data.Data
+    }
+    // console.log('project data', this.SelectedProjectNames)
+  })
+}
+
+SaveGeneralMstDetails(){
+
+   console.log("this.GeneralMasterForm",this.GeneralMasterForm);
+  
+
+  let model = {
+    groupname:  this.grpnameDetails,
+    name: this.GeneralMasterForm.controls['Name'].value,
+    // typeid: this.GeneralMasterForm.controls['typeId'].value,
+    // SeqOrder:this.GeneralMasterForm.controls['SeqOrder'].value,
+    parentid : this.grpId,
+    isactive:true,
+    // flag:this.idflag
+  } 
+
+  console.log("model",model);
+  
+
+  this.rest.postParams(this.global.getapiendpoint() + '/General/CreateGeneralMst',model).subscribe((data: any) => {
+    // console.log("data",data);
+   
+    if (data.Success) {
+      this.messageService.add({severity: 'success',summary: 'Success',detail: 'Add New Resource Successfully',
+      });
+      this.Cancel_form();
+      // this.idflag = 0
+      this.GeneralMasterForm.reset();
+    } else {
+      this.messageService.add({severity: 'warn',summary: 'warning',detail: 'Record not saved',
+      });
+    }
+  
+  });
+
+}
+
+
 }

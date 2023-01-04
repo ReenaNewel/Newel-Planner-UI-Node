@@ -85,6 +85,9 @@ app.use("/WeekelyEfforts", WeekelyEffortsService);
 var Reports = require('./Service/Reports/reportsService')();
 app.use("/Reports", Reports);
 
+var changePassword = require('./Service/ChangePassword/changepassword')();
+app.use("/changePassword", changePassword);
+
 
 
 // ******************************************************************************************************************
@@ -626,7 +629,7 @@ app.delete('/leavedetails/:id', (req, res)=> {
 
 app.get('/general', (req, res)=>{
     try{
-        client.query(`Select * from tbl_general_master ORDER BY id`, (err, result)=>{
+        client.query(`Select * from tbl_general_master where parentid <> 0 ORDER BY id`, (err, result)=>{
             if(!err){
                 // res.send(result.rows);
                 res.status(200).json({ Success: true, Message: 'tbl_general_master Table Details', Data: result.rows });
@@ -948,7 +951,7 @@ app.get('/allholiday', (req, res)=>{
     try{
         var flag = req.body.flag
         
-        client.query(`select typeid,name from tbl_general_master where typeid not in(select holiday_id from tbl_master_holiday)
+        client.query(`select typeid,name from tbl_general_master where typeid not in(select holiday_id from tbl_master_holiday where isactive=true)
         and parentid=16`, (err, results)=>{
             if(!err){
                 if (results != null )  {

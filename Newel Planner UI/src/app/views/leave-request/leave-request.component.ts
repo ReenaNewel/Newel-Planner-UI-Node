@@ -50,6 +50,8 @@ export class LeaveRequestComponent implements OnInit {
   updateid: any;
   leavestatus: any;
   today: Date;
+  leavetype: any;
+  chkbalanceflag: boolean;
 
   constructor(private fb: FormBuilder, private router: Router,
     private rest: RestService, private Global: Global,
@@ -191,7 +193,7 @@ export class LeaveRequestComponent implements OnInit {
           this.LeaveDetails();
         }
         else {
-          this.messageService.add({ severity: 'warn', summary: 'Success', detail: 'Leave Request not created' });
+          this.messageService.add({ severity: 'warn', summary: 'Info', detail: 'Leave Request not created' });
         }
 
       });
@@ -223,8 +225,39 @@ export class LeaveRequestComponent implements OnInit {
   date1: any;
   datecount: any;
 
-  leavecount() {
+  // Reena
+  checkLeaveCount(leavecount:any){
+    // this.chkbalanceflag =true
+    // console.log('leavecount',leavecount.value)
+    this.leavetype = leavecount.value
+    // console.log('leavecount',this.balanceleavedata.length)
 
+    for(let i=0 ;i < this.balanceleavedata.length ;i++){
+      // console.log('typeid',this.balanceleavedata[i].typeid)
+      if(this.leavetype == this.balanceleavedata[i].typeid){
+        if(this.ProjectForm.controls['LeaveNO'].value > this.balanceleavedata[i].b){
+          this.messageService.add({ severity: 'warn', summary: 'Info', detail: 'Your leave has been reached to its limits..' });
+          this.chkbalanceflag =false
+          this.ProjectForm.controls['LeaveNO'].setValue('')
+          this.ProjectForm.controls['LeaveDropdwon'].setValue('')
+          this.ProjectForm.controls['enddate'].setValue('')
+          
+          
+
+        }
+        else{
+          this.chkbalanceflag =true
+        }
+          }
+    }
+
+  }
+  // Reena
+
+
+
+  leavecount() {
+    // this.chkbalanceflag =true
     this.date1 = new Date(this.ProjectForm.value.startdate);
 
     this.date2 = new Date(this.ProjectForm.value.enddate);
@@ -232,7 +265,11 @@ export class LeaveRequestComponent implements OnInit {
     var iWeeks, iDateDiff, iAdjust = 0;
     // if (this.date2 < this.date1 ) return -1; // error code if dates transposed
     if (this.date2 < this.date1) {
-      this.messageService.add({ severity: 'warn', summary: 'Success', detail: 'Please Select Valid Date' });
+      this.messageService.add({ severity: 'warn', summary: 'Info', detail: 'Please Select Valid Date' });
+      this.chkbalanceflag =false
+    }
+    else{
+      this.chkbalanceflag = true
     }
     var iWeekday1 = this.date1.getDay(); // day of week
     var iWeekday2 = this.date2.getDay();
@@ -311,7 +348,7 @@ export class LeaveRequestComponent implements OnInit {
         this.LeaveDetails();
       }
       else {
-        this.messageService.add({ severity: 'warn', summary: 'Success', detail: 'Record not updated..!!' });
+        this.messageService.add({ severity: 'warn', summary: 'Info', detail: 'Record not updated..!!' });
       }
     })
   }
@@ -344,12 +381,12 @@ export class LeaveRequestComponent implements OnInit {
         this.LeaveDetails();
       }
       else {
-        this.messageService.add({ severity: 'warn', summary: 'Success', detail: 'Record not updated..!!' });
+        this.messageService.add({ severity: 'warn', summary: 'Info', detail: 'Record not updated..!!' });
       }
     })
   }
 
-
+  
   ApprovalLeaveData: any;
    LeaveDetailsForApproval() {
 
@@ -412,7 +449,7 @@ export class LeaveRequestComponent implements OnInit {
         this.LeaveDetails();
       }
       else {
-        this.messageService.add({ severity: 'warn', summary: 'Success', detail: 'Record not updated..!!' });
+        this.messageService.add({ severity: 'warn', summary: 'Info', detail: 'Record not updated..!!' });
       }
     })
   }
@@ -445,7 +482,7 @@ export class LeaveRequestComponent implements OnInit {
         this.LeaveDetailsForApproval()
       }
       else {
-        this.messageService.add({ severity: 'warn', summary: 'Success', detail: 'Record not updated..!!' });
+        this.messageService.add({ severity: 'warn', summary: 'Info', detail: 'Record not updated..!!' });
       }
     })
   }

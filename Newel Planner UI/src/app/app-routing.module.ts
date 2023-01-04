@@ -6,13 +6,15 @@ import { Page404Component } from './views/pages/page404/page404.component';
 import { Page500Component } from './views/pages/page500/page500.component';
 import { LoginComponent } from './views/pages/login/login.component';
 import { RegisterComponent } from './views/pages/register/register.component';
+// import {ChangePasswordComponent} from './views/Masters/password-change/password-change.component'
+import { PasswordChangeComponent } from './views/masters/password-change/password-change.component';
 
 const routes: Routes = [
 
   {
     path: '',
     redirectTo:'login',
-    // redirectTo: 'timesheet',
+    // redirectTo: 'dashboard',
     pathMatch: 'full'
   },
   {
@@ -125,6 +127,7 @@ const routes: Routes = [
         import('./views/Reports/Reports.module').then((m) => m.ReportsModule)
 
       },
+
     ]
   },
   {
@@ -146,6 +149,14 @@ const routes: Routes = [
     component: LoginComponent,
     data: {
       title: 'Login Page'
+    }
+  },
+  {
+
+    path: 'changePassword',
+    component: PasswordChangeComponent,
+    data: {
+      title: 'change Password Page'
     }
   },
   {

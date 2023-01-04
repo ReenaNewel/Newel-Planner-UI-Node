@@ -10,7 +10,9 @@
         <c-col sm="12" md="12" lg="12" xl="auto" xxl="auto" class="border-1 ps-0 onlyCalendarIcon">
 
           <p-calendar [(ngModel)]="taskDate" name="taskdate" [showIcon]="true" appendTo="body"
-            [inputStyle]="{'width':'0px', 'border':'0', 'padding':'0'}" class="">
+            [inputStyle]="{'width':'0px', 'border':'0', 'padding':'0'}" class=""
+            [maxDate]="maximumDate" tabindex="0" >
+            <!-- for disabled post dates -->
           </p-calendar> {{taskDate | date:'shortDate'}}
 
         </c-col>
@@ -170,7 +172,9 @@
       </c-col>
 
       <c-col sm="12" md="4" lg="4" class="mb-3">
-        <input  pTooltip="Efforts in Hrs" tooltipPosition="top" type="number" class="w-full" placeholder="Efforts In Hrs*" pInputText name="efforts"
+        <input  pTooltip="Efforts in Hrs" tooltipPosition="top" type="number"  min="1" class="w-full"
+         placeholder="Efforts In Hrs*" 
+        pInputText name="efforts" required
           [(ngModel)]="selectedEfforts" />
         <!-- <p-inputNumber inputId="minmax" [min]="0" [max]="500" 
         inputId="integeronly" placeholder="Efforts In Hrs*"
@@ -180,12 +184,13 @@
 
       <c-col sm="12" md="4" lg="4" class="mb-3">
         <p-calendar  pTooltip="Start Date" tooltipPosition="top" [style]="{'minWidth':'100%'}" [showIcon]="true" appendTo="body" placeholder="Start Date"
-          inputId="icon" required name="startdate" [(ngModel)]="selectedStartDate"></p-calendar>
+          inputId="icon" required="dateflag=true" name="startdate" [(ngModel)]="selectedStartDate" ></p-calendar>
       </c-col>
 
       <c-col sm="12" md="4" lg="4" class="mb-3">
-        <p-calendar  pTooltip="End Date" tooltipPosition="top" [style]="{'minWidth':'100%'}" [showIcon]="true" appendTo="body" placeholder="End Date"
-          inputId="icon" required name="enddate" [(ngModel)]="selectedEndate"></p-calendar>
+        <p-calendar  pTooltip="End Date" tooltipPosition="top" [style]="{'minWidth':'100%'}" [showIcon]="true"
+          appendTo="body" placeholder="End Date"
+          inputId="icon" required="dateflag=true" name="enddate" [(ngModel)]="selectedEndate" (onSelect)="CheckDate()"></p-calendar>
       </c-col>
 
       <c-col sm="12" md="8" lg="8" class="mb-3">
@@ -220,7 +225,8 @@
 
     </c-row>
     <!-- (click)="SubmitNewTask()" -->
-    <p-button type="submit" [disabled]="ProjectForm.invalid" label="Save"
+    <!-- {{!dateflag}} -->
+    <p-button type="submit" [disabled]="ProjectForm.invalid || dateflag==false" label="Save"
       styleClass="p-button-warning px-3 py-2"></p-button>
     <!-- (click)="timesheetform.resetForm()" -->
     <p-button (click)="createTaskDialog=false" (click)="createTaskClose()" (click)="ProjectForm.resetForm()"

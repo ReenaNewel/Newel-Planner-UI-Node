@@ -33,7 +33,7 @@
                 <p-dropdown   pTooltip="Project Name" tooltipPosition="top" [options]="ProjectNames"  [style]="{'minWidth':'100%'}" optionValue="projectid"
                  [(ngModel)]="selectedProject" value="projectid" optionLabel="projectname"
                 [filter]="true" required name="projectname" (onChange)="getUserByProjectId(selectedProject)"
-                filterBy="projectname" [showClear]="true" placeholder="Project Name" class="borderNone">
+                filterBy="projectname" [showClear]="true" placeholder="Project Name" class="borderNone" appendTo="body">
               </p-dropdown>
             </c-col>
 
@@ -45,13 +45,13 @@
             <c-col sm="12" md="4" lg="4" class="mb-3">
                 <p-dropdown  pTooltip="Task Type" tooltipPosition="top" [options]="tasktypes" [style]="{'minWidth':'100%'}" optionLabel="name" [filter]="true"
                     filterBy="name" [showClear]="true" value="typeid" placeholder="Task Type*" class="" required
-                    name="tasktype_name" [(ngModel)]="selectedTaskTypeName" optionValue="typeid">
+                    name="tasktype_name" [(ngModel)]="selectedTaskTypeName" optionValue="typeid" appendTo="body">
                 </p-dropdown>
             </c-col>
 
             <c-col sm="12" md="4" lg="4" class="mb-3">
                 <p-dropdown  pTooltip="Task Status" tooltipPosition="top" [options]="tasks" [style]="{'minWidth':'100%'}" optionLabel="name" [filter]="true"
-                    filterBy="name" name="taskstatus" [showClear]="true" value="typeid" placeholder="Task Status*"
+                    filterBy="name" name="taskstatus" [showClear]="true" value="typeid" placeholder="Task Status*" appendTo="body"
                     class="" required [(ngModel)]="selectedtaskstatus"  (onChange)="GetTaskStatus($event.value)" optionValue="typeid">
                 </p-dropdown>
             </c-col>
@@ -64,7 +64,7 @@
                     <p-dropdown  pTooltip="Assignee Name" tooltipPosition="top" [options]="UserData" [style]="{'minWidth':'100%'}" optionLabel="name" [filter]="true"
                     filterBy="name" [showClear]="true" 
                     placeholder="Assignee Name*" class=""
-                    required [(ngModel)]="selectedTaskAssignee" optionValue="userid" name="assignee_name">
+                    required [(ngModel)]="selectedTaskAssignee" optionValue="userid" name="assignee_name" appendTo="body">
                     </p-dropdown>
                 </div>
                 <div *ngIf="flag==0">
@@ -72,26 +72,26 @@
                     [filter]="true" filterBy="name" optionValue="userid"
                     [showClear]="true"  value="userid" (onChange)="GetAssigneeName($event.value)" 
                     placeholder="Assignee Name*" class="" required
-                    [(ngModel)]="selectedTaskAssignee" name="assignee_name">
+                    [(ngModel)]="selectedTaskAssignee" name="assignee_name" appendTo="body">
                     </p-multiSelect>
                 </div>
             </c-col>
 
             <c-col sm="12" md="4" lg="4" class="mb-3">
                 <input  pTooltip="Efforts in Hrs" tooltipPosition="top" type="number" class="w-full"
-                 placeholder="Efforts In Hrs*" pInputText name="efforts"
-                    [(ngModel)]="selectedEfforts" />
+                 placeholder="Efforts In Hrs*" pInputText name="efforts" min="1"
+                    [(ngModel)]="selectedEfforts" required />
                    
             </c-col>
 
             <c-col sm="12" md="4" lg="4" class="mb-3">
                 <p-calendar  pTooltip="Start Date" tooltipPosition="top" [style]="{'minWidth':'100%'}" [showIcon]="true" appendTo="body" placeholder="Start Date"
-                    inputId="icon" required name="startdate" [(ngModel)]="selectedStartDate"></p-calendar>
+                    inputId="icon" required="dateflag=true" name="startdate" [(ngModel)]="selectedStartDate"></p-calendar>
             </c-col>
 
             <c-col sm="12" md="4" lg="4" class="mb-3">
                 <p-calendar  pTooltip="End Date" tooltipPosition="top" [style]="{'minWidth':'100%'}" [showIcon]="true" appendTo="body" placeholder="End Date"
-                    inputId="icon" required name="enddate" [(ngModel)]="selectedEndate"></p-calendar>
+                    inputId="icon" required="dateflag=true" name="enddate" [(ngModel)]="selectedEndate"(onSelect)="CheckDate()"></p-calendar>
             </c-col>
 
             <c-col sm="12" md="8" lg="8" class="mb-3">
@@ -99,9 +99,9 @@
                     [(ngModel)]="selectedComment"  form/>
             </c-col>         
         </c-row>
-            <p-button *ngIf="showSaveBtn" type="submit" [disabled]="!ProjectForm.valid" (click)="SubmitNewTask()"
+            <p-button *ngIf="showSaveBtn" type="submit" [disabled]="!ProjectForm.valid || dateflag==false" (click)="SubmitNewTask(ProjectForm.valid)"
             label="Save" styleClass="p-button-warning px-3 py-2"></p-button>
-            <p-button *ngIf="!showSaveBtn" type="submit" [disabled]="!ProjectForm.valid" (click)="UpdateTask()"
+            <p-button *ngIf="!showSaveBtn" type="submit" [disabled]="!ProjectForm.valid || dateflag==false" (click)="UpdateTask(ProjectForm.valid)"
             label="Update" styleClass="p-button-warning px-3 py-2"></p-button>
             <p-button (click)="NewTaskDialog=false" label="Back" styleClass="p-button-text pb-2"></p-button>
 
@@ -114,7 +114,7 @@
 
         <div class="card">
             <p-table #dt [value]="SelectedProjectNames" [rows]="10" [paginator]="true"
-                [globalFilterFields]="['Id','name', 'taskname','tasktype_name', 'assigneename','efforts','startdate',
+                [globalFilterFields]="['Id','name', 'taskname','tasktype_name', 'assignee_name','efforts','startdate',
                 'enddate','attachment','comments','Actions']"
                 dataKey="id" editMode="row" [tableStyle]="{'min-width': '50rem'}" [rowHover]="true"
                 currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
@@ -166,19 +166,19 @@
                 <ng-template pTemplate="body" let-SelectedProject let-editing="editing" let-ri="rowIndex">
                     <tr [pEditableRow]="SelectedProject">
                         <td [hidden]="true">
-                            {{SelectedProject.id  }}
+                            {{SelectedProject.id}}
                         </td>
                         <td>
                             {{SelectedProject.name}}
                         </td>
                         <td>
-                            {{SelectedProject.taskname }}
+                            {{SelectedProject.taskname}}
                         </td>
                         <td>
-                            {{SelectedProject.tasktype_name    }}
+                            {{SelectedProject.tasktype_name}}
                         </td>
                         <td>
-                            {{SelectedProject.assignee_name }}
+                            {{SelectedProject.assignee_name}}
                         </td>
                         <td>
                             {{SelectedProject.efforts | number}}  Hrs
@@ -191,7 +191,7 @@
 
                         </td>
                         <td>
-                            {{SelectedProject.comments }}
+                            {{SelectedProject.comments}}
                         </td>
                       
                         <td>

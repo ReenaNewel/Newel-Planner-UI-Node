@@ -86,7 +86,7 @@
                 <c-col sm="12" md="4" lg="6" class="mb-3">
                     <label>Employee Name</label>
                     <input type="text" class="w-full" placeholder="Employee Name*" pInputText formControlName="EmpName"
-                        [value]="id" />
+                        [value]="id" readonly/>
                 </c-col>
 
                 <c-col sm="12" md="4" lg="6" class="mb-3">
@@ -94,7 +94,7 @@
                     <p-dropdown [options]="RAData" [style]="{'minWidth':'100%'}" optionValue="id" optionLabel="name"
                         [filter]="true" filterBy="name" [showClear]="true" value="id"
                         (onChange)="getRAEmailId($event.value)" placeholder="Select RA Name*" required
-                        formControlName="RAName">
+                        appendTo="body" formControlName="RAName">
                     </p-dropdown>
                 </c-col>
 

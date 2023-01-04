@@ -38,6 +38,8 @@ export class ReportsComponent implements OnInit {
     ProjectData: boolean = false;
     today: Date;
     todate: Date;
+    reportname: string;
+    dateflag: boolean;
 
 
 
@@ -85,17 +87,28 @@ export class ReportsComponent implements OnInit {
     getAllReportType() {
         this.rest.getAll(this.Global.getapiendpoint() + '/Reports/GetAllReportsType').subscribe((data: any) => {
             this.ReportTypeMasterDetails = data.Data;
-            console.log('ReportType', this.ReportTypeMasterDetails)
+            // console.log('ReportType', this.ReportTypeMasterDetails)
         })
     }
 
 
     ShowReportsDetails(event: any) {
         this.ReportValue = event;
-        console.log("Reports", this.ReportValue);
+        // console.log("Reports", this.ReportValue);
 
 
     }
+    CheckDate(){
+        this.dateflag = true
+      
+              if (this.ReportForm.controls['fromdate'].value > this.ReportForm.controls['todate'].value){
+                this.dateflag = false
+                this.messageService.add({ severity: 'warn', summary: 'Alert', detail: 'Please Select Correct Date Range' });
+                
+            }
+             
+          }
+    
     ExporttoExcelReport() {
         if (this.ReportTypeTimeSheetDetails != null) {
             import("xlsx").then(xlsx => {
@@ -105,7 +118,7 @@ export class ReportsComponent implements OnInit {
                     bookType: "xlsx",
                     type: "array"
                 });
-                this.saveAsExcelFile(excelBuffer, "ReportDetails");
+                this.saveAsExcelFile(excelBuffer, this.reportname);
             });
         }
         else {
@@ -187,11 +200,59 @@ export class ReportsComponent implements OnInit {
             ]
             this.getAllProjectDetails();
         }
+        else if (this.ReportValue == 4) {
+
+            this.cols = [
+
+                { field: 'username', header: 'Employee Name' },
+                { field: 'projectname', header: 'Project Name' },
+                { field: 'taskname', header: 'Task Name' },
+                { field: 'tasktype', header: 'Task Type' },
+                { field: 'taskstatus', header: 'Task Status' },
+                { field: 'startdate', header: 'Start Date' },
+                { field: 'enddate', header: 'End Date' },
+                { field: 'efforts', header: 'Efforts'}
+
+
+            ]
+
+            this.getAlltaskDetails();
+
+
+
+        }
         else {
 
         }
     }
+
+    getAlltaskDetails() {
+
+        this.reportname = "Task Details Report";
+
+        var model = {
+
+            Reporttype: this.ReportValue,
+
+            fromdate: moment(this.ReportForm.value.fromdate).format('YYYY-MM-DD'),
+
+            todate: moment(this.ReportForm.value.todate).format('YYYY-MM-DD')
+
+        }
+
+
+
+        this.rest.postParams(this.Global.getapiendpoint() + '/Reports/getAllTaskDetails', model).subscribe((data: any) => {
+
+            this.ReportTypeTimeSheetDetails = data.Data;
+
+            // console.log('ReportTaskDetailsType', this.ReportTypeTimeSheetDetails)
+
+        })
+
+    }
     getTimesheetreportdata() {
+        this.reportname = "TImesheet Details Report";
         var model = {
             Reporttype: this.ReportValue,
             fromdate: moment(this.ReportForm.value.fromdate).format('YYYY-MM-DD'),
@@ -200,10 +261,11 @@ export class ReportsComponent implements OnInit {
 
         this.rest.postParams(this.Global.getapiendpoint() + '/Reports/GetTimesheetReportTypeData', model).subscribe((data: any) => {
             this.ReportTypeTimeSheetDetails = data.Data;
-            console.log('ReportTimesheetType', this.ReportTypeTimeSheetDetails)
+            // console.log('ReportTimesheetType', this.ReportTypeTimeSheetDetails)
         })
     }
     getAllProjectDetails() {
+        this.reportname = "Project Details Report";
         var model = {
             Reporttype: this.ReportValue,
             fromdate: moment(this.ReportForm.value.fromdate).format('YYYY-MM-DD'),
@@ -212,11 +274,12 @@ export class ReportsComponent implements OnInit {
 
         this.rest.postParams(this.Global.getapiendpoint() + '/Reports/getAllProjectData', model).subscribe((data: any) => {
             this.ReportTypeTimeSheetDetails = data.Data;
-            console.log('ReportprojectdetilasType', this.ReportTypeTimeSheetDetails)
+            // console.log('ReportprojectdetilasType', this.ReportTypeTimeSheetDetails)
         })
     }
 
     getAllLeavedetails() {
+        this.reportname = "Leave Details Report";
         var model = {
             Reporttype: this.ReportValue,
             fromdate: moment(this.ReportForm.value.fromdate).format('YYYY-MM-DD'),

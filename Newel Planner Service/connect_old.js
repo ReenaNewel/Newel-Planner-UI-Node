@@ -7,6 +7,6 @@ const client = new Client({
     password: "India@123",
     database: "Planner_Prod"
 })
-// planner_prod
+// Planner_Prod
 
 module.exports = client

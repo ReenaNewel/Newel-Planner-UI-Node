@@ -264,7 +264,7 @@
 
 
 
- <!-- Bhushan Start Timesheet Summery -->
+ <!-- Bhushan Start task Summery -->
 
         <p-tabPanel header="Task Summary">
             <div class="flex justify-content-center flex-wrap">
@@ -288,7 +288,7 @@
 
       <div class="card">
           <p-table #dt [value]="OverdueTaskData" [rows]="5" [paginator]="true"
-              [globalFilterFields]="['concat','projectname','enddate','overdue']"
+              [globalFilterFields]="['concat','projectname','startdate','enddate','overdue']"
               dataKey="id" editMode="row" [tableStyle]="{'min-width': '50rem'}" [rowHover]="true"
               currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
               [showCurrentPageReport]="true">
@@ -297,6 +297,8 @@
                       <th style="width:2rem !important">Resource Name
                       </th>
                       <th>Project Name
+                      </th>
+                      <th>StartDate
                       </th>
                       <th>EndDate
                       </th>
@@ -314,10 +316,13 @@
                           {{SelectedOverdueData.projectname}}
                       </td>
                       <td>
+                        {{SelectedOverdueData.startdate | date:'dd/MM/yyyy'}}
+                    </td>
+                      <td>
                           {{SelectedOverdueData.enddate | date:'dd/MM/yyyy'}}
                       </td>
                       <td>
-                          {{SelectedOverdueData.overdue | date:'dd/MM/yyyy'}}
+                          {{SelectedOverdueData.overdue}}
                       </td>
                       
                   </tr>
@@ -337,7 +342,7 @@
 
       <div class="card">
           <p-table #dt [value]="UpcomingdeadlinesData" [rows]="5" [paginator]="true"
-              [globalFilterFields]="['concat','projectname','taskname','enddate','efforts']"
+              [globalFilterFields]="['concat','projectname','taskname','startdate','enddate','efforts']"
               dataKey="id" editMode="row" [tableStyle]="{'min-width': '50rem'}" [rowHover]="true"
               currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
               [showCurrentPageReport]="true">
@@ -348,6 +353,8 @@
                       <th>Project Name
                       </th>
                       <th>Task Name
+                      </th>
+                      <th>StartDate
                       </th>
                       <th>Deadline
                       </th>
@@ -367,6 +374,9 @@
                       <td>
                           {{UpcommingdeadlinesData.taskname}}
                       </td>
+                      <td>
+                        {{UpcommingdeadlinesData.startdate  | date:'dd/MM/yyyy'}}
+                    </td>
                       <td>
                           {{UpcommingdeadlinesData.enddate  | date:'dd/MM/yyyy'}}
                       </td>
@@ -452,7 +462,305 @@
 
 
         </p-tabPanel>
-        <!-- Bhushan End Timesheet Summery Tab -->
+        <!-- Bhushan End task Summery Tab -->
+        <p-tabPanel header="Timesheet Summary">
+
+          <!-- <div class="flex justify-content-center flex-wrap">
+            <form [formGroup]="SummaryForm" (submit)="submit()">
+              <p-dropdown class="dropdown" [options]="member" optionLabel="name" optionValue="value"
+                [filter]="true" filterBy="name" [showClear]="true" placeholder="Select"
+                formControlName="SummaryDropdown" (onChange)="ShowSummary($event.value)">
+              </p-dropdown>
+            </form>
+          </div> -->
+          <c-row class="grid border border-secondary p-2">
+            <!-- <c-col sm="12" xl="6" xxl="2">
+              <div class="field-checkbox pt-2">
+                <p-checkbox [binary]="true" inputId="binary"></p-checkbox>
+                <label for="binary">RA Wise</label>
+              </div>
+
+            </c-col> -->
+
+            <!-- <c-col sm="12" xl="6" xxl="2"> -->
+
+              <div class="flex justify-content-center flex-wrap">
+                <form [formGroup]="TimesheetForm" (submit)="submit()">
+                  <p-dropdown class="dropdown" [options]="member" optionLabel="name" optionValue="value" [filter]="true"
+                    filterBy="name" [showClear]="true" formControlName="teamselectiondropdown"
+                    (onChange)="OnlymeOrTeam($event.value)">
+                  </p-dropdown>
+                  &nbsp; &nbsp;
+                 
+                  <p-dropdown class="dropdown" [options]="TimeSpanData" optionLabel="name" optionValue="typeid"
+                    [filter]="true" filterBy="name" [showClear]="true" placeholder="Select" formControlName="Timespan"
+                    (onChange)="ShowTimespan($event.value)">
+                  </p-dropdown>
+
+
+                </form>
+              </div>
+            <!-- </c-col> -->
+          </c-row>
+
+          <div class="card" *ngIf="timespanid == 1">
+            <p-table #dt [value]="Today" [rows]="5" [paginator]="true" [globalFilterFields]="['name','Today']"
+              dataKey="id" editMode="row" [tableStyle]="{'min-width': '50rem'}" [rowHover]="true"
+              currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+              [showCurrentPageReport]="true">
+              <ng-template pTemplate="header">
+                <tr>
+                  <th style="width:2rem !important">UserName
+                  </th>
+                  <th style="width:2rem !important">Today
+                  </th>
+
+
+                </tr>
+
+              </ng-template>
+              <ng-template pTemplate="body" let-Selected let-editing="editing" let-ri="rowIndex">
+                <tr [pEditableRow]="Selected">
+                  <td>
+                    {{Selected.name }}
+                  </td>
+                  <td>
+                    {{Selected.Today}}
+                  </td>
+
+                </tr>
+              </ng-template>
+            </p-table>
+          </div>
+
+          <div class="card" *ngIf="timespanid == 2">
+            <p-table #dt [value]="Yesterday" [rows]="5" [paginator]="true" [globalFilterFields]="['name','Yesterday']"
+              dataKey="id" editMode="row" [tableStyle]="{'min-width': '50rem'}" [rowHover]="true"
+              currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+              [showCurrentPageReport]="true">
+              <ng-template pTemplate="header">
+                <tr>
+                  <th style="width:2rem !important">UserName
+                  </th>
+                  <th style="width:2rem !important">Yesterday
+                  </th>
+
+
+                </tr>
+
+              </ng-template>
+              <ng-template pTemplate="body" let-Selected let-editing="editing" let-ri="rowIndex">
+                <tr [pEditableRow]="Selected">
+                  <td>
+                    {{Selected.name }}
+                  </td>
+                  <td>
+                    {{Selected.Yesterday}}
+                  </td>
+
+                </tr>
+              </ng-template>
+            </p-table>
+          </div>
+
+          <div class="card" *ngIf="timespanid == 3">
+            <p-table #dt [value]="Current_Week" [rows]="5" [paginator]="true"
+              [globalFilterFields]="['name','Current Week']" dataKey="id" editMode="row"
+              [tableStyle]="{'min-width': '50rem'}" [rowHover]="true"
+              currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+              [showCurrentPageReport]="true">
+              <ng-template pTemplate="header">
+                <tr>
+                  <th style="width:2rem !important">UserName
+                  </th>
+                  <th style="width:2rem !important">Current Week
+                  </th>
+
+
+                </tr>
+
+              </ng-template>
+              <ng-template pTemplate="body" let-Selected let-editing="editing" let-ri="rowIndex">
+                <tr [pEditableRow]="Selected">
+                  <td>
+                    {{Selected.name }}
+                  </td>
+                  <td>
+                    {{Selected.Current_Week}}
+                  </td>
+
+                </tr>
+              </ng-template>
+            </p-table>
+          </div>
+
+
+
+          <div class="card" *ngIf="timespanid == 4">
+            <p-table #dt [value]="Last_Week" [rows]="5" [paginator]="true" [globalFilterFields]="['name','Last Week']"
+              dataKey="id" editMode="row" [tableStyle]="{'min-width': '50rem'}" [rowHover]="true"
+              currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+              [showCurrentPageReport]="true">
+              <ng-template pTemplate="header">
+                <tr>
+                  <th style="width:2rem !important">UserName
+                  </th>
+                  <th style="width:2rem !important">Last Week
+                  </th>
+
+
+                </tr>
+
+              </ng-template>
+              <ng-template pTemplate="body" let-Selected let-editing="editing" let-ri="rowIndex">
+                <tr [pEditableRow]="Selected">
+                  <td>
+                    {{Selected.name }}
+                  </td>
+                  <td>
+                    {{Selected.Last_Week}}
+                  </td>
+
+                </tr>
+              </ng-template>
+            </p-table>
+          </div>
+
+          <div class="card" *ngIf="timespanid == 5">
+            <p-table #dt [value]="Current_Month" [rows]="5" [paginator]="true"
+              [globalFilterFields]="['name','Current_Month']" dataKey="id" editMode="row"
+              [tableStyle]="{'min-width': '50rem'}" [rowHover]="true"
+              currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+              [showCurrentPageReport]="true">
+              <ng-template pTemplate="header">
+                <tr>
+                  <th style="width:2rem !important">UserName
+                  </th>
+                  <th style="width:2rem !important">Current Month
+                  </th>
+
+
+                </tr>
+
+              </ng-template>
+              <ng-template pTemplate="body" let-Selected let-editing="editing" let-ri="rowIndex">
+                <tr [pEditableRow]="Selected">
+                  <td>
+                    {{Selected.name }}
+                  </td>
+                  <td>
+                    {{Selected.Current_Month}}
+                  </td>
+
+                </tr>
+              </ng-template>
+            </p-table>
+          </div>
+
+
+          <div class="card" *ngIf="timespanid == 6">
+            <p-table #dt [value]="Last_Month" [rows]="5" [paginator]="true" [globalFilterFields]="['name','Last_Month']"
+              dataKey="id" editMode="row" [tableStyle]="{'min-width': '50rem'}" [rowHover]="true"
+              currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+              [showCurrentPageReport]="true">
+              <ng-template pTemplate="header">
+                <tr>
+                  <th style="width:2rem !important">UserName
+                  </th>
+                  <th style="width:2rem !important">Last Month
+                  </th>
+
+
+                </tr>
+
+              </ng-template>
+              <ng-template pTemplate="body" let-Selected let-editing="editing" let-ri="rowIndex">
+                <tr [pEditableRow]="Selected">
+                  <td>
+                    {{Selected.name }}
+                  </td>
+                  <td>
+                    {{Selected.Last_Month}}
+                  </td>
+
+                </tr>
+              </ng-template>
+            </p-table>
+          </div>
+
+
+          <div class="card" *ngIf="timespanid == 7">
+            <p-table #dt [value]="CurrentYear" [rows]="5" [paginator]="true"
+              [globalFilterFields]="['name','month', 'sum']" dataKey="id" editMode="row"
+              [tableStyle]="{'min-width': '50rem'}" [rowHover]="true"
+              currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+              [showCurrentPageReport]="true">
+              <ng-template pTemplate="header">
+                <tr>
+                  <th style="width:2rem !important">UserName
+                  </th>
+                  <th style="width:2rem !important">Month
+                  </th>
+                  <th style="width:2rem !important">Hours
+                  </th>
+
+
+                </tr>
+
+              </ng-template>
+              <ng-template pTemplate="body" let-Selected let-editing="editing" let-ri="rowIndex">
+                <tr [pEditableRow]="Selected">
+                  <td>
+                    {{Selected.name }}
+                  </td>
+                  <td>
+                    {{Selected.month}}
+                  </td>
+                  <td>
+                    {{Selected.sum}}
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </div>
+
+          <div class="card" *ngIf="timespanid == 8">
+            <p-table #dt [value]="LastYear" [rows]="5" [paginator]="true" [globalFilterFields]="['name','month', 'sum']"
+              dataKey="id" editMode="row" [tableStyle]="{'min-width': '50rem'}" [rowHover]="true"
+              currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+              [showCurrentPageReport]="true">
+              <ng-template pTemplate="header">
+                <tr>
+                  <th style="width:2rem !important">UserName
+                  </th>
+                  <th style="width:2rem !important">Month
+                  </th>
+                  <th style="width:2rem !important">Hours
+                  </th>
+
+
+                </tr>
+
+              </ng-template>
+              <ng-template pTemplate="body" let-Selected let-editing="editing" let-ri="rowIndex">
+                <tr [pEditableRow]="Selected">
+                  <td>
+                    {{Selected.name }}
+                  </td>
+                  <td>
+                    {{Selected.month}}
+                  </td>
+                  <td>
+                    {{Selected.sum}}
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </div>
+
+          
+        </p-tabPanel>
+      
       </p-tabView>
 
     </c-col>

@@ -1,6 +1,56 @@
 <p-toast></p-toast>
 <p-confirmDialog header="Confirmation" icon="fa fa-exclamation-triangle" width="425"></p-confirmDialog>
 <!-- <div class="card"> -->
+
+ <!-- Reena -->
+<div *ngIf="weekeffortshowflag == 1">
+    <c-card class="mb-4">
+        <c-card-header>Upcoming week Efforts
+            <!-- <a href="javascript: void(0);" (click)="ExporttoExcelReport()" style="margin-left:77%;">Export to Excel</a> -->
+
+        </c-card-header>
+        <c-card-body class="px-3">
+        <div class="card">
+
+            <p-table #dt [value]="UpcomingWeekEffortsData" [rows]="5" [paginator]="true"
+                    [globalFilterFields]="['name','week1','week2']"
+                    dataKey="id" editMode="row" [tableStyle]="{'min-width': '50rem'}" [rowHover]="true"
+                    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                    [showCurrentPageReport]="true">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th>Employee Name
+                            </th>
+                            <th>Week1
+                            </th>
+                            <th>Week2
+                            </th>
+                        
+                        </tr>
+
+                    </ng-template>
+                    <ng-template pTemplate="body" let-Selectedweek let-editing="editing" let-ri="rowIndex">
+                        <tr [pEditableRow]="Selectedweek">
+                            <td>
+                                {{Selectedweek.name}}
+                            </td>
+                            <td>
+                                {{Selectedweek.Week1==null?0:Selectedweek.Week1}}
+                            </td>
+                            <td>
+                                {{Selectedweek.Week2==null?0:Selectedweek.Week2}}
+                            </td>
+                        
+                        </tr>
+                    </ng-template>
+            </p-table>
+        
+        </div>
+        </c-card-body>
+    </c-card>
+</div>
+ <!-- Reena -->
+
 <p-toolbar styleClass="mb-4 gap-2">
     <ng-template pTemplate="left">
         <span class="p-input-icon-left">
@@ -12,10 +62,12 @@
     </ng-template>
 
     <ng-template pTemplate="right">
-        <p-button (click)="showCreateNewProjectDialog()" icon="pi pi-plus" label="Add Weekely Efforts"
+     
+        <p-button (click)="showCreateNewProjectDialog()" icon="pi pi-plus" label="Add Weekly Efforts"
             styleClass="p-button-warning px-3 py-2 mb-md-1">
         </p-button>
-    </ng-template>
+    </ng-template> 
+
 </p-toolbar>
 
 <p-dialog [modal]="true" [(visible)]="WeekelyEffortsDialog" header="Weekely Efforts"
@@ -156,10 +208,10 @@
                 <ng-template pTemplate="body" let-Selected let-editing="editing" let-ri="rowIndex">
                     <tr [pEditableRow]="Selected">
                         <td>
-                            {{Selected.raname }}
+                            {{Selected.raname}}
                         </td>
                         <td>
-                            {{Selected.username }}
+                            {{Selected.username}}
                         </td>
                         <td>
                             {{Selected.selectedweek}}

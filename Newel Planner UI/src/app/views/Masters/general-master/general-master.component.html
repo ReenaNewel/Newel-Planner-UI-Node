@@ -1,3 +1,153 @@
+
+<p-toast></p-toast>
+<!-- <div class="card"> -->
+<p-toolbar styleClass="mb-4 gap-2">
+    <ng-template pTemplate="left">
+        <span class="p-input-icon-left">
+            <i class="pi pi-search"></i>
+            <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
+                placeholder="Search..." />
+        </span>
+
+    </ng-template>
+
+    <ng-template pTemplate="right">
+        <p-button (click)="showCreateNewProjectDialog()" icon="pi pi-plus" label="Create"
+            styleClass="p-button-warning px-3 py-2 mb-md-1">
+        </p-button>
+    </ng-template>
+</p-toolbar>
+
+<c-card class="mb-4">
+    <c-card-header>General Master</c-card-header>
+    <c-card-body class="px-3">
+
+        <div class="card">
+            <p-table #dt [value]="SelectedProjectNames" [rows]="10" [paginator]="true"
+                [globalFilterFields]="[ 'groupname', 'name']"
+                dataKey="id" editMode="row" [tableStyle]="{'min-width': '50rem'}" [rowHover]="true"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                [showCurrentPageReport]="true">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <!-- <th style="width:2rem !important">Group Name
+                        </th> -->
+                        <th>Group Name
+                        </th>
+                        <th>Name
+                        </th>
+                        <!-- <th>Type ID
+                        </th>
+                        <th>Seq ID
+                        </th>
+                        <th>Parent ID
+                        </th>                         -->
+                        <th style="width:2rem !important">Action</th>
+                    </tr>
+                   
+                </ng-template>
+                <ng-template pTemplate="body" let-SelectedProject let-editing="editing" let-ri="rowIndex">
+                    <tr [pEditableRow]="SelectedProject">
+                        <td>
+                            {{SelectedProject.groupname }}
+                        </td>
+                        <td>
+                            {{SelectedProject.name}}
+                        </td>
+                        <!-- <td>
+                            {{SelectedProject.typeid}}
+                        </td>
+                        <td>
+                            {{SelectedProject.seqorder}}
+                        </td>
+                        <td>
+                            {{SelectedProject.parentid}}
+                        </td>                        -->
+                        <td>
+                            <div class="flex align-items-center justify-content-center gap-2">
+                                <button pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil"
+                                    (click)="editGeneral(SelectedProject)"
+                                    class="p-button-rounded p-button-text"></button>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+
+    </c-card-body>
+</c-card>
+
+<!-- </div> -->
+
+
+
+
+<p-dialog header="General Master" [(visible)]="generalDialog" [breakpoints]="{'960px': '75vw'}" (onHide)="Cancel_form()"
+    [style]="{width: '70vw'}" [draggable]="false" [resizable]="false" class="pb-2"  [modal]="true">
+    <form [formGroup]="GeneralMasterForm" (submit)="submit()">
+        <c-row class="">
+
+            <c-col sm="12" md="4" lg="4" class="mb-3">
+                <label class="pb-2">Group Name</label>
+                <p-dropdown [options]="getGroupId" [style]="{'minWidth':'100%'}" optionValue="groupname" optionLabel="groupname"
+                    [filter]="true" filterBy="groupname" [showClear]="true"
+                    (onChange)="getParentId($event)"
+                    placeholder="Group Name*" class=""
+                    required formControlName="GrpName" appendTo="body" [disabled]="isdisabled">
+                </p-dropdown>
+                <small *ngIf="GeneralMasterForm.controls['GrpName'].touched && GeneralMasterForm.controls['GrpName'].invalid"
+                    class="p-error block">
+                    <span *ngIf="GeneralMasterForm.controls['GrpName'].errors">This field is mandatory.</span>
+                </small>
+            </c-col>
+         <br>
+         <br>
+
+         <c-col sm="12" md="4" lg="4" class="mb-3">
+            <label class="pb-2">Name</label>
+            <input type="text" class="w-full" placeholder="Name*" pInputText required
+                formControlName="Name" />
+            <small *ngIf="GeneralMasterForm.controls['Name'].touched && GeneralMasterForm.controls['Name'].invalid"
+                class="p-error block">
+                <span *ngIf="GeneralMasterForm.controls['Name'].errors">This field is mandatory.</span>
+            </small>
+        </c-col>
+
+        <c-col sm="12" md="4" lg="4" class="mb-3">
+            <label class="pb-2">Parent Id</label>
+            <input type="text" class="w-full" placeholder="Parant Id*" [(ngModel)]="grpId" optionValue="grpId"  pInputText required
+                formControlName="ParantId" readonly />
+            <small *ngIf="GeneralMasterForm.controls['ParantId'].touched && GeneralMasterForm.controls['ParantId'].invalid"
+                class="p-error block">
+                <span *ngIf="GeneralMasterForm.controls['ParantId'].errors">This field is mandatory.</span>
+            </small>
+        </c-col>
+            <c-col>
+                <p-button *ngIf="showSaveBtn" type="submit" [disabled]="!GeneralMasterForm.valid" (click)="SaveGeneralMstDetails()"
+                    label="Save" styleClass="p-button-warning px-3 py-2"></p-button>
+                <p-button *ngIf="!showSaveBtn" type="submit" [disabled]="!GeneralMasterForm.valid" (click)="UpdateGeneralMstDetails()"
+                    label="Update" styleClass="p-button-warning px-3 py-2"></p-button>
+                <p-button (click)="generalDialog=false" (click)="Cancel_form()" label="Back" styleClass="p-button-text pb-2"></p-button>
+                <!-- <p-button (click)="GeneralMasterForm.resetForm()" (click)="timesheetform.resetForm()"
+                    (click)="createTaskDialog=false" label="Back" styleClass="p-button-text pb-2"></p-button> -->
+
+            </c-col>
+
+        </c-row>
+    </form>
+
+</p-dialog>
+
+
+
+
+
+
+
+
+
+
 <!-- <div class="form-container">
     <div *ngIf="isCreate" class="">
         <div class="container">

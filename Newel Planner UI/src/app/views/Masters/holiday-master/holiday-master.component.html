@@ -1,190 +1,153 @@
-<!-- <div class="form-container">
-  <mat-card>
-    <mat-card-header>
-      <mat-card-title>
-        Holiday Master
-      </mat-card-title>
-      <button class="btn-close btn-close-white" aria-label="Close" (click)="Cancel()"></button>
-    </mat-card-header>
-  </mat-card>
-  <div class="container">
+<p-toast></p-toast>
+<p-toolbar styleClass="mb-4 gap-2">
+  <ng-template pTemplate="left">
+      <span class="p-input-icon-left">
+          <i class="pi pi-search"></i>
+          <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
+              placeholder="Search..." />
+      </span>
+
+  </ng-template>
+
+  <ng-template pTemplate="right">
+      <p-button (click)="showCreateNewProjectDialog()" icon="pi pi-plus" label="Holiday"
+          styleClass="p-button-warning px-3 py-2 mb-md-1">
+      </p-button>
+  </ng-template>
+</p-toolbar>
+<c-card class="mb-4">
+  <c-card-header>Holiday Master</c-card-header>
+  <c-card-body class="px-3">
+
+      <div class="card">
+          <p-table #dt [value]="AllHolidayData" [rows]="10" [paginator]="true"
+              [globalFilterFields]="['holiday_id','name','holiday_date','description','isactive']"
+              dataKey="id" editMode="row" [tableStyle]="{'min-width': '50rem'}" [rowHover]="true"
+              currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+              [showCurrentPageReport]="true">
+              <ng-template pTemplate="header">
+                  <tr>
+                     
+                      <th> Holiday Name
+                      </th>
+                      <th>Holiday Date
+                      </th>
+                      <th>Description
+                      </th>
+                    
+                      
+                      <th style="width:2rem !important">Action</th>
+                  </tr>
+                  
+              </ng-template>
+              <ng-template pTemplate="body" let-AllHolidayData let-editing="editing" let-ri="rowIndex">
+                  <tr [pEditableRow]="AllHolidayData">
+                   
+                      <td>
+                          {{AllHolidayData.name}}
+                      </td>
+                      <td>
+                          {{AllHolidayData.holiday_date| date:'dd/MM/yyyy'}}
+                      </td>
+                      <td>
+                        {{AllHolidayData.description}}
+                    </td>
+                  
+                      <td>
+                          <div class="flex align-items-center justify-content-center gap-2">
+                              <button pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil"
+                                  (click)="editholidays(AllHolidayData)"
+                                  class="p-button-rounded p-button-text"></button>
+                          </div>
+                      </td>
+                  </tr>
+              </ng-template>
+          </p-table>
+      </div>
+
+  </c-card-body>
+</c-card>
+
+<p-dialog header="Holiday Master" [(visible)]="projectDialog" [breakpoints]="{'960px': '75vw'}" (onHide)="Cancel_form()"
+    [style]="{width: '70vw'}" [draggable]="false" [resizable]="false" class="pb-2"  [modal]="true">
     <form [formGroup]="ProjectForm" (submit)="submit()">
+        <c-row class="">
+
+          <c-col sm="12" md="4" lg="4" class="mb-3">
+            <label>Holiday Date</label>
+            <p-calendar [style]="{'minWidth':'100%'}" [showIcon]="true" appendTo="body"
+                placeholder="Holiday Date" inputId="icon" name="startDate" formControlName="startDate">
+            </p-calendar>
+        </c-col>
+
+        
+            
+      
+            <c-col sm="12" md="4" lg="4" class="mb-3">
+                <div *ngIf="flag==1">
+                <label>Holiday Name</label>
+                <p-dropdown [options]="Holidays" [style]="{'minWidth':'100%'}" optionValue="typeid"
+                    optionLabel="name" [filter]="true" filterBy="name" [showClear]="true" appendTo="body"
+                    placeholder="HolidayName*" (onChange)="changeholidayId($event)" required
+                    formControlName="HolidayName">
+                </p-dropdown>
+            </div>
+
+            
+            <div *ngIf="flag==0">
+                <label>Holiday Name</label>
+                  <input type="text" class="w-full" placeholder="Holiday Desc*" pInputText required
+                      formControlName="HolidayName" />
+                  <small *ngIf="ProjectForm.controls['HolidayName'].touched && ProjectForm.controls['HolidayName'].invalid"
+                      class="p-error block">
+                      <span *ngIf="ProjectForm.controls['HolidayName'].errors">This field is mandatory.</span>
+                  </small>
+            </div>
+  
+            </c-col>
 
 
-      <div *ngIf="isViewList == true">
-        <div class=" " fxLayout.xl="row wrap" fxLayout.lg="row" fxLayout.sm="column" fxLayout.xs="column"
-          fxLayoutGap="20px" fxLayoutGap.sm="0" fxLayoutGap.xs="0">
+            <c-col sm="12" md="4" lg="4" class="mb-3">
+              <label>Holiday Description</label>
+                <input type="text" class="w-full" placeholder="Holiday Desc*" pInputText required
+                    formControlName="HolidayDesc" />
+                <small *ngIf="ProjectForm.controls['HolidayDesc'].touched && ProjectForm.controls['HolidayDesc'].invalid"
+                    class="p-error block">
+                    <span *ngIf="ProjectForm.controls['HolidayDesc'].errors">This field is mandatory.</span>
+                </small>
+            </c-col>
 
-          <mat-form-field fxFlex="0 0 calc(85%-15px)" fxFlex.sm="0 0 100%" fxFlex.xs="0 0 100%" appearance="fill"
-            appearance="standard">
-            <mat-label class="filter">Filter</mat-label>
-            <input matInput (keyup)="applyFilter($event)" placeholder="Search" #input>
-          </mat-form-field>
+           <c-col sm="12" md="12" lg="12">
+              <label>Status</label>
+              <div class="field-radiobutton">
+                  <p-radioButton value="true" formControlName="PrjActive" required></p-radioButton>
+                  <label for="Active">Active</label>
+                  <span class="px-3"></span>
+                  
+                  <p-radioButton value="false" formControlName="PrjActive" required>
+                  </p-radioButton>
+                  <label for="InActive">In Active</label>
+              </div>
+              <small class="p-error block"
+                  *ngIf="ProjectForm.controls['PrjActive'].touched && ProjectForm.controls['PrjActive'].invalid">
+                  <span *ngIf="ProjectForm.controls['PrjActive'].errors">This field is mandatory.</span>
+              </small>
+          </c-col>
 
-          <button mat-flat-button color="primary" class="custom-btn">
-            <mat-icon mat-list-icon class="Add-New" (click)="showform()">add_circle</mat-icon>Create
-          </button>
+            
+            <c-col>
+                <p-button *ngIf="showSaveBtn" type="submit" [disabled]="!ProjectForm.valid" (click)="saveHolidays()"
+                    label="Save" styleClass="p-button-warning px-3 py-2"></p-button>
+                <p-button *ngIf="!showSaveBtn" type="submit" [disabled]="!ProjectForm.valid" (click)="UpdateHolidays()"
+                    label="Update" styleClass="p-button-warning px-3 py-2"></p-button>
+                <p-button (click)="projectDialog=false" (click)="Cancel_form()" label="Back" styleClass="p-button-text pb-2"></p-button>
+            </c-col>
 
-        </div>
-        <div class=" " fxLayout.xl="column wrap" fxLayout.lg="column" fxLayout.sm="column" fxLayout.xs="column"
-          fxLayoutGap="20px" fxLayoutGap.sm="0" fxLayoutGap.xs="0" class="table-responsive">
-          <table class="table" mat-table [dataSource]="dataSource" matSort class="mat-elevation-z0">
-
-            <ng-container matColumnDef="Sr.No">
-              <th mat-header-cell class="mat-header-cell" *matHeaderCellDef mat-sort-header> Sr.NO </th>
-              <td mat-cell *matCellDef="let element ; let i = index"> {{i+1}} </td>
-            </ng-container>
-            <ng-container matColumnDef="HolidayId">
-              <th mat-header-cell [hidden]="true" class="mat-header-cell" *matHeaderCellDef mat-sort-header> Holiday Id
-              </th>
-              <td mat-cell *matCellDef="let element " [hidden]="true"> {{element.typeid}}</td>
-            </ng-container>
-            <ng-container matColumnDef="Status">
-              <th mat-header-cell [hidden]="true" class="mat-header-cell" *matHeaderCellDef mat-sort-header> Status
-              </th>
-              <td mat-cell *matCellDef="let element " [hidden]="true"> {{element.isactive}}</td>
-            </ng-container>
-
-            <ng-container matColumnDef="HolidayDesc">
-              <th mat-header-cell [hidden]="true" class="mat-header-cell" *matHeaderCellDef mat-sort-header> Holiday
-                Desc </th>
-              <td mat-cell *matCellDef="let element " [hidden]="true"> {{element.description}}</td>
-            </ng-container>
-
-            <ng-container matColumnDef="HolidayName">
-              <th mat-header-cell class="mat-header-cell" *matHeaderCellDef mat-sort-header>Holiday Name </th>
-              <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-            </ng-container>
-
-            <ng-container matColumnDef="HolidayDate">
-              <th mat-header-cell class="mat-header-cell" *matHeaderCellDef mat-sort-header> Holiday Date </th>
-              <td mat-cell *matCellDef="let element"> {{element.holiday_date| date:'dd/MM/yyyy'}} </td>
-            </ng-container>
-
-            <ng-container matColumnDef="Action">
-              <th mat-header-cell class="mat-header-cell" *matHeaderCellDef mat-sort-header>Action</th>
-              <td mat-cell *matCellDef="let element">
-                <button mat-icon-button color="primary" (click)="editholidays(element)">
-                  <mat-icon>edit</mat-icon>
-                </button>
-
-            </ng-container>
-
-
-            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-
-            <tr class="mat-row" *matNoDataRow>
-              <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
-            </tr>
-
-          </table>
-          <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page"></mat-paginator>
-        </div>
-      </div>
-      <div *ngIf="IsCreate == true">
-        <div class="box">
-          <mat-form-field appearance="outline">
-            <mat-label>Choose a date</mat-label>
-            <input matInput [matDatepicker]="picker" formControlName="startDate" placeholder="Start date">
-            <mat-hint [style]="'color: rgb(96, 45, 224);'">MM/DD/YYYY</mat-hint>
-            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-            <mat-datepicker #picker></mat-datepicker>
-          </mat-form-field>
-          <br>
-          <br>
-          <mat-form-field class="form-field" appearance="outline">
-            <mat-label> Holiday Name
-            </mat-label>
-            <mat-select formControlName="HolidayName" name="HolldayName"
-              (selectionChange)="changeholidayId($event.value)">
-              <mat-option *ngFor="let Holiday of Holidays" [value]="Holiday.typeid">
-                {{Holiday.name}}
-              </mat-option>
-            </mat-select>
-
-            <mat-error
-              *ngIf="ProjectForm.controls['HolidayName'].touched && ProjectForm.controls['HolidayName'].invalid">
-              <span *ngIf="ProjectForm.controls['HolidayName'].errors">This field is mandatory.</span>
-            </mat-error>
-          </mat-form-field>&nbsp;
-          <mat-form-field class="form-field" appearance="outline">
-            <mat-label> Holiday Description
-            </mat-label>
-            <input matInput formControlName="HolidayDesc">
-            <mat-error
-              *ngIf="ProjectForm.controls['HolidayDesc'].touched && ProjectForm.controls['HolidayDesc'].invalid">
-              <span *ngIf="ProjectForm.controls['HolidayDesc'].errors">This field is mandatory.</span>
-            </mat-error>
-          </mat-form-field>&nbsp;
-          <br>
-          <br>
-          <mat-radio-group aria-label="Select an option" formControlName="PrjActive" class="margin-left">
-            <mat-radio-button value="true">Active</mat-radio-button>
-            <mat-radio-button value="false">In Active</mat-radio-button>
-            <mat-error *ngIf="ProjectForm.controls['PrjActive'].touched && ProjectForm.controls['PrjActive'].invalid">
-              <span *ngIf="ProjectForm.controls['PrjActive'].errors">This field is mandatory.</span>
-            </mat-error>
-          </mat-radio-group>
-          <br>
-          <br><br>
-          <button mat-raised-button class="Save" type="submit" [disabled]="!ProjectForm.valid"
-            (click)="saveHolidays()">Save</button>&nbsp;&nbsp;&nbsp;
-          <div *ngIf="isViewList == true">
-            <button mat-raised-button class="Save" type="submit" color="primary">Edit</button>&nbsp;&nbsp;&nbsp;
-          </div>
-          <button mat-raised-button class="Save" type="submit" color="primary" (click)="Cancel_form()">Back</button>
-        </div>
-      </div>
-
-      <div *ngIf="IsEditable == true">
-        <div class="box">
-          <mat-form-field appearance="outline">
-            <mat-label>Choose a date</mat-label>
-            <input matInput [matDatepicker]="picker" formControlName="startDate" placeholder="Start date">
-            <mat-hint [style]="'color: rgb(96, 45, 224);'">MM/DD/YYYY</mat-hint>
-            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-            <mat-datepicker #picker></mat-datepicker>
-          </mat-form-field>
-          <br>
-          <br>
-          <mat-form-field class="form-field" appearance="outline">
-            <mat-label> Holiday Name
-            </mat-label>
-            <input matInput formControlName="HolidayName" [disabled]=true>
-            <mat-error
-              *ngIf="ProjectForm.controls['HolidayName'].touched && ProjectForm.controls['HolidayName'].invalid">
-              <span *ngIf="ProjectForm.controls['HolidayName'].errors">This field is mandatory.</span>
-            </mat-error>
-          </mat-form-field>&nbsp;
-          <mat-form-field class="form-field" appearance="outline">
-            <mat-label> Holiday Description
-            </mat-label>
-            <input matInput formControlName="HolidayDesc">
-            <mat-error
-              *ngIf="ProjectForm.controls['HolidayDesc'].touched && ProjectForm.controls['HolidayDesc'].invalid">
-              <span *ngIf="ProjectForm.controls['HolidayDesc'].errors">This field is mandatory.</span>
-            </mat-error>
-          </mat-form-field>&nbsp;
-          <br>
-          <br>
-          <mat-radio-group aria-label="Select an option" formControlName="PrjActive" class="margin-left">
-            <mat-radio-button value="true">Active</mat-radio-button>
-            <mat-radio-button value="false">In Active</mat-radio-button>
-            <mat-error *ngIf="ProjectForm.controls['PrjActive'].touched && ProjectForm.controls['PrjActive'].invalid">
-              <span *ngIf="ProjectForm.controls['PrjActive'].errors">This field is mandatory.</span>
-            </mat-error>
-          </mat-radio-group>
-          <br>
-          <br><br>
-          <button mat-raised-button class="Save" type="submit" color="primary" [disabled]="!ProjectForm.valid"
-            (click)="UpdateHolidays()">Edit</button>&nbsp;&nbsp;&nbsp;
-          <button mat-raised-button class="Save" type="submit" color="primary" (click)="Cancel_form()">Back</button>
-        </div>
-      </div>
-
-
+        </c-row>
     </form>
 
-  </div>
-</div> -->
+</p-dialog>
+
+
+  
+  

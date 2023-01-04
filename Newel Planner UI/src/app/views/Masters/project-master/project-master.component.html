@@ -23,7 +23,7 @@
 
         <div class="card">
             <p-table #dt [value]="SelectedProjectNames" [rows]="10" [paginator]="true"
-                [globalFilterFields]="['projectname','clientname','projecttype','projectstatus','projectstage']"
+                [globalFilterFields]="['projectname','clientname','projecttype','prjstartdate','prjtodate','projectstatus','projectstage']"
                 dataKey="id" editMode="row" [tableStyle]="{'min-width': '50rem'}" [rowHover]="true"
                 currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
                 [showCurrentPageReport]="true">
@@ -141,16 +141,16 @@
             </c-col>
             <c-col sm="12" md="4" lg="4" class="mb-3">
                 <p-calendar pTooltip="Start Date" tooltipPosition="top" [style]="{'minWidth':'100%'}" [showIcon]="true" appendTo="body"
-                    placeholder="Project Start Date" inputId="icon" name="startdate" formControlName="fromdate">
+                required="dateflag=true" placeholder="Project Start Date" inputId="icon" name="startdate" formControlName="fromdate" >
                 </p-calendar>
             </c-col>
             <c-col sm="12" md="4" lg="4" class="mb-3">
                 <p-calendar pTooltip="End Date" tooltipPosition="top" [style]="{'minWidth':'100%'}" [showIcon]="true" appendTo="body"
-                    placeholder="Project End Date" inputId="icon" required name="enddate" formControlName="todate">
+                    placeholder="Project End Date" inputId="icon" required="dateflag=true" name="enddate" formControlName="todate" (onSelect)="CheckDate()">
                 </p-calendar>
             </c-col>
             <c-col sm="12" md="4" lg="4" class="mb-3">
-                <input pTooltip="Planned Efforts" tooltipPosition="top" type="number" class="w-full" placeholder="Effort In Hrs*" pInputText required
+                <input pTooltip="Planned Efforts" tooltipPosition="top" type="number" min="1" class="w-full" placeholder="Effort In Hrs*" pInputText required
                     formControlName="PlannedEfforts" />
                 <small
                     *ngIf="ProjectForm.controls['PlannedEfforts'].touched && ProjectForm.controls['PlannedEfforts'].invalid"
@@ -209,9 +209,9 @@
                 </small> -->
             </c-col>
             <c-col>
-                <p-button *ngIf="showSaveBtn" type="submit" [disabled]="!ProjectForm.valid" (click)="SavePrjDetails()"
+                <p-button *ngIf="showSaveBtn" type="submit" [disabled]="!ProjectForm.valid || dateflag==false" (click)="SavePrjDetails()"
                     label="Save" styleClass="p-button-warning px-3 py-2"></p-button>
-                <p-button *ngIf="!showSaveBtn" type="submit" [disabled]="!ProjectForm.valid" (click)="UpdateProject()"
+                <p-button *ngIf="!showSaveBtn" type="submit" [disabled]="!ProjectForm.valid || dateflag==false" (click)="UpdateProject()"
                     label="Update" styleClass="p-button-warning px-3 py-2"></p-button>
                 <p-button (click)="projectDialog=false" (click)="Cancel_form()" label="Back" styleClass="p-button-text pb-2"></p-button>
                 <!-- <p-button (click)="ProjectForm.resetForm()" (click)="timesheetform.resetForm()"

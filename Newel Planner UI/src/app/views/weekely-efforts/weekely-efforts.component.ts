@@ -42,6 +42,8 @@ export class WeekelyEffortsComponent implements OnInit {
   weekhoursarray: any = [];
   balancedHours : any;
   AssignedHours: any;
+  UpcomingWeekEffortsData: any;
+  weekeffortshowflag: number;
 
   constructor(private fb: FormBuilder, private router: Router,
     private rest: RestService, private Global: Global,
@@ -54,12 +56,13 @@ export class WeekelyEffortsComponent implements OnInit {
     this.userLoggedIn = JSON.parse(localStorage.getItem('userLoggedIn')!);
     this.userid = this.userLoggedIn.id;
     this.ShowDetails();
-    
+    this.weekeffortshowflag = 0
     this.showformdetails();
     this.MonthWeek();
     this.ShowProjectDetails();
     //this.ShouwHours();
     this.ShowProjectActivityDetails();
+    this.UpcomingWeekEfforts();
     this.WeekelyEffortsShowDetails();
   }
 
@@ -87,6 +90,25 @@ export class WeekelyEffortsComponent implements OnInit {
 //      console.log("WeekelyEffortsData", this.WeekelyEffortsData);
 
       //this.monthwek = data.Data;
+
+    })
+  }
+
+
+  UpcomingWeekEfforts() {
+    var model={
+      userid : this.userid
+    }
+    this.rest.postParams(this.Global.getapiendpoint() + '/WeekelyEfforts/GetUpcomingWeekSummary',model).subscribe((data: any) => {
+    if(data.Data.length>0){
+    this.UpcomingWeekEffortsData = data.Data;
+    this.weekeffortshowflag = 1
+    //  console.log("UpcomingWeekEffortsData", this.UpcomingWeekEffortsData);
+    }
+    else{
+      this.weekeffortshowflag = 0
+    }
+
 
     })
   }

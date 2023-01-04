@@ -61,6 +61,7 @@ export class ProjectMasterComponent implements OnInit {
   products2: any[];
   SelectedProjectNames: any[];
   showSaveBtn: boolean;
+  dateflag: boolean;
 
 
   constructor(private fb: FormBuilder, private router: Router,
@@ -85,35 +86,35 @@ export class ProjectMasterComponent implements OnInit {
     this.showformdetails()
     this.ShowDetails()
 
-    this.products2 = [
-      {
-        category: "Accessories",
-        code: "f230fh0g3",
-        description: "Product Description",
-        id: "1000",
-        image: "bamboo-watch.jpg",
-        inventoryStatus: "INSTOCK",
-        name: "Bamboo Watch",
-        price: 65,
-        quantity: 24,
-        rating: 5,
-      },
-      {
-        category: "Accessories",
-        code: "nvklal433",
-        description: "Product Description",
-        id: "1001",
-        image: "black-watch.jpg",
-        inventoryStatus: "INSTOCK",
-        name: "Black Watch",
-        price: 72,
-        quantity: 61,
-        rating: 4,
-      }
+    // this.products2 = [
+    //   {
+    //     category: "Accessories",
+    //     code: "f230fh0g3",
+    //     description: "Product Description",
+    //     id: "1000",
+    //     image: "bamboo-watch.jpg",
+    //     inventoryStatus: "INSTOCK",
+    //     name: "Bamboo Watch",
+    //     price: 65,
+    //     quantity: 24,
+    //     rating: 5,
+    //   },
+    //   {
+    //     category: "Accessories",
+    //     code: "nvklal433",
+    //     description: "Product Description",
+    //     id: "1001",
+    //     image: "black-watch.jpg",
+    //     inventoryStatus: "INSTOCK",
+    //     name: "Black Watch",
+    //     price: 72,
+    //     quantity: 61,
+    //     rating: 4,
+    //   }
 
-    ];
+    // ];
 
-    console.log("products7", this.products2);
+    // console.log("products7", this.products2);
 
   }
   editing:boolean
@@ -123,6 +124,19 @@ export class ProjectMasterComponent implements OnInit {
     this.showSaveBtn = true;
   }
 
+  CheckDate(){
+    this.dateflag = true
+    console.log('start date ,end date ',this.ProjectForm.controls['todate'].value)
+        if(this.ProjectForm.controls['fromdate'].value ||  this.ProjectForm.controls['todate'].value){
+          if (this.ProjectForm.controls['fromdate'].value > this.ProjectForm.controls['todate'].value){
+            this.dateflag = false
+            this.messageService.add({ severity: 'warn', summary: 'Alert', detail: 'Please Select Correct Date Range' });
+            
+          //  return
+          }
+        }
+         
+      }
 
   // onRowEditInit(SelectedProject) {
   //   const project = SelectedProject;
@@ -269,7 +283,8 @@ export class ProjectMasterComponent implements OnInit {
 
   }
   SavePrjDetails() {
-
+this.CheckDate()
+if(this.ProjectForm.valid){
     var model = {
       name: this.ProjectForm.controls['PrjName'].value,
       activity: this.ProjectForm.controls['Activity'].value,
@@ -300,6 +315,7 @@ export class ProjectMasterComponent implements OnInit {
       //  this.isViewList=true
 
     })
+  }
   }
   editprojects(row: any) {
 
@@ -358,8 +374,8 @@ export class ProjectMasterComponent implements OnInit {
 
   UpdateProject() {
     // this.loginid =1
-
-    
+    this.CheckDate()
+    if(this.ProjectForm.valid){
     var model = {
       projectid: this.projectid,
       name: this.ProjectForm.controls['PrjName'].value,
@@ -377,7 +393,7 @@ export class ProjectMasterComponent implements OnInit {
       projectstatus: this.ProjectForm.controls['PrjStatus'].value,
 
     }
-    console.log('update data :', model)
+    // console.log('update data :', model)
     this.rest.postParams(this.Global.getapiendpoint() + '/Project/UpdateProjects', model).subscribe((data: any) => {
       // console.log(data.Data)
       if (data.Success) {
@@ -390,7 +406,7 @@ export class ProjectMasterComponent implements OnInit {
       //  this.isViewList=true
 
     })
-
+  }
   }
 
   Cancel() {

@@ -1,3 +1,4 @@
+<p-toast></p-toast>
 <form [formGroup]="ReportForm">
     <p-toolbar styleClass="mb-4 gap-2">
         <ng-template pTemplate="left">
@@ -21,7 +22,7 @@
         <c-col sm="12" md="4" lg="3" class="mb-3">
             <label class="pb-2">From Date</label>
             <p-calendar [style]="{'minWidth':'100%'}" [showIcon]="true" appendTo="body" placeholder="Report Start Date"
-                inputId="icon" name="fromdate" formControlName="fromdate" [(ngModel)] = "today">
+                inputId="icon" name="fromdate" formControlName="fromdate" [(ngModel)] = "today"(onSelect)="CheckDate()">
             </p-calendar>
         </c-col>
     
@@ -29,7 +30,7 @@
          <c-col sm="12" md="4" lg="3" class="mb-3">
             <label class="pb-2">To Date</label>
             <p-calendar [style]="{'minWidth':'100%'}" [showIcon]="true" appendTo="body" placeholder="Report End Date"
-                inputId="icon" required name="todate" formControlName="todate" [(ngModel)] = "todate">
+                inputId="icon" required name="todate" formControlName="todate" [(ngModel)] = "todate" (onSelect)="CheckDate()">
             </p-calendar>
         </c-col>
         <ng-template pTemplate="right">

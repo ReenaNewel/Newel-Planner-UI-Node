@@ -100,6 +100,57 @@ router.route('/getAllTasks')
     } 
 })
 
+router.route("/CreateGeneralMst").post(function (req, res) {
+    try {
+      var reqbody = req.body;    
+  
+      console.log(`Insert`, reqbody);
+      var querytext = `SELECT insertgeneralmstdetails( :p_groupname,:p_name,:p_parentid);`;
+        var param = {
+          replacements: {
+            p_groupname: reqbody.groupname,
+            p_name: reqbody.name,
+            p_parentid: reqbody.parentid,
+          },
+          type: connect.sequelize.QueryTypes.SELECT,
+        };
+        console.log(`param`, param);
+        connect.sequelize.query(querytext, param).then(
+          function (result) {
+            res.status(200).json({
+
+                Success: true,
+                Message: "Userproject Mapping Details successfully",
+                Data:result
+            });
+          },
+          function (err) {
+            res
+              .status(200)
+              .json({
+                Success: false,
+                Message: " insert Userproject Mappingtable API failed.",
+                Data: null,
+              });
+          }
+        );    
+
+     
+
+     
+    } catch (err) {
+      res
+        .status(200)
+        .json({
+          Success: false,
+          Message: " Userproject Mapping table API failed.",
+          Data: null,
+        });
+    }
+     
+  });
+
+
 
     return router;
 };

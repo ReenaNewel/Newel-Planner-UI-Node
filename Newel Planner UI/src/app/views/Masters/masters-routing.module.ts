@@ -7,7 +7,7 @@ import { HolidayMasterComponent } from './holiday-master/holiday-master.componen
 import { LeaveMasterComponent } from './leave-master/leave-master.component';
 import { ProjectMasterComponent } from './project-master/project-master.component';
 import { UsermasterComponent } from './usermaster/usermaster.component';
-
+import {PasswordChangeComponent} from './password-change/password-change.component';
 const routes: Routes = [
   {
     path: 'activity',
@@ -57,7 +57,15 @@ const routes: Routes = [
     data: {
       title: 'User'
     }
-  }
+  },
+  {
+
+    path: 'ChangePassword',
+    component: PasswordChangeComponent,
+    data: {
+      title: 'ChangePassword'
+    }
+  },
 ];
 
 @NgModule({

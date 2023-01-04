@@ -733,6 +733,402 @@ var routes = function () {
       }
   });
 
+// Bhushan
+router.route('/GetTasksheetTimeSpan')
+.get(function (req, res) {
+    try {
+        const GeneralMst = datamodel.tbl_general_master();
+
+        var param = {
+            where: {
+                parentid: 127,
+            }, order: [['typeid']]
+        };
+
+        //console.log(param);
+
+        dataaccess
+            .FindAll(GeneralMst, param)
+
+            .then(
+                function (result) {
+                    if (result != null) {
+                        res
+                            .status(200)
+                            .json({
+                                Success: true,
+                                Message: "Get all TasksheetTimeSpan successfully",
+                                Data: result,
+                            });
+                    } else {
+                        // dataconn.errorlogger('GenaralMasterService', 'getProjectStatus', { message: 'No object found', stack: '' });
+
+                        res
+                            .status(200)
+                            .json({
+                                Success: false,
+                                Message: "Error occurred while Getting record",
+                                Data: null,
+                            });
+                    }
+                },
+                function (err) {
+                    dataconn.errorlogger('NewTaskService', 'GetTasksheetTimeSpan', { message: 'No object found', stack: '' });
+                    res
+                        .status(200)
+                        .json({
+                            Success: false,
+                            Message: " Genaral Master table API failed.",
+                            Data: null,
+                        });
+                }
+            );
+    } catch (err) {
+        dataconn.errorlogger('NewTaskService', 'GetTasksheetTimeSpan', { message: 'No object found', stack: '' });
+        res
+            .status(200)
+            .json({
+                Success: false,
+                Message: " General Master table API failed.",
+                Data: null,
+            });
+    }
+});
+
+
+
+//Testing 
+
+
+router.route('/GetTimesheetSummary_CurrentYear')
+.post(function (req, res) {
+    try {
+
+        var querytext = 'SELECT "TimesheetSummary_CurrentYear"(:p_userid,:p_ref); FETCH ALL IN "abc"';
+
+        var param = {
+            replacements: {
+                p_userid: req.body.userid,
+                p_ref: 'abc'
+            },
+            type: connect.sequelize.QueryTypes.SELECT
+        }
+        connect.sequelize
+            .query(querytext, param)
+            .then(function (result) {
+                result.shift();
+                //console.log('result...',result)
+                res.status(200).json({
+                    Success: true,
+                    Message: "Get all Task Summary Current Year Details successfully",
+                    Data: result
+                });
+            }, function (err) {
+                dataconn.errorlogger('NewTaskService', 'GetTimesheetSummary_CurrentYear', err);
+                res.status(200).json({ Success: false, Message: ' NewTask table API failed.', Data: null });
+            });
+    } catch (err) {
+        dataconn.errorlogger('NewTaskService', 'GetTimesheetSummary_CurrentYear', err);
+        res.status(200).json({ Success: false, Message: '  table API failed.', Data: null });
+    }
+});
+
+
+
+
+
+router.route('/GetTimesheetSummary_CurrentWeek')
+.post(function (req, res) {
+    try {
+
+        var querytext = 'SELECT "TimesheetSummary_CurrentWeek"(:p_userid,:p_type,:p_ref); FETCH ALL IN "abc"';
+
+        var param = {
+            replacements: {
+                p_userid: req.body.userid,
+                p_type: req.body.p_type,
+                p_ref: 'abc'
+            },
+            type: connect.sequelize.QueryTypes.SELECT
+        }
+        connect.sequelize
+            .query(querytext, param)
+            .then(function (result) {
+                result.shift();
+                //console.log('result...',result)
+                res.status(200).json({
+                    Success: true,
+                    Message: "Get all CurrentWeek Summary successfully",
+                    Data: result
+                });
+            }, function (err) {
+                dataconn.errorlogger('NewTaskService', 'GetTimesheetSummary_CurrentWeek', err);
+                res.status(200).json({ Success: false, Message: ' NewTask table API failed.', Data: null });
+            });
+    } catch (err) {
+        dataconn.errorlogger('NewTaskService', 'GetTimesheetSummary_CurrentWeek', err);
+        res.status(200).json({ Success: false, Message: '  table API failed.', Data: null });
+    }
+});
+
+
+
+router.route('/GetTimesheetSummary_LastWeek')
+.post(function (req, res) {
+    try {
+
+        var querytext = 'SELECT "TimesheetSummary_LastWeek"(:p_userid,:p_type,:p_ref); FETCH ALL IN "abc"';
+
+        var param = {
+            replacements: {
+                p_userid: req.body.userid,
+                p_type: req.body.p_type,
+                p_ref: 'abc'
+            },
+            type: connect.sequelize.QueryTypes.SELECT
+        }
+        connect.sequelize
+            .query(querytext, param)
+            .then(function (result) {
+                result.shift();
+                //console.log('result...',result)
+                res.status(200).json({
+                    Success: true,
+                    Message: "Get all Timesheet Summary Last_Week successfully",
+                    Data: result
+                });
+            }, function (err) {
+                dataconn.errorlogger('NewTaskService', 'GetTimesheetSummary_LastWeek', err);
+                res.status(200).json({ Success: false, Message: ' NewTask table API failed.', Data: null });
+            });
+    } catch (err) {
+        dataconn.errorlogger('NewTaskService', 'GetTimesheetSummary_LastWeek', err);
+        res.status(200).json({ Success: false, Message: '  table API failed.', Data: null });
+    }
+});
+
+
+
+router.route('/GetTimesheetSummary_CurrentMonth')
+.post(function (req, res) {
+    try {
+
+        var querytext = 'SELECT "TimesheetSummary_CurrentMonth"(:p_userid,:p_type,:p_ref); FETCH ALL IN "abc"';
+
+        var param = {
+            replacements: {
+                p_userid: req.body.userid,
+                p_type: req.body.p_type,
+                p_ref: 'abc'
+            },
+            type: connect.sequelize.QueryTypes.SELECT
+        }
+        connect.sequelize
+            .query(querytext, param)
+            .then(function (result) {
+                result.shift();
+                //console.log('result...',result)
+                res.status(200).json({
+                    Success: true,
+                    Message: "Get all TimesheetSummary Current Month successfully",
+                    Data: result
+                });
+            }, function (err) {
+                dataconn.errorlogger('NewTaskService', 'GetTimesheetSummary_CurrentMonth', err);
+                res.status(200).json({ Success: false, Message: ' NewTask table API failed.', Data: null });
+            });
+    } catch (err) {
+        dataconn.errorlogger('NewTaskService', 'GetTimesheetSummary_CurrentMonth', err);
+        res.status(200).json({ Success: false, Message: '  table API failed.', Data: null });
+    }
+});
+
+
+
+
+
+router.route('/GetTimesheetSummary_LastMonth')
+.post(function (req, res) {
+    try {
+
+        var querytext = 'SELECT "TimesheetSummary_LastMonth"(:p_userid,:p_type,:p_ref); FETCH ALL IN "abc"';
+
+        var param = {
+            replacements: {
+                p_userid: req.body.userid,
+                p_type: req.body.p_type,
+                p_ref: 'abc'
+            },
+            type: connect.sequelize.QueryTypes.SELECT
+        }
+        connect.sequelize
+            .query(querytext, param)
+            .then(function (result) {
+                result.shift();
+                console.log('result...', result)
+                res.status(200).json({
+                    Success: true,
+                    Message: "Get all Details successfully",
+                    Data: result
+                });
+            }, function (err) {
+                dataconn.errorlogger('NewTaskService', 'GetTimesheetSummary_LastMonth', err);
+                res.status(200).json({ Success: false, Message: ' NewTask table API failed.', Data: null });
+            });
+    } catch (err) {
+        dataconn.errorlogger('NewTaskService', 'GetTimesheetSummary_LastMonth', err);
+        res.status(200).json({ Success: false, Message: '  table API failed.', Data: null });
+    }
+});
+
+
+
+
+
+
+router.route('/GetTimesheetSummary_Today')
+.post(function (req, res) {
+    try {
+
+        var querytext = 'SELECT "TimesheetSummary_Today"(:p_userid,:p_type,:p_ref); FETCH ALL IN "abc"';
+
+        var param = {
+            replacements: {
+                p_userid: req.body.userid,
+                p_type: req.body.p_type,
+                p_ref: 'abc'
+            },
+            type: connect.sequelize.QueryTypes.SELECT
+        }
+        connect.sequelize
+            .query(querytext, param)
+            .then(function (result) {
+                result.shift();
+                console.log('result...', result)
+                res.status(200).json({
+                    Success: true,
+                    Message: "Get all GetProjectNames Details successfully",
+                    Data: result
+                });
+            }, function (err) {
+                dataconn.errorlogger('NewTaskService', 'GetTimesheetSummary_Today', err);
+                res.status(200).json({ Success: false, Message: ' NewTask table API failed.', Data: null });
+            });
+    } catch (err) {
+        dataconn.errorlogger('NewTaskService', 'GetTimesheetSummary_Today', err);
+        res.status(200).json({ Success: false, Message: '  table API failed.', Data: null });
+    }
+});
+
+
+
+
+router.route('/GetTimesheetSummary_Yesterday')
+.post(function (req, res) {
+    try {
+
+        var querytext = 'SELECT "TimesheetSummary_Yesterday"(:p_userid,:p_type,:p_ref); FETCH ALL IN "abc"';
+
+        var param = {
+            replacements: {
+                p_userid: req.body.userid,
+                p_type: req.body.p_type,
+                p_ref: 'abc'
+            },
+            type: connect.sequelize.QueryTypes.SELECT
+        }
+        connect.sequelize
+            .query(querytext, param)
+            .then(function (result) {
+                result.shift();
+                console.log('result...', result)
+                res.status(200).json({
+                    Success: true,
+                    Message: "Get all GetProjectNames Details successfully",
+                    Data: result
+                });
+            }, function (err) {
+                dataconn.errorlogger('NewTaskService', 'GetTimesheetSummary_Yesterday', err);
+                res.status(200).json({ Success: false, Message: ' NewTask table API failed.', Data: null });
+            });
+    } catch (err) {
+        dataconn.errorlogger('NewTaskService', 'GetTimesheetSummary_Yesterday', err);
+        res.status(200).json({ Success: false, Message: '  table API failed.', Data: null });
+    }
+});
+
+
+
+
+router.route('/GetTimesheetSummary_CurrentYear')
+.post(function (req, res) {
+    try {
+
+        var querytext = 'SELECT "TimesheetSummary_CurrentYear"(:p_userid,:p_ref); FETCH ALL IN "abc"';
+
+        var param = {
+            replacements: {
+                p_userid: req.body.userid,
+                p_ref: 'abc'
+            },
+            type: connect.sequelize.QueryTypes.SELECT
+        }
+        connect.sequelize
+            .query(querytext, param)
+            .then(function (result) {
+                result.shift();
+                console.log('result...', result)
+                res.status(200).json({
+                    Success: true,
+                    Message: "Get all  Details successfully",
+                    Data: result
+                });
+            }, function (err) {
+                dataconn.errorlogger('NewTaskService', 'GetTimesheetSummary_CurrentYear', err);
+                res.status(200).json({ Success: false, Message: ' NewTask table API failed.', Data: null });
+            });
+    } catch (err) {
+        dataconn.errorlogger('NewTaskService', 'GetTimesheetSummary_CurrentYear', err);
+        res.status(200).json({ Success: false, Message: '  table API failed.', Data: null });
+    }
+});
+
+
+router.route('/GetTimesheetSummary_LastYear')
+.post(function (req, res) {
+    try {
+
+        var querytext = 'SELECT "TimesheetSummary_LastYear"(:p_userid,:p_ref); FETCH ALL IN "abc"';
+
+        var param = {
+            replacements: {
+                p_userid: req.body.userid,
+                p_ref: 'abc'
+            },
+            type: connect.sequelize.QueryTypes.SELECT
+        }
+        connect.sequelize
+            .query(querytext, param)
+            .then(function (result) {
+                result.shift();
+                console.log('result...', result)
+                res.status(200).json({
+                    Success: true,
+                    Message: "Get all Details successfully",
+                    Data: result
+                });
+            }, function (err) {
+                dataconn.errorlogger('NewTaskService', 'GetTimesheetSummary_LastYear', err);
+                res.status(200).json({ Success: false, Message: ' NewTask table API failed.', Data: null });
+            });
+    } catch (err) {
+        dataconn.errorlogger('NewTaskService', 'GetTimesheetSummary_LastYear', err);
+        res.status(200).json({ Success: false, Message: '  table API failed.', Data: null });
+    }
+});
+// bhushan
+
+
 
   return router;
 };

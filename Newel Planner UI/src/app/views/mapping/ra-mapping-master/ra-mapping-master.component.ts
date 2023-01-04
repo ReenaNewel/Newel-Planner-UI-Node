@@ -68,7 +68,8 @@ export class RaMappingMasterComponent implements OnInit {
   ShowDetails() {
     this.rest.getAll(this.Global.getapiendpoint() + '/RAMapping/GetRADetails').subscribe((data: any) => {
       if (data.Success) {
-        this.RADetails = data.Data;       
+        this.RADetails = data.Data;    
+         
       }
     })
   }
@@ -134,13 +135,14 @@ export class RaMappingMasterComponent implements OnInit {
 
     this.rest.postParams(this.Global.getapiendpoint() + apiUrl, model).subscribe((data: any) => {
       if (data.Success) {
-        this.messageService.add({ severity: 'success', summary: 'Service Message', detail: 'New Data Saved successfully' });
+        this.messageService.add({ severity: 'success', summary: 'Service Message', detail: 'Record Saved successfully' });
         this.Cancel_form();
         this.ShowDetails();
+        this.GetuserRaropdown();
 
       }
       else {
-        this.messageService.add({ severity: 'warn', summary: 'Success', detail: 'Record not saved' });
+        this.messageService.add({ severity: 'warn', summary: 'warning', detail: 'Record not saved' });
       }
     });
   }
@@ -159,7 +161,7 @@ export class RaMappingMasterComponent implements OnInit {
         this.ShowDetails();
       }
       else {
-        this.messageService.add({ severity: 'warn', summary: 'Success', detail: 'Record not saved' });
+        this.messageService.add({ severity: 'warn', summary: 'warning', detail: 'Record not saved' });
       }
     })
   }
